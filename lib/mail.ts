@@ -65,7 +65,7 @@ export async function notifySubscribersForArticle(article: {
   });
   if (subscribers.length === 0) return { sent: 0 };
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3400";
   const articleUrl = `${siteUrl}/blog/${article.slug}`;
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#111827">

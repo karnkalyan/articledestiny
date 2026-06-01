@@ -21,7 +21,7 @@ export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
     where: { key: { in: PUBLIC_KEYS } },
   });
   const settings = Object.fromEntries(rows.map((row) => [row.key, row.value]));
-  const siteUrl = (settings.site_url || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/+$/, "");
+  const siteUrl = (settings.site_url || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3400").replace(/\/+$/, "");
 
   return {
     site_url: siteUrl,

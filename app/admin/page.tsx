@@ -84,7 +84,7 @@ const emptySettings = {
   mail_pass: "",
   mail_from: "",
   mail_secure: "false",
-  site_url: "http://localhost:3000",
+  site_url: "http://localhost:3400",
   google_search_console_verification: "",
   ga4_measurement_id: "",
   adsense_client_id: "",
@@ -397,7 +397,7 @@ export default function AdminDashboardPage() {
                 <h3 className="text-sm font-black uppercase tracking-widest">What These Fields Do</h3>
                 <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
                   <p><strong className="text-white">Search Console:</strong> paste only the verification token. The app renders the required meta tag.</p>
-                  <p><strong className="text-white">Sitemap:</strong> generated live at <span className="text-cyan-300">{(settings.site_url || "http://localhost:3000").replace(/\/+$/, "")}/sitemap.xml</span>.</p>
+                  <p><strong className="text-white">Sitemap:</strong> generated live at <span className="text-cyan-300">{(settings.site_url || "http://localhost:3400").replace(/\/+$/, "")}/sitemap.xml</span>.</p>
                   <p><strong className="text-white">GA4:</strong> use an ID like <span className="text-cyan-300">G-XXXXXXXXXX</span>. The tracking script loads automatically.</p>
                   <p><strong className="text-white">AdSense:</strong> use an ID like <span className="text-cyan-300">ca-pub-XXXXXXXXXXXXXXXX</span>. Ad slot HTML is still managed in the Ads tab.</p>
                 </div>
