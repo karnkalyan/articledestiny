@@ -75,29 +75,23 @@ export async function ensureSeeded() {
       update: {},
     });
 
-    console.log("🧠 Checking article count...");
+    console.log("🧠 Loading articles from DB...");
+    const existingCount = await db.article.count();
 
-    const articleCount = await db.article.count();
+    console.log("📊 Existing articles:", existingCount);
 
-    if (articleCount > 0) {
-      console.log(`✅ Articles already exist (${articleCount}), skipping import.`);
+    console.log("📦 Parsing blogger data...");
+
+    const entries = (bloggerData as any)?.feed?.entry;
+
+    if (!Array.isArray(entries) || entries.length === 0) {
+      console.error("❌ No valid entries found in JSON");
       return;
     }
-
-    console.log("📦 Loading blogger data...");
-
-    const entries = Array.isArray((bloggerData as any)?.feed?.entry)
-      ? (bloggerData as any).feed.entry
-      : [];
 
     console.log(`📊 Entries found: ${entries.length}`);
 
-    if (!entries.length) {
-      console.warn("⚠️ No entries found in JSON file!");
-      return;
-    }
-
-    console.log("🧹 Clearing old articles...");
+    console.log("🧹 Clearing articles...");
     await db.article.deleteMany();
 
     console.log("📥 Importing articles...");
@@ -105,76 +99,78 @@ export async function ensureSeeded() {
     for (let i = 0; i < entries.length; i++) {
       const entry = entries[i];
 
-      const title = entry.title?.$t || "Untitled Story";
-      const content = entry.content?.$t || "";
-      const coverImage = getCoverImage(entry);
-      const canonicalUrl = getAlternateUrl(entry);
+      try {
+        const title = entry.title?.$t || "Untitled Story";
+        const content = entry.content?.$t || "";
+        const coverImage = getCoverImage(entry);
+        const canonicalUrl = getAlternateUrl(entry);
 
-      const category = "Stories";
-      const excerpt = stripHtml(content).slice(0, 260);
+        const category = "Stories";
+        const excerpt = stripHtml(content).slice(0, 260);
 
-      const seo = generateSeo({
-        title,
-        content,
-        excerpt,
-        category,
-        coverImage,
-        canonicalUrl,
-      });
-
-      let slug = slugify(title) || `story-${entry.id?.$t || Date.now()}`;
-      let suffix = 1;
-
-      while (await db.article.findUnique({ where: { slug } })) {
-        slug = `${slugify(title)}-${suffix}`;
-        suffix++;
-      }
-
-      await db.article.create({
-        data: {
-          slug,
+        const seo = generateSeo({
           title,
           content,
-          excerpt: seo.excerpt,
+          excerpt,
           category,
           coverImage,
-          published: true,
-          authorId: owner.id,
-          createdAt: entry.published?.$t
-            ? new Date(entry.published.$t)
-            : new Date(),
+          canonicalUrl,
+        });
 
-          metaTitle: seo.metaTitle,
-          metaDescription: seo.metaDescription,
-          metaKeywords: seo.metaKeywords,
-          canonicalUrl: seo.canonicalUrl || null,
+        let slug = slugify(title) || `story-${entry.id?.$t || Date.now()}`;
+        let suffix = 1;
 
-          ogTitle: seo.ogTitle,
-          ogDescription: seo.ogDescription,
-          ogImage: seo.ogImage || null,
+        while (await db.article.findUnique({ where: { slug } })) {
+          slug = `${slugify(title)}-${suffix}`;
+          suffix++;
+        }
 
-          twitterTitle: seo.twitterTitle,
-          twitterDescription: seo.twitterDescription,
-          twitterImage: seo.twitterImage || null,
+        await db.article.create({
+          data: {
+            slug,
+            title,
+            content,
+            excerpt: seo.excerpt,
+            category,
+            coverImage,
+            published: true,
+            authorId: owner.id,
+            createdAt: entry.published?.$t
+              ? new Date(entry.published.$t)
+              : new Date(),
 
-          focusKeyword: seo.focusKeyword,
-          seoScore: seo.seoScore,
-        },
-      });
+            metaTitle: seo.metaTitle,
+            metaDescription: seo.metaDescription,
+            metaKeywords: seo.metaKeywords,
+            canonicalUrl: seo.canonicalUrl || null,
 
-      if (i % 10 === 0) {
-        console.log(`📌 Imported ${i + 1}/${entries.length}`);
+            ogTitle: seo.ogTitle,
+            ogDescription: seo.ogDescription,
+            ogImage: seo.ogImage || null,
+
+            twitterTitle: seo.twitterTitle,
+            twitterDescription: seo.twitterDescription,
+            twitterImage: seo.twitterImage || null,
+
+            focusKeyword: seo.focusKeyword,
+            seoScore: seo.seoScore,
+          },
+        });
+
+        console.log(`✅ Inserted: ${title}`);
+      } catch (err) {
+        console.error(`❌ Failed entry ${i}:`, err);
       }
     }
 
-    console.log("🎉 Seeding completed successfully!");
+    const finalCount = await db.article.count();
+    console.log(`🎉 Done. Total articles now: ${finalCount}`);
   } catch (error) {
     console.error("❌ Seeding failed:", error);
     throw error;
   }
 }
 
-// CLI runner
 if (
   require.main === module ||
   (process.argv[1] &&
