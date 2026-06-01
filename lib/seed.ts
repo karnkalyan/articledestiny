@@ -126,3 +126,17 @@ export async function ensureSeeded() {
     console.error("Database seeding encountered an issue:", error);
   }
 }
+
+if (require.main === module || (process.argv[1] && (process.argv[1].endsWith("seed.ts") || process.argv[1].endsWith("seed.js")))) {
+  console.log("Seeding database via CLI...");
+  ensureSeeded()
+    .then(() => {
+      console.log("Database seeded successfully.");
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error("Database seeding failed:", error);
+      process.exit(1);
+    });
+}
+
