@@ -1,0 +1,387 @@
+@import "tailwindcss";
+@import "quill/dist/quill.snow.css";
+
+@theme {
+  --color-indigo-650: #493fdf;
+  --color-indigo-750: #3d34b7;
+  --color-teal-150: #b2f8eb;
+  --color-teal-650: #0e857d;
+  --color-slate-1000: #060913;
+  --color-zinc-850: #202023;
+  --color-gray-450: #848b97;
+  --color-gray-550: #5b6371;
+  --color-gray-205: #dadce3;
+
+  --spacing-4\.5: 1.125rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 border-gray-100 antialiased selection:bg-indigo-500 selection:text-white dark:bg-zinc-950 dark:text-zinc-100;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .admin-shell {
+    --nexus-bg: #f8fafc;
+    --nexus-card-bg: rgba(255, 255, 255, 0.72);
+    --nexus-card-border: rgba(15, 23, 42, 0.08);
+    --nexus-border: rgba(15, 23, 42, 0.08);
+    --nexus-text-main: #0f172a;
+    --nexus-text-muted: #64748b;
+    --nexus-sidebar-bg: rgba(255, 255, 255, 0.88);
+    --nexus-header-bg: rgba(255, 255, 255, 0.78);
+    --nexus-shadow: 0 8px 32px rgba(15, 23, 42, 0.07);
+    --nexus-primary: #06b6d4;
+    --nexus-secondary: #f97316;
+    --nexus-accent: #ef4444;
+    --grad-primary: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+    --grad-accent: linear-gradient(135deg, #f97316 0%, #0f172a 100%);
+    --grad-mesh: radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.1) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.05) 0, transparent 50%);
+    --sidebar-active-bg: linear-gradient(90deg, rgba(6, 182, 212, 0.15), rgba(14, 116, 144, 0.05));
+    --nexus-input-bg: rgba(255, 255, 255, 0.86);
+    --nexus-input-border: rgba(15, 23, 42, 0.15);
+    --nexus-input-focus-bg: #ffffff;
+    background-color: var(--nexus-bg);
+    background-image: var(--grad-mesh);
+    background-attachment: fixed;
+    color: var(--nexus-text-main);
+    scroll-behavior: smooth;
+  }
+
+  .dark .admin-shell {
+    --nexus-bg: #0b0f17;
+    --nexus-card-bg: rgba(22, 28, 42, 0.65);
+    --nexus-card-border: rgba(255, 255, 255, 0.055);
+    --nexus-border: rgba(255, 255, 255, 0.055);
+    --nexus-text-main: #f1f5f9;
+    --nexus-text-muted: #94a3b8;
+    --nexus-sidebar-bg: #131924;
+    --nexus-header-bg: rgba(19, 25, 36, 0.86);
+    --nexus-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.8);
+    --nexus-primary: #06b6d4;
+    --nexus-secondary: #f97316;
+    --nexus-accent: #ef4444;
+    --grad-primary: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+    --grad-accent: linear-gradient(135deg, #f97316 0%, #7f1d1d 100%);
+    --grad-mesh: radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.07) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0, transparent 50%);
+    --sidebar-active-bg: #1e293b;
+    --nexus-input-bg: rgba(255, 255, 255, 0.025);
+    --nexus-input-border: rgba(255, 255, 255, 0.08);
+    --nexus-input-focus-bg: rgba(255, 255, 255, 0.045);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .admin-shell {
+      --nexus-bg: #0b0f17;
+      --nexus-card-bg: rgba(22, 28, 42, 0.65);
+      --nexus-card-border: rgba(255, 255, 255, 0.055);
+      --nexus-border: rgba(255, 255, 255, 0.055);
+      --nexus-text-main: #f1f5f9;
+      --nexus-text-muted: #94a3b8;
+      --nexus-sidebar-bg: #131924;
+      --nexus-header-bg: rgba(19, 25, 36, 0.86);
+      --nexus-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.8);
+      --nexus-primary: #06b6d4;
+      --nexus-secondary: #f97316;
+      --nexus-accent: #ef4444;
+      --grad-primary: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+      --grad-accent: linear-gradient(135deg, #f97316 0%, #7f1d1d 100%);
+      --grad-mesh: radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.07) 0, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0, transparent 50%);
+      --sidebar-active-bg: #1e293b;
+      --nexus-input-bg: rgba(255, 255, 255, 0.025);
+      --nexus-input-border: rgba(255, 255, 255, 0.08);
+      --nexus-input-focus-bg: rgba(255, 255, 255, 0.045);
+    }
+  }
+
+  main:has(.admin-shell) {
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  body:has(.admin-shell) #app-navbar,
+  body:has(.admin-shell) #app-footer {
+    display: none !important;
+  }
+
+  .admin-shell ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .admin-shell ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .admin-shell ::-webkit-scrollbar-thumb {
+    background: var(--nexus-card-border);
+    border-radius: 999px;
+  }
+
+  .admin-shell ::-webkit-scrollbar-thumb:hover {
+    background: var(--nexus-primary);
+  }
+
+  .admin-sidebar {
+    background: var(--nexus-sidebar-bg) !important;
+    border: 1px solid var(--nexus-card-border) !important;
+    box-shadow: var(--nexus-shadow) !important;
+    color: var(--nexus-text-main) !important;
+  }
+
+  .admin-header {
+    background: var(--nexus-header-bg) !important;
+    border: 1px solid var(--nexus-card-border) !important;
+    box-shadow: var(--nexus-shadow) !important;
+    color: var(--nexus-text-main) !important;
+  }
+
+  @media (min-width: 1024px) {
+    .admin-sidebar {
+      position: fixed !important;
+      top: 15px !important;
+      left: 15px !important;
+      bottom: 15px !important;
+      height: calc(100vh - 30px) !important;
+      border-radius: 20px !important;
+      overflow: hidden;
+      z-index: 40;
+    }
+
+    .admin-header {
+      position: fixed !important;
+      top: 15px !important;
+      right: 15px !important;
+      height: 60px !important;
+      border-radius: 16px !important;
+      z-index: 35;
+    }
+
+    .admin-header-expanded {
+      left: 303px !important;
+      width: calc(100% - 318px) !important;
+    }
+
+    .admin-header-collapsed {
+      left: 111px !important;
+      width: calc(100% - 126px) !important;
+    }
+
+    .admin-content {
+      padding-top: 95px !important;
+      padding-right: 15px !important;
+      padding-bottom: 20px !important;
+    }
+
+    .admin-content-expanded {
+      margin-left: 287px !important;
+    }
+
+    .admin-content-collapsed {
+      margin-left: 95px !important;
+    }
+  }
+
+  .nexus-card {
+    background: var(--nexus-card-bg) !important;
+    border: 1px solid var(--nexus-card-border) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--nexus-shadow) !important;
+    color: var(--nexus-text-main) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .nexus-card:hover {
+    border-color: color-mix(in srgb, var(--nexus-primary) 24%, var(--nexus-card-border)) !important;
+  }
+
+  .nexus-card-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--nexus-card-border) !important;
+    padding: 16px 20px !important;
+  }
+
+  .nexus-card-title {
+    color: var(--nexus-text-main) !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.2px !important;
+    text-transform: none !important;
+  }
+
+  .nexus-btn-primary {
+    background: var(--grad-primary) !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25) !important;
+  }
+
+  .nexus-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(6, 182, 212, 0.35) !important;
+  }
+
+  .nexus-input {
+    background: var(--nexus-input-bg) !important;
+    border: 1px solid var(--nexus-input-border) !important;
+    border-radius: 8px !important;
+    color: var(--nexus-text-main) !important;
+  }
+
+  .nexus-input:focus {
+    background: var(--nexus-input-focus-bg) !important;
+    border-color: var(--nexus-primary) !important;
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important;
+  }
+
+  .nexus-text-muted {
+    color: var(--nexus-text-muted) !important;
+  }
+
+  .nexus-stat-card {
+    background: var(--nexus-card-bg) !important;
+    border: 1px solid var(--nexus-card-border) !important;
+    border-radius: 14px !important;
+    box-shadow: var(--nexus-shadow) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .nexus-stat-icon {
+    background: var(--grad-primary);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+  }
+
+  .nexus-row {
+    background: rgba(255, 255, 255, 0.01);
+    border-bottom: 1px solid var(--nexus-card-border);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .nexus-row:hover {
+    background: rgba(59, 130, 246, 0.045);
+    transform: translateY(-1px);
+  }
+
+  @keyframes nexusFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nexus-animate {
+    animation: nexusFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .rich-editor:empty::before {
+    content: attr(data-placeholder);
+    @apply text-gray-400;
+  }
+
+  .rich-editor h2 {
+    @apply text-2xl font-bold text-slate-950 dark:text-zinc-100 mt-8 mb-3 leading-tight;
+  }
+
+  .rich-editor p {
+    @apply my-3;
+  }
+
+  .rich-editor blockquote {
+    @apply border-l-4 border-indigo-500 pl-4 my-5 italic text-slate-700 dark:text-zinc-300;
+  }
+
+  .rich-editor ul {
+    @apply list-disc pl-6 my-4;
+  }
+
+  .rich-editor ol {
+    @apply list-decimal pl-6 my-4;
+  }
+
+  .rich-editor a {
+    @apply text-indigo-650 underline underline-offset-2;
+  }
+
+  .quill-story-editor .ql-toolbar {
+    @apply border-0 border-b border-gray-100 bg-slate-50/80 p-2 dark:border-zinc-850 dark:bg-zinc-900/70;
+  }
+
+  .quill-story-editor .ql-container {
+    @apply border-0 text-base font-sans;
+  }
+
+  .quill-story-editor .ql-editor {
+    @apply min-h-[420px] max-h-[760px] overflow-y-auto px-5 py-5 text-slate-800 dark:text-zinc-200;
+  }
+
+  .quill-story-editor .ql-editor.ql-blank::before {
+    @apply text-gray-400 not-italic;
+  }
+
+  .quill-story-editor .ql-editor h1 {
+    @apply text-3xl font-black leading-tight text-slate-950 dark:text-zinc-50;
+  }
+
+  .quill-story-editor .ql-editor h2 {
+    @apply text-2xl font-bold leading-tight text-slate-950 dark:text-zinc-50;
+  }
+
+  .quill-story-editor .ql-editor h3 {
+    @apply text-xl font-bold leading-tight text-slate-950 dark:text-zinc-50;
+  }
+
+  .quill-story-editor .ql-editor p,
+  .quill-story-editor .ql-editor li {
+    @apply leading-8;
+  }
+
+  .quill-story-editor .ql-editor img {
+    @apply max-w-full rounded-2xl border border-gray-100 my-5 shadow-sm dark:border-zinc-850;
+  }
+
+  .quill-story-editor .ql-video,
+  #article-body .ql-video {
+    @apply w-full aspect-video rounded-2xl border border-gray-100 my-6 dark:border-zinc-850;
+  }
+
+  #article-body .ql-align-center {
+    text-align: center;
+  }
+
+  #article-body .ql-align-right {
+    text-align: right;
+  }
+
+  #article-body .ql-align-justify {
+    text-align: justify;
+  }
+
+  #article-body img {
+    @apply max-w-full rounded-2xl border border-gray-100 my-6 shadow-sm dark:border-zinc-850;
+  }
+}

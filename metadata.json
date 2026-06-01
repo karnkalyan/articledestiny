@@ -1,0 +1,8 @@
+{
+  "name": "ArticleDestiny",
+  "description": "An elegant, feature-rich blog and article publishing engine with reading history, user interactions, comments, and admin moderation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

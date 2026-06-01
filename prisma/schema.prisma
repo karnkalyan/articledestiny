@@ -1,0 +1,128 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             Int              @id @default(autoincrement())
+  email          String           @unique
+  password       String
+  name           String
+  role           String           @default("USER") // ADMIN, AUTHOR, USER
+  isBanned       Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  articles       Article[]
+  comments       Comment[]
+  likes          Like[]
+  readingHistory ReadingHistory[]
+}
+
+model Article {
+  id             Int              @id @default(autoincrement())
+  slug           String           @unique
+  title          String
+  content        String           @db.LongText
+  excerpt        String           @db.Text
+  metaTitle      String?
+  metaDescription String?         @db.Text
+  metaKeywords   String?          @db.Text
+  canonicalUrl   String?
+  ogTitle        String?
+  ogDescription  String?          @db.Text
+  ogImage        String?
+  twitterTitle   String?
+  twitterDescription String?      @db.Text
+  twitterImage   String?
+  focusKeyword   String?
+  seoScore       Int              @default(0)
+  published      Boolean          @default(true)
+  category       String           @default("General")
+  coverImage     String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  likesCount     Int              @default(0)
+  viewsCount     Int              @default(0)
+  authorId       Int
+  author         User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments       Comment[]
+  likes          Like[]
+  readingHistory ReadingHistory[]
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String    @db.Text
+  status    String    @default("APPROVED") // APPROVED, PENDING, REJECTED, SPAM
+  createdAt DateTime  @default(now())
+  articleId Int
+  article   Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentId  Int?
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+}
+
+model Like {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  articleId Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+}
+
+model ReadingHistory {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  articleId Int
+  readAt    DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+}
+
+model Ad {
+  id        Int     @id @default(autoincrement())
+  placement String  @unique // top, sidebar, bottom
+  code      String  @db.LongText
+  active    Boolean @default(true)
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  name      String
+  mimeType  String
+  data      String   @db.LongText // Base64-encoded string
+  url       String   @db.Text // e.g. /api/media/123 or base64 format itself
+  createdAt DateTime @default(now())
+}
+
+model Subscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String   @db.LongText
+  updatedAt DateTime @updatedAt
+}

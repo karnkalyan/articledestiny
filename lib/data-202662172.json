@@ -1,0 +1,544 @@
+{
+    "version": "1.0",
+    "encoding": "UTF-8",
+    "feed": {
+        "xmlns": "http://www.w3.org/2005/Atom",
+        "xmlns$openSearch": "http://a9.com/-/spec/opensearchrss/1.0/",
+        "xmlns$blogger": "http://schemas.google.com/blogger/2008",
+        "xmlns$georss": "http://www.georss.org/georss",
+        "xmlns$gd": "http://schemas.google.com/g/2005",
+        "xmlns$thr": "http://purl.org/syndication/thread/1.0",
+        "id": {
+            "$t": "tag:blogger.com,1999:blog-1091445250248403637"
+        },
+        "updated": {
+            "$t": "2026-01-17T04:02:07.972-08:00"
+        },
+        "title": {
+            "type": "text",
+            "$t": "Articledestiny"
+        },
+        "subtitle": {
+            "type": "html",
+            "$t": "Create the passion of own structure."
+        },
+        "link": [
+            {
+                "rel": "http://schemas.google.com/g/2005#feed",
+                "type": "application/atom+xml",
+                "href": "https://nirmla123.blogspot.com/feeds/posts/default"
+            },
+            {
+                "rel": "self",
+                "type": "application/atom+xml",
+                "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default?alt=json&max-results=500"
+            },
+            {
+                "rel": "alternate",
+                "type": "text/html",
+                "href": "https://nirmla123.blogspot.com/"
+            },
+            {
+                "rel": "hub",
+                "href": "http://pubsubhubbub.appspot.com/"
+            }
+        ],
+        "author": [
+            {
+                "name": {
+                    "$t": "Khushi"
+                },
+                "uri": {
+                    "$t": "http://www.blogger.com/profile/09124691895111848744"
+                },
+                "email": {
+                    "$t": "noreply@blogger.com"
+                },
+                "gd$image": {
+                    "rel": "http://schemas.google.com/g/2005#thumbnail",
+                    "width": "32",
+                    "height": "32",
+                    "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja1EdNZWEKq8wnJvnXQGKwZ8lLdlhNAc-IMpVNI7gXMCTwYOEmKjVF0PYGUj86c-p24grh1He9FyQ0SAoW4eFV71-mJuJ6dmoHzAjs9gu8ULJIf733_MremaY6OEdHS9i6WZ07xJKWgf2LKGrTIsG9cbh74kCfZgAg1fEQYwNqoWJfhQ/s1600/khushbu%20photo.jpg"
+                }
+            }
+        ],
+        "generator": {
+            "version": "7.00",
+            "uri": "http://www.blogger.com",
+            "$t": "Blogger"
+        },
+        "openSearch$totalResults": {
+            "$t": "6"
+        },
+        "openSearch$startIndex": {
+            "$t": "1"
+        },
+        "openSearch$itemsPerPage": {
+            "$t": "500"
+        },
+        "entry": [
+            {
+                "id": {
+                    "$t": "tag:blogger.com,1999:blog-1091445250248403637.post-7067145357312236686"
+                },
+                "published": {
+                    "$t": "2026-01-17T02:07:00.000-08:00"
+                },
+                "updated": {
+                    "$t": "2026-01-17T02:07:38.364-08:00"
+                },
+                "title": {
+                    "type": "text",
+                    "$t": "My world (MOM)"
+                },
+                "content": {
+                    "type": "html",
+                    "$t": "<div><br /></div><div><br /></div><div><br /></div><div><span style=\"font-family: times;\"><span style=\"color: #cc0000;\">My world; place in the story was my mom</span></span></div><div><span style=\"font-family: times;\"><br /></span></div><div><span style=\"font-family: times;\"><br /></span></div><div><span style=\"font-family: times;\"><br /></span></div><div><span style=\"font-family: times;\"><br /></span></div><div><table align=\"center\" cellpadding=\"0\" cellspacing=\"0\" class=\"tr-caption-container\" style=\"margin-left: auto; margin-right: auto;\"><tbody><tr><td style=\"text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEgSnDODyEYF1ye2EvJ6OTxa-zEOs4MPItGeGl45p6iomGi7BH4YUpKvjtWv4379Yh6dupk45O_prakUQ4tefLI4j6ZRFvuzh3RyDJmsLssQ8RVzzTYoqs6iV9qebtbMolK9xFBxz5m0lGG39_XVAMptVXCozoeD61C_4473Ev1wZ6ibgpuVrKtjHOuEuKU\" style=\"margin-left: auto; margin-right: auto;\"><img alt=\"\" data-original-height=\"1690\" data-original-width=\"940\" height=\"384\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEgSnDODyEYF1ye2EvJ6OTxa-zEOs4MPItGeGl45p6iomGi7BH4YUpKvjtWv4379Yh6dupk45O_prakUQ4tefLI4j6ZRFvuzh3RyDJmsLssQ8RVzzTYoqs6iV9qebtbMolK9xFBxz5m0lGG39_XVAMptVXCozoeD61C_4473Ev1wZ6ibgpuVrKtjHOuEuKU=w485-h384\" width=\"485\" /></a></td></tr><tr><td class=\"tr-caption\" style=\"text-align: center;\"></td></tr></tbody></table><br /></div><div><span style=\"font-family: times;\"><span style=\"color: red;\">She was not only my mom but&nbsp; an angel who beautifully create my world</span></span></div><div><span style=\"color: red; font-family: times;\">The story begins here,</span></div><div><span style=\"color: red; font-family: times;\">when i was small i thought world is a beautiful place to be in</span></div><div><span style=\"color: red; font-family: times;\">But i was unaware of the troubles which lives brings being in the world</span></div><div><span style=\"color: red; font-family: times;\">Slowly everything i enjoyed passing of time and my age with my mom</span></div><div><span style=\"color: red; font-family: times;\">I grew younger and mom grew older&nbsp;</span></div><div><span style=\"color: red; font-family: times;\">I could not notice the changes that was taking place with my world</span></div><div><span style=\"color: red; font-family: times;\">I thought my mom is my strength she will never be away leaving me alone&nbsp;</span></div><div><span style=\"color: red; font-family: times;\">But one day for my higher study i went away from my mom&nbsp;</span></div><div><span style=\"color: red; font-family: times;\">But i thought where will she go she will be with me being my world</span></div><div><span style=\"color: red; font-family: times;\">After the study completed and dreams was in the pick i made my mind to be back to home</span></div><div><span style=\"color: red; font-family: times;\">Yes, i was in home after several waits and finally i met my mom&nbsp;</span></div><div><span style=\"color: red; font-family: times;\">The happiness of meeting her blooms my day with her smile and blessing of fate</span></div><div><span style=\"color: red; font-family: times;\">Just evening appeared sun was drawn, and family times begin</span></div><div><span style=\"color: red; font-family: times;\">All were enjoying till nothing happened&nbsp;</span></div><div><span style=\"color: red; font-family: times;\">Everything was better fine till the mom didn't respond&nbsp;&nbsp;</span></div><div><span style=\"color: red; font-family: times;\">A sudden call rang which changed my world</span></div><div><span style=\"color: red; font-family: times;\">There was silence and heaviness inside the heart&nbsp;</span></div><div><span style=\"color: red; font-family: times;\">It was nothing but everything a last goodbye of my world which was my mom</span></div><div><span style=\"color: red;\"><br /></span></div><div><br /></div><div><br /></div><div><br /></div>"
+                },
+                "link": [
+                    {
+                        "rel": "replies",
+                        "type": "application/atom+xml",
+                        "href": "https://nirmla123.blogspot.com/feeds/7067145357312236686/comments/default",
+                        "title": "Post Comments"
+                    },
+                    {
+                        "rel": "replies",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2026/01/my-world-mom.html#comment-form",
+                        "title": "0 Comments"
+                    },
+                    {
+                        "rel": "edit",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/7067145357312236686"
+                    },
+                    {
+                        "rel": "self",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/7067145357312236686"
+                    },
+                    {
+                        "rel": "alternate",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2026/01/my-world-mom.html",
+                        "title": "My world (MOM)"
+                    }
+                ],
+                "author": [
+                    {
+                        "name": {
+                            "$t": "Khushi"
+                        },
+                        "uri": {
+                            "$t": "http://www.blogger.com/profile/09124691895111848744"
+                        },
+                        "email": {
+                            "$t": "noreply@blogger.com"
+                        },
+                        "gd$image": {
+                            "rel": "http://schemas.google.com/g/2005#thumbnail",
+                            "width": "32",
+                            "height": "32",
+                            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja1EdNZWEKq8wnJvnXQGKwZ8lLdlhNAc-IMpVNI7gXMCTwYOEmKjVF0PYGUj86c-p24grh1He9FyQ0SAoW4eFV71-mJuJ6dmoHzAjs9gu8ULJIf733_MremaY6OEdHS9i6WZ07xJKWgf2LKGrTIsG9cbh74kCfZgAg1fEQYwNqoWJfhQ/s1600/khushbu%20photo.jpg"
+                        }
+                    }
+                ],
+                "media$thumbnail": {
+                    "xmlns$media": "http://search.yahoo.com/mrss/",
+                    "url": "https://blogger.googleusercontent.com/img/a/AVvXsEgSnDODyEYF1ye2EvJ6OTxa-zEOs4MPItGeGl45p6iomGi7BH4YUpKvjtWv4379Yh6dupk45O_prakUQ4tefLI4j6ZRFvuzh3RyDJmsLssQ8RVzzTYoqs6iV9qebtbMolK9xFBxz5m0lGG39_XVAMptVXCozoeD61C_4473Ev1wZ6ibgpuVrKtjHOuEuKU=s72-w485-h384-c",
+                    "height": "72",
+                    "width": "72"
+                },
+                "thr$total": {
+                    "$t": "0"
+                }
+            },
+            {
+                "id": {
+                    "$t": "tag:blogger.com,1999:blog-1091445250248403637.post-4517428524604805247"
+                },
+                "published": {
+                    "$t": "2024-05-10T06:04:00.000-07:00"
+                },
+                "updated": {
+                    "$t": "2024-05-10T06:04:07.278-07:00"
+                },
+                "title": {
+                    "type": "text",
+                    "$t": "Unexplained exception."
+                },
+                "content": {
+                    "type": "html",
+                    "$t": "<p></p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEjlxqFOC1gNzwccu8ZipqN3gAfnWDUewCfpgWIb6jjAPvVHxDrbyVKL9Z93PL-hm3DoFJuTCCkTeSfXifvZ5aGASWVkXzBi2fZs6Yhn-681PBxfFzAMTDyBbHLqyWGvtMNeQP2ZwRzu5LExWOlq-RxE4Cp2c88ERro5ZGVtEweQ8yKoosJJx-PV5-GLHMQ\" style=\"background-color: #fff2cc; margin-left: 1em; margin-right: 1em;\"><img alt=\"\" data-original-height=\"554\" data-original-width=\"600\" height=\"185\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEjlxqFOC1gNzwccu8ZipqN3gAfnWDUewCfpgWIb6jjAPvVHxDrbyVKL9Z93PL-hm3DoFJuTCCkTeSfXifvZ5aGASWVkXzBi2fZs6Yhn-681PBxfFzAMTDyBbHLqyWGvtMNeQP2ZwRzu5LExWOlq-RxE4Cp2c88ERro5ZGVtEweQ8yKoosJJx-PV5-GLHMQ=w200-h185\" width=\"200\" /></a></div><br /><p></p><p><br /></p><div style=\"text-align: center;\"><b>I thought to be perfect in the sense of perfection</b></div><p></p><p style=\"text-align: center;\"><b>But I didn't realized it was unexplained exception</b></p><p style=\"text-align: center;\"><b>I fairy tailed of love from everyone</b></p><p style=\"text-align: center;\"><b>But I didn't know it was the hate of someone</b></p><p style=\"text-align: center;\"><b>Trying to be perfect was okey</b></p><p style=\"text-align: center;\"><b>But trying to be flawless was not</b></p><p style=\"text-align: center;\"><b>I admired slowly everyone was not as perfect as we stare out</b></p><p style=\"text-align: center;\"><b>It was just a rotation of time with ongoing rhyme</b></p><p style=\"text-align: center;\"><b>At the end of state it was just a realization never stop to be good</b></p><p style=\"text-align: center;\"><b>whatever be the situation with unexplained exception</b></p><p style=\"text-align: center;\"><b><br /></b></p><p style=\"text-align: center;\"><b><br /></b></p><p style=\"text-align: center;\"><br /></p><p><br /></p><blockquote style=\"border: none; margin: 0 0 0 40px; padding: 0px;\"><p style=\"text-align: center;\"><br /></p></blockquote><p><br /></p>"
+                },
+                "link": [
+                    {
+                        "rel": "replies",
+                        "type": "application/atom+xml",
+                        "href": "https://nirmla123.blogspot.com/feeds/4517428524604805247/comments/default",
+                        "title": "Post Comments"
+                    },
+                    {
+                        "rel": "replies",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2024/05/unexplained-exception.html#comment-form",
+                        "title": "0 Comments"
+                    },
+                    {
+                        "rel": "edit",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/4517428524604805247"
+                    },
+                    {
+                        "rel": "self",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/4517428524604805247"
+                    },
+                    {
+                        "rel": "alternate",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2024/05/unexplained-exception.html",
+                        "title": "Unexplained exception."
+                    }
+                ],
+                "author": [
+                    {
+                        "name": {
+                            "$t": "Khushi"
+                        },
+                        "uri": {
+                            "$t": "http://www.blogger.com/profile/09124691895111848744"
+                        },
+                        "email": {
+                            "$t": "noreply@blogger.com"
+                        },
+                        "gd$image": {
+                            "rel": "http://schemas.google.com/g/2005#thumbnail",
+                            "width": "32",
+                            "height": "32",
+                            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja1EdNZWEKq8wnJvnXQGKwZ8lLdlhNAc-IMpVNI7gXMCTwYOEmKjVF0PYGUj86c-p24grh1He9FyQ0SAoW4eFV71-mJuJ6dmoHzAjs9gu8ULJIf733_MremaY6OEdHS9i6WZ07xJKWgf2LKGrTIsG9cbh74kCfZgAg1fEQYwNqoWJfhQ/s1600/khushbu%20photo.jpg"
+                        }
+                    }
+                ],
+                "media$thumbnail": {
+                    "xmlns$media": "http://search.yahoo.com/mrss/",
+                    "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjlxqFOC1gNzwccu8ZipqN3gAfnWDUewCfpgWIb6jjAPvVHxDrbyVKL9Z93PL-hm3DoFJuTCCkTeSfXifvZ5aGASWVkXzBi2fZs6Yhn-681PBxfFzAMTDyBbHLqyWGvtMNeQP2ZwRzu5LExWOlq-RxE4Cp2c88ERro5ZGVtEweQ8yKoosJJx-PV5-GLHMQ=s72-w200-h185-c",
+                    "height": "72",
+                    "width": "72"
+                },
+                "thr$total": {
+                    "$t": "0"
+                }
+            },
+            {
+                "id": {
+                    "$t": "tag:blogger.com,1999:blog-1091445250248403637.post-2900933177542862897"
+                },
+                "published": {
+                    "$t": "2022-10-10T23:47:00.000-07:00"
+                },
+                "updated": {
+                    "$t": "2022-10-10T23:47:14.070-07:00"
+                },
+                "title": {
+                    "type": "text",
+                    "$t": "Beautiful life"
+                },
+                "content": {
+                    "type": "html",
+                    "$t": "<p><br /></p><p>Glorious feel of life&nbsp;</p><p></p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEjXIG-7q7UkEQ-2jFrXMxqjmCvEV50MSKj1A8sMajLtU2JWLdB865t8gjuERojEWokNVV7nlnmaU6fdE6cNXvQgsB0I8SBHM5Vf6t7TW8dC0aDuIOrfk2BhHKMOue4N2fL-q6yqUbt1B1XzvORohrT44mv29r4BKkXmvsPW-2YCtqlZa3lJLljZ0If0\" style=\"margin-left: 1em; margin-right: 1em;\"><img alt=\"\" data-original-height=\"700\" data-original-width=\"933\" height=\"324\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEjXIG-7q7UkEQ-2jFrXMxqjmCvEV50MSKj1A8sMajLtU2JWLdB865t8gjuERojEWokNVV7nlnmaU6fdE6cNXvQgsB0I8SBHM5Vf6t7TW8dC0aDuIOrfk2BhHKMOue4N2fL-q6yqUbt1B1XzvORohrT44mv29r4BKkXmvsPW-2YCtqlZa3lJLljZ0If0=w571-h324\" width=\"571\" /></a></div><span style=\"color: red;\"><br /><i style=\"font-family: times; font-size: large;\">once upon a morning what i see was the fairy with sparkling light</i></span><p></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>With a blooms of flower cherishing the weather all the side</i></span></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>I was wonder with seeing the beauty of the sky and asking self was it a night or a beautiful life</i></span></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>I cannot believe in my eyes was it true or just a imagination alike</i></span></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>I saw a bird singing in the roof with enlightenment of the joy&nbsp;</i></span></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>I felt a rain droplets with full of shine in a beautiful sky</i></span></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>Still i was wonder was it true or just a imagination alike</i></span></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>The things went so beautiful that i was mesmerizing with the joy</i></span></p><p><span style=\"color: red; font-family: times; font-size: medium;\"><i>And it was feel like was it a beautiful life.. :) :)</i></span></p><p><br /></p>"
+                },
+                "link": [
+                    {
+                        "rel": "replies",
+                        "type": "application/atom+xml",
+                        "href": "https://nirmla123.blogspot.com/feeds/2900933177542862897/comments/default",
+                        "title": "Post Comments"
+                    },
+                    {
+                        "rel": "replies",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/10/beautiful-life.html#comment-form",
+                        "title": "0 Comments"
+                    },
+                    {
+                        "rel": "edit",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/2900933177542862897"
+                    },
+                    {
+                        "rel": "self",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/2900933177542862897"
+                    },
+                    {
+                        "rel": "alternate",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/10/beautiful-life.html",
+                        "title": "Beautiful life"
+                    }
+                ],
+                "author": [
+                    {
+                        "name": {
+                            "$t": "Khushi"
+                        },
+                        "uri": {
+                            "$t": "http://www.blogger.com/profile/09124691895111848744"
+                        },
+                        "email": {
+                            "$t": "noreply@blogger.com"
+                        },
+                        "gd$image": {
+                            "rel": "http://schemas.google.com/g/2005#thumbnail",
+                            "width": "32",
+                            "height": "32",
+                            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja1EdNZWEKq8wnJvnXQGKwZ8lLdlhNAc-IMpVNI7gXMCTwYOEmKjVF0PYGUj86c-p24grh1He9FyQ0SAoW4eFV71-mJuJ6dmoHzAjs9gu8ULJIf733_MremaY6OEdHS9i6WZ07xJKWgf2LKGrTIsG9cbh74kCfZgAg1fEQYwNqoWJfhQ/s1600/khushbu%20photo.jpg"
+                        }
+                    }
+                ],
+                "media$thumbnail": {
+                    "xmlns$media": "http://search.yahoo.com/mrss/",
+                    "url": "https://blogger.googleusercontent.com/img/a/AVvXsEjXIG-7q7UkEQ-2jFrXMxqjmCvEV50MSKj1A8sMajLtU2JWLdB865t8gjuERojEWokNVV7nlnmaU6fdE6cNXvQgsB0I8SBHM5Vf6t7TW8dC0aDuIOrfk2BhHKMOue4N2fL-q6yqUbt1B1XzvORohrT44mv29r4BKkXmvsPW-2YCtqlZa3lJLljZ0If0=s72-w571-h324-c",
+                    "height": "72",
+                    "width": "72"
+                },
+                "thr$total": {
+                    "$t": "0"
+                }
+            },
+            {
+                "id": {
+                    "$t": "tag:blogger.com,1999:blog-1091445250248403637.post-7375848166395305667"
+                },
+                "published": {
+                    "$t": "2022-09-06T09:25:00.001-07:00"
+                },
+                "updated": {
+                    "$t": "2022-09-06T09:25:34.379-07:00"
+                },
+                "title": {
+                    "type": "text",
+                    "$t": "Rain and  the Struggle"
+                },
+                "content": {
+                    "type": "html",
+                    "$t": "<p><br /></p><p><br /></p><p></p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEhyadkBS14iKnP82Xd-5Nd77lUc0S-rjvlh83vwVxw1NaY4H5GVEq0nERYE3Hr0dTl9inoaL760qke0BGBhV1Iu_ioPoaEA18oTea-xkD30aXAxMFNSmFjn49LaKmR3DEQkLRfb3sXGgkipZn9z46M-yzNpHUOEQgi-pjGaAMiuR2Eyjgqg6k_4Nvrd\" style=\"margin-left: 1em; margin-right: 1em;\"><img alt=\"\" data-original-height=\"672\" data-original-width=\"1024\" height=\"240\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEhyadkBS14iKnP82Xd-5Nd77lUc0S-rjvlh83vwVxw1NaY4H5GVEq0nERYE3Hr0dTl9inoaL760qke0BGBhV1Iu_ioPoaEA18oTea-xkD30aXAxMFNSmFjn49LaKmR3DEQkLRfb3sXGgkipZn9z46M-yzNpHUOEQgi-pjGaAMiuR2Eyjgqg6k_4Nvrd=w497-h240\" width=\"497\" /></a></div><br /><br /><p></p><p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <b>&nbsp; &nbsp; The hope of ray</b></p><p><br /></p><p>&nbsp;<i><span style=\"color: #cc0000;\">Once a time, a storming rain occurs with a night</span></i></p><p><i><span style=\"color: #cc0000;\">&nbsp;everything went with a flow, nothing was left behind</span></i></p><p><i><span style=\"color: #cc0000;\">when night passes and a day rise with a sunshine</span></i></p><p><i><span style=\"color: #cc0000;\">a people were feeling tenses with full of their minds</span></i></p><p><i><span style=\"color: #cc0000;\">people went here and there collecting things and stuff&nbsp;</span></i></p><p><i><span style=\"color: #cc0000;\">but nothing could happen rather than rain disturbed</span></i></p><p><i><span style=\"color: #cc0000;\">the struggling to mange things went day by day</span></i></p><p><i><span style=\"color: #cc0000;\">people went worried of what could happen next</span></i></p><p><i><span style=\"color: #cc0000;\">the time passes and the rain was continuous</span></i></p><p><i><span style=\"color: #cc0000;\">nothing was in the hand of people but hope of being a things better</span></i></p><p><i><span style=\"color: #cc0000;\">after a few days rain out to dry&nbsp;</span></i></p><p><i><span style=\"color: #cc0000;\">people seems to be calm with delightful sight</span></i></p><p><i><span style=\"color: #cc0000;\">later the things was back to normal with a view of rain and struggle..&nbsp;</span></i></p>"
+                },
+                "link": [
+                    {
+                        "rel": "replies",
+                        "type": "application/atom+xml",
+                        "href": "https://nirmla123.blogspot.com/feeds/7375848166395305667/comments/default",
+                        "title": "Post Comments"
+                    },
+                    {
+                        "rel": "replies",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/09/rain-and-struggle.html#comment-form",
+                        "title": "0 Comments"
+                    },
+                    {
+                        "rel": "edit",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/7375848166395305667"
+                    },
+                    {
+                        "rel": "self",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/7375848166395305667"
+                    },
+                    {
+                        "rel": "alternate",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/09/rain-and-struggle.html",
+                        "title": "Rain and  the Struggle"
+                    }
+                ],
+                "author": [
+                    {
+                        "name": {
+                            "$t": "Khushi"
+                        },
+                        "uri": {
+                            "$t": "http://www.blogger.com/profile/09124691895111848744"
+                        },
+                        "email": {
+                            "$t": "noreply@blogger.com"
+                        },
+                        "gd$image": {
+                            "rel": "http://schemas.google.com/g/2005#thumbnail",
+                            "width": "32",
+                            "height": "32",
+                            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja1EdNZWEKq8wnJvnXQGKwZ8lLdlhNAc-IMpVNI7gXMCTwYOEmKjVF0PYGUj86c-p24grh1He9FyQ0SAoW4eFV71-mJuJ6dmoHzAjs9gu8ULJIf733_MremaY6OEdHS9i6WZ07xJKWgf2LKGrTIsG9cbh74kCfZgAg1fEQYwNqoWJfhQ/s1600/khushbu%20photo.jpg"
+                        }
+                    }
+                ],
+                "media$thumbnail": {
+                    "xmlns$media": "http://search.yahoo.com/mrss/",
+                    "url": "https://blogger.googleusercontent.com/img/a/AVvXsEhyadkBS14iKnP82Xd-5Nd77lUc0S-rjvlh83vwVxw1NaY4H5GVEq0nERYE3Hr0dTl9inoaL760qke0BGBhV1Iu_ioPoaEA18oTea-xkD30aXAxMFNSmFjn49LaKmR3DEQkLRfb3sXGgkipZn9z46M-yzNpHUOEQgi-pjGaAMiuR2Eyjgqg6k_4Nvrd=s72-w497-h240-c",
+                    "height": "72",
+                    "width": "72"
+                },
+                "thr$total": {
+                    "$t": "0"
+                }
+            },
+            {
+                "id": {
+                    "$t": "tag:blogger.com,1999:blog-1091445250248403637.post-6895769959707632397"
+                },
+                "published": {
+                    "$t": "2022-08-30T09:55:00.000-07:00"
+                },
+                "updated": {
+                    "$t": "2022-08-30T09:55:28.958-07:00"
+                },
+                "title": {
+                    "type": "text",
+                    "$t": "The journey of Life with endless death"
+                },
+                "content": {
+                    "type": "html",
+                    "$t": "<p></p><blockquote><span style=\"background-color: #76a5af;\">The conversation went like this between life and death...</span></blockquote><p></p><p><i><span style=\"font-size: medium;\">Life asked the death why people hate you and love me</span></i></p><div class=\"separator\" style=\"clear: both; text-align: center;\"><i><span style=\"font-size: medium;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEgMs8GNoHfiqAInoWAjzmP0bFtKCf-UQp1ANYT-AxJmAu5Isfln-tubh_xMItUlM0G_nSREprAMRGSRaZoINmqbg3I1KFjDDWnSO-FmIG4zVxg9rV0TU4KbmzNnH-aLXw2XIznhMnz5a3eVPDwljQjvPCSRYq47CdqmGozW_yDVzF_xsEcYnomw_zN7\" style=\"margin-left: 1em; margin-right: 1em;\"><img alt=\"\" data-original-height=\"793\" data-original-width=\"1061\" height=\"239\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEgMs8GNoHfiqAInoWAjzmP0bFtKCf-UQp1ANYT-AxJmAu5Isfln-tubh_xMItUlM0G_nSREprAMRGSRaZoINmqbg3I1KFjDDWnSO-FmIG4zVxg9rV0TU4KbmzNnH-aLXw2XIznhMnz5a3eVPDwljQjvPCSRYq47CdqmGozW_yDVzF_xsEcYnomw_zN7=w565-h239\" width=\"565\" /></a></span></i></div><p></p><p><i><span style=\"font-size: medium;\">Death smiled and replied the journey of life is so beautiful</span></i></p><p><i><span style=\"font-size: medium;\">Life gives endless effort to dream and a option to live</span></i></p><p><i><span style=\"font-size: medium;\">Life gives a chance to be what you wanted to become</span></i></p><p><i><span style=\"font-size: medium;\">Life gives a treasury to smile within the several of the corn</span></i></p><p><i><span style=\"font-size: medium;\">Life uplifts the dream to very height</span></i></p><p><i><span style=\"font-size: medium;\">Until and unless you get success to survive</span></i></p><p><span style=\"background-color: #e06666;\">Lastly, death said very true meaning of death to a life</span></p><p><i><span style=\"font-size: medium;\">Death is a bitter full true for which people are living</span></i></p><p><i><span style=\"font-size: medium;\">Death gives the sadness which makes people cry</span></i></p><p><i><span style=\"font-size: medium;\">Death teaches true meaning of living</span></i></p><p><i><span style=\"font-size: medium;\">Death is death but it don't kills people until and unless they try to survive.&nbsp;</span></i></p><p><i><span style=\"background-color: #ffa400; font-size: medium;\">This, way the conversation&nbsp;between life and death got stuck.....</span></i></p>"
+                },
+                "link": [
+                    {
+                        "rel": "replies",
+                        "type": "application/atom+xml",
+                        "href": "https://nirmla123.blogspot.com/feeds/6895769959707632397/comments/default",
+                        "title": "Post Comments"
+                    },
+                    {
+                        "rel": "replies",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/08/the-journey-of-life-with-endless-death.html#comment-form",
+                        "title": "2 Comments"
+                    },
+                    {
+                        "rel": "edit",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/6895769959707632397"
+                    },
+                    {
+                        "rel": "self",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/6895769959707632397"
+                    },
+                    {
+                        "rel": "alternate",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/08/the-journey-of-life-with-endless-death.html",
+                        "title": "The journey of Life with endless death"
+                    }
+                ],
+                "author": [
+                    {
+                        "name": {
+                            "$t": "Khushi"
+                        },
+                        "uri": {
+                            "$t": "http://www.blogger.com/profile/09124691895111848744"
+                        },
+                        "email": {
+                            "$t": "noreply@blogger.com"
+                        },
+                        "gd$image": {
+                            "rel": "http://schemas.google.com/g/2005#thumbnail",
+                            "width": "32",
+                            "height": "32",
+                            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja1EdNZWEKq8wnJvnXQGKwZ8lLdlhNAc-IMpVNI7gXMCTwYOEmKjVF0PYGUj86c-p24grh1He9FyQ0SAoW4eFV71-mJuJ6dmoHzAjs9gu8ULJIf733_MremaY6OEdHS9i6WZ07xJKWgf2LKGrTIsG9cbh74kCfZgAg1fEQYwNqoWJfhQ/s1600/khushbu%20photo.jpg"
+                        }
+                    }
+                ],
+                "media$thumbnail": {
+                    "xmlns$media": "http://search.yahoo.com/mrss/",
+                    "url": "https://blogger.googleusercontent.com/img/a/AVvXsEgMs8GNoHfiqAInoWAjzmP0bFtKCf-UQp1ANYT-AxJmAu5Isfln-tubh_xMItUlM0G_nSREprAMRGSRaZoINmqbg3I1KFjDDWnSO-FmIG4zVxg9rV0TU4KbmzNnH-aLXw2XIznhMnz5a3eVPDwljQjvPCSRYq47CdqmGozW_yDVzF_xsEcYnomw_zN7=s72-w565-h239-c",
+                    "height": "72",
+                    "width": "72"
+                },
+                "thr$total": {
+                    "$t": "2"
+                }
+            },
+            {
+                "id": {
+                    "$t": "tag:blogger.com,1999:blog-1091445250248403637.post-1678430649980453411"
+                },
+                "published": {
+                    "$t": "2022-08-29T03:13:00.000-07:00"
+                },
+                "updated": {
+                    "$t": "2022-08-29T03:13:29.177-07:00"
+                },
+                "title": {
+                    "type": "text",
+                    "$t": "Destiny the ionic"
+                },
+                "content": {
+                    "type": "html",
+                    "$t": "<p><b>Never give up just hold yourself to be one.....</b>&nbsp;</p><p></p><div class=\"separator\" style=\"clear: both; text-align: center;\"><a href=\"https://blogger.googleusercontent.com/img/a/AVvXsEi3ofakpxHO2fAVwP96Q2YLqp_vYn5-EU4C2G9ZeZljzc-Bogv3LvO8cCeeHqHlHrbQzZj6MnmGOwAc8p5r-WfATf5x6XOQKthp3AtHlcTLddEqJJ7LRs4fMNrDf7ncM3_8NajtoUPZrd02H0J8MugWc_r9JifHr0iwssQY_0oj9mpfujGu-usXz6PP\" style=\"margin-left: 1em; margin-right: 1em;\"><img alt=\"\" data-original-height=\"315\" data-original-width=\"474\" height=\"311\" src=\"https://blogger.googleusercontent.com/img/a/AVvXsEi3ofakpxHO2fAVwP96Q2YLqp_vYn5-EU4C2G9ZeZljzc-Bogv3LvO8cCeeHqHlHrbQzZj6MnmGOwAc8p5r-WfATf5x6XOQKthp3AtHlcTLddEqJJ7LRs4fMNrDf7ncM3_8NajtoUPZrd02H0J8MugWc_r9JifHr0iwssQY_0oj9mpfujGu-usXz6PP=w644-h311\" width=\"644\" /></a></div><br /><p></p><p><i><span style=\"color: #674ea7;\">I was in the search of destiny&nbsp;</span></i></p><p><i><span style=\"color: #674ea7;\">So, I decided to find it day and night</span></i></p><p><i><span style=\"color: #674ea7;\">I cried, I prayed for the destiny to be in my favor alike</span></i></p><div class=\"separator\" style=\"clear: both; text-align: center;\"><i></i></div><p><i><span style=\"color: #674ea7;\">The day passes and the night, but the time remains aside,</span></i></p><p><i><span style=\"color: #674ea7;\">In the search of destiny i walked along a mile</span></i></p><p><i><span style=\"color: #674ea7;\">But nothing i got rather than a shining light</span></i></p><p><i><span style=\"color: #674ea7;\">I was tired with the time and tides which was for no one with a passing move</span></i></p><p><i><span style=\"color: #674ea7;\">One day, i looked at the sky and asked why the destiny is not in the favor of mine</span></i></p><p><i><span style=\"color: #674ea7;\">Than sky looked back with its shining light and said&nbsp;</span></i></p><p><i><span style=\"color: #674ea7;\">You can get whole world just find the right time and a way to live a life</span></i></p><p><i><span style=\"color: #674ea7;\">Just work in yourself to find the light that lights inside you not only to get the destiny&nbsp;</span></i></p><p><i><span style=\"color: #674ea7;\">But the whole sky !!!</span></i></p><p><br /></p>"
+                },
+                "link": [
+                    {
+                        "rel": "replies",
+                        "type": "application/atom+xml",
+                        "href": "https://nirmla123.blogspot.com/feeds/1678430649980453411/comments/default",
+                        "title": "Post Comments"
+                    },
+                    {
+                        "rel": "replies",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/08/destiny-ionic.html#comment-form",
+                        "title": "2 Comments"
+                    },
+                    {
+                        "rel": "edit",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/1678430649980453411"
+                    },
+                    {
+                        "rel": "self",
+                        "type": "application/atom+xml",
+                        "href": "https://www.blogger.com/feeds/1091445250248403637/posts/default/1678430649980453411"
+                    },
+                    {
+                        "rel": "alternate",
+                        "type": "text/html",
+                        "href": "https://nirmla123.blogspot.com/2022/08/destiny-ionic.html",
+                        "title": "Destiny the ionic"
+                    }
+                ],
+                "author": [
+                    {
+                        "name": {
+                            "$t": "Khushi"
+                        },
+                        "uri": {
+                            "$t": "http://www.blogger.com/profile/09124691895111848744"
+                        },
+                        "email": {
+                            "$t": "noreply@blogger.com"
+                        },
+                        "gd$image": {
+                            "rel": "http://schemas.google.com/g/2005#thumbnail",
+                            "width": "32",
+                            "height": "32",
+                            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEja1EdNZWEKq8wnJvnXQGKwZ8lLdlhNAc-IMpVNI7gXMCTwYOEmKjVF0PYGUj86c-p24grh1He9FyQ0SAoW4eFV71-mJuJ6dmoHzAjs9gu8ULJIf733_MremaY6OEdHS9i6WZ07xJKWgf2LKGrTIsG9cbh74kCfZgAg1fEQYwNqoWJfhQ/s1600/khushbu%20photo.jpg"
+                        }
+                    }
+                ],
+                "media$thumbnail": {
+                    "xmlns$media": "http://search.yahoo.com/mrss/",
+                    "url": "https://blogger.googleusercontent.com/img/a/AVvXsEi3ofakpxHO2fAVwP96Q2YLqp_vYn5-EU4C2G9ZeZljzc-Bogv3LvO8cCeeHqHlHrbQzZj6MnmGOwAc8p5r-WfATf5x6XOQKthp3AtHlcTLddEqJJ7LRs4fMNrDf7ncM3_8NajtoUPZrd02H0J8MugWc_r9JifHr0iwssQY_0oj9mpfujGu-usXz6PP=s72-w644-h311-c",
+                    "height": "72",
+                    "width": "72"
+                },
+                "thr$total": {
+                    "$t": "2"
+                }
+            }
+        ]
+    }
+}
