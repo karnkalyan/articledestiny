@@ -2,11 +2,8 @@ services:
   web:
     build: .
     restart: always
-    ports:
-      - "3400:3400"
+    network_mode: "host"
     environment:
-      DATABASE_URL: "mysql://admin:quantumSql%40123@host.docker.internal:3306/articledestiny"
+      DATABASE_URL: "mysql://admin:quantumSql%40123@127.0.0.1:3306/articledestiny"
       JWT_SECRET: "khusbhuArticleDestiny!#$@"
       PORT: 3400
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
