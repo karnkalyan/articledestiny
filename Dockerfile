@@ -21,5 +21,5 @@ RUN npx prisma generate
 EXPOSE 3400
 ENV PORT=3400
 
-# Push database schema, build Next.js with active connection, and start in production
-CMD ["sh", "-c", "npx prisma db push && npm run build && npm run start"]
+# Push database schema, seed database, build Next.js, and start in production
+CMD ["sh", "-c", "npx prisma db push && npx prisma db seed && npm run build && npm run start"]
