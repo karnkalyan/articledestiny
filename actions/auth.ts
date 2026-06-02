@@ -4,11 +4,9 @@ import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { createSession, deleteSession, getSession } from "@/lib/session";
 import { SafeUser } from "@/types";
-import { ensureSeeded } from "@/lib/seed";
 
 export async function registerUser(formData: FormData) {
   try {
-    await ensureSeeded();
     const email = formData.get("email")?.toString().trim();
     const password = formData.get("password")?.toString();
     const name = formData.get("name")?.toString().trim();
@@ -66,7 +64,6 @@ export async function registerUser(formData: FormData) {
 
 export async function loginUser(formData: FormData) {
   try {
-    await ensureSeeded();
     const email = formData.get("email")?.toString().trim();
     const password = formData.get("password")?.toString();
 
@@ -109,7 +106,6 @@ export async function loginUser(formData: FormData) {
 }
 
 export async function getMe(): Promise<SafeUser | null> {
-  await ensureSeeded();
   return await getSession();
 }
 

@@ -7,7 +7,6 @@ import { getMe } from "@/actions/auth";
 import { AdSense } from "@/components/AdSense";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ReadIndicator } from "@/components/ReadIndicator";
-import { ensureSeeded } from "@/lib/seed";
 
 interface SearchParamsResponse {
   category?: string;
@@ -19,8 +18,7 @@ export default async function HomePage(props: {
   const searchParams = await props.searchParams;
   const activeCategory = searchParams.category || "All";
 
-  // 1. Core user session & seed database
-  await ensureSeeded();
+  // 1. Core user session
   const currentUser = await getMe();
 
   // Load site settings for About Spotlight
