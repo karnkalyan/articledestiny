@@ -16,6 +16,13 @@
 }
 
 @layer base {
+  :root {
+    --grad-primary: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+  }
+  .dark {
+    --grad-primary: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+  }
+
   html {
     scroll-behavior: smooth;
   }

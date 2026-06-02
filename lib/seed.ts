@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import bloggerData from "@/lib/data-202662172.json";
+import bloggerData from "./data-202662172.json";
 import { db } from "./db";
 import { generateSeo, stripHtml } from "./seo";
 

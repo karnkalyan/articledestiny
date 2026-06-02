@@ -182,6 +182,9 @@ function WriteArticleForm() {
             setFocusKeyword(res.article.focusKeyword || "");
             setSeoScore(res.article.seoScore || 0);
           }
+        } else {
+          const res = await response.json();
+          setErrorMsg(res.error || "Failed to load article for editing");
         }
       } catch (error) {
         console.error("Error loading article for editing:", error);
@@ -642,7 +645,7 @@ function AdminComposerShell({ children, currentUser }: { children: React.ReactNo
       <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--nexus-card-border)]">
         {!sidebarCollapsed && (
           <div className="flex items-center gap-3">
-            <span className="h-8 w-8 rounded-lg bg-[var(--grad-primary)] text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-cyan-500/20">A</span>
+            <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-700 text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-cyan-500/20">A</span>
             <div>
               <p className="text-[10px] uppercase tracking-[0.24em] text-[var(--nexus-text-muted)] font-bold">ArticleDestiny</p>
               <h2 className="text-sm font-black text-[var(--nexus-text-main)]">Admin Console</h2>
@@ -718,7 +721,7 @@ function AdminComposerShell({ children, currentUser }: { children: React.ReactNo
                 <Menu className="h-5 w-5" />
               </button>
               <div className="min-w-0">
-                <h1 className="text-lg font-black truncate bg-[var(--grad-primary)] bg-clip-text text-transparent">Story Composer</h1>
+                <h1 className="text-lg font-black truncate text-slate-900 dark:text-white">Story Composer</h1>
                 <p className="text-[11px] nexus-text-muted truncate">Create, edit, optimize, and publish stories from the admin workspace.</p>
               </div>
             </div>

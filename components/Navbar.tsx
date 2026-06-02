@@ -32,7 +32,7 @@ export function Navbar({ user }: NavbarProps) {
               <span className="p-2 bg-gradient-to-tr from-indigo-500 to-indigo-600 rounded-xl shadow-md shadow-indigo-100 dark:shadow-none group-hover:scale-105 transition-transform">
                 <Sparkles className="h-4.5 w-4.5 text-white animate-pulse" />
               </span>
-              <span className="text-lg font-black tracking-tight bg-gradient-to-r from-slate-900 to-indigo-950 bg-clip-text text-transparent dark:from-white dark:to-zinc-300">
+              <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
                 Article<span className="text-indigo-600 dark:text-indigo-400">Destiny</span>
               </span>
             </Link>

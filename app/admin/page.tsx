@@ -228,7 +228,7 @@ export default function AdminDashboardPage() {
       <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--nexus-card-border)]">
         {!sidebarCollapsed && (
           <div className="flex items-center gap-3">
-            <span className="h-8 w-8 rounded-lg bg-[var(--grad-primary)] text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-cyan-500/20">A</span>
+            <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-700 text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-cyan-500/20">A</span>
             <div>
               <p className="text-[10px] uppercase tracking-[0.24em] text-[var(--nexus-text-muted)] font-bold">ArticleDestiny</p>
               <h2 className="text-sm font-black text-[var(--nexus-text-main)]">Admin Console</h2>
@@ -320,7 +320,7 @@ export default function AdminDashboardPage() {
                 <Menu className="h-5 w-5" />
               </button>
               <div className="min-w-0">
-                <h1 className="text-lg font-black truncate bg-[var(--grad-primary)] bg-clip-text text-transparent">Admin Panel</h1>
+                <h1 className="text-lg font-black truncate text-slate-900 dark:text-white">Admin Panel</h1>
                 <p className="text-[11px] nexus-text-muted truncate">Professional control center for stories, SEO, mail, ads, and website content.</p>
               </div>
             </div>
@@ -428,7 +428,7 @@ export default function AdminDashboardPage() {
                     <div className="flex items-center gap-2">
                       <Button variant="outline" onClick={() => router.push(`/blog/${article.slug}`)} className="h-8 px-3">View</Button>
                       <Button onClick={() => router.push(`/admin/write?id=${article.id}`)} className="h-8 px-3">Edit</Button>
-                      <Button variant="destructive" onClick={() => runAction(() => deleteArticle(article.id), "Story deleted.")} className="h-8 w-8 p-0"><Trash2 className="h-4 w-4" /></Button>
+                      <Button variant="destructive" onClick={() => runAction(() => deleteArticle(article.id), "Story deleted.")} className="h-8 px-3 gap-1.5"><Trash2 className="h-3.5 w-3.5" /><span className="hidden sm:inline">Delete</span></Button>
                     </div>
                   </MotionDiv>
                 ))}
