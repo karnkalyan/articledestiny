@@ -64,6 +64,7 @@ export default async function RootLayout({
     <html lang="en" className={inter.variable}>
       <head>
         {gscToken && <meta name="google-site-verification" content={gscToken} />}
+        {adsenseClient && <meta name="google-adsense-account" content={adsenseClient} />}
         {adsenseClient && (
           <script
             async

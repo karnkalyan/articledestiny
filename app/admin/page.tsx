@@ -27,6 +27,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { getMe, logoutUser } from "@/actions/auth";
+import { renderArticleContent } from "@/lib/markdown";
 import {
   createUserFromAdmin,
   deleteArticle,
@@ -104,6 +105,7 @@ export default function AdminDashboardPage() {
 
   const [stats, setStats] = useState<any>(null);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [previewArticle, setPreviewArticle] = useState<Article | null>(null);
   const [users, setUsers] = useState<SafeUser[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
@@ -378,12 +380,12 @@ export default function AdminDashboardPage() {
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-600">Google Control Room</p>
                   <h2 className="text-xl font-black mt-1">Search Console, Analytics, and AdSense</h2>
-                  <p className="text-xs text-gray-500 mt-1">Save once here. The app injects verification, GA4, AdSense, robots, and sitemap URLs automatically.</p>
+                  <p className="text-xs text-gray-500 mt-1">Paste the simple value or the full Google snippet. The app extracts IDs and renders verification tags, Analytics, AdSense, ads.txt, robots, and sitemap URLs automatically.</p>
                 </div>
-                <Input label="Public Site URL" value={settings.site_url} onChange={(value) => setSettings({ ...settings, site_url: value })} />
-                <Input label="Google Search Console Verification Token" value={settings.google_search_console_verification} onChange={(value) => setSettings({ ...settings, google_search_console_verification: value })} />
-                <Input label="GA4 Measurement ID" value={settings.ga4_measurement_id} onChange={(value) => setSettings({ ...settings, ga4_measurement_id: value })} />
-                <Input label="AdSense Publisher Client ID" value={settings.adsense_client_id} onChange={(value) => setSettings({ ...settings, adsense_client_id: value })} />
+                <Input label="Public Site URL" value={settings.site_url} onChange={(value) => setSettings({ ...settings, site_url: value })} placeholder="https://articledestiny.com" />
+                <Input label="Google Search Console Verification" value={settings.google_search_console_verification} onChange={(value) => setSettings({ ...settings, google_search_console_verification: value })} placeholder="verification token or full meta tag" />
+                <Input label="GA4 Measurement ID" value={settings.ga4_measurement_id} onChange={(value) => setSettings({ ...settings, ga4_measurement_id: value })} placeholder="G-XXXXXXXXXX or full gtag snippet" />
+                <Input label="AdSense Verification / Publisher ID" value={settings.adsense_client_id} onChange={(value) => setSettings({ ...settings, adsense_client_id: value })} placeholder="ca-pub-... or AdSense script/meta/ads.txt line" />
                 <label className="flex items-center gap-2 text-xs font-bold">
                   <input type="checkbox" checked={settings.adsense_auto_ads !== "false"} onChange={(e) => setSettings({ ...settings, adsense_auto_ads: String(e.target.checked) })} />
                   Load AdSense script globally for Auto Ads
@@ -396,10 +398,10 @@ export default function AdminDashboardPage() {
               <section className="xl:col-span-5 rounded-3xl bg-slate-950 text-white border border-white/10 p-5 sm:p-6 shadow-2xl shadow-slate-900/30 space-y-4">
                 <h3 className="text-sm font-black uppercase tracking-widest">What These Fields Do</h3>
                 <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
-                  <p><strong className="text-white">Search Console:</strong> paste only the verification token. The app renders the required meta tag.</p>
+                  <p><strong className="text-white">Search Console:</strong> paste the token or full meta tag. The app renders the required meta tag.</p>
                   <p><strong className="text-white">Sitemap:</strong> generated live at <span className="text-cyan-300">{(settings.site_url || "http://localhost:3400").replace(/\/+$/, "")}/sitemap.xml</span>.</p>
                   <p><strong className="text-white">GA4:</strong> use an ID like <span className="text-cyan-300">G-XXXXXXXXXX</span>. The tracking script loads automatically.</p>
-                  <p><strong className="text-white">AdSense:</strong> use an ID like <span className="text-cyan-300">ca-pub-XXXXXXXXXXXXXXXX</span>. Ad slot HTML is still managed in the Ads tab.</p>
+                  <p><strong className="text-white">AdSense:</strong> use an ID like <span className="text-cyan-300">ca-pub-XXXXXXXXXXXXXXXX</span>, or paste the script, meta tag, or ads.txt line. The app renders all three verification methods.</p>
                 </div>
               </section>
             </MotionForm>
@@ -426,7 +428,7 @@ export default function AdminDashboardPage() {
                       <p className="text-[10px] nexus-text-muted truncate">/{article.slug}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" onClick={() => router.push(`/blog/${article.slug}`)} className="h-8 px-3">View</Button>
+                      <Button variant="outline" onClick={() => setPreviewArticle(article)} className="h-8 px-3">Preview</Button>
                       <Button onClick={() => router.push(`/admin/write?id=${article.id}`)} className="h-8 px-3">Edit</Button>
                       <Button variant="destructive" onClick={() => runAction(() => deleteArticle(article.id), "Story deleted.")} className="h-8 px-3 gap-1.5"><Trash2 className="h-3.5 w-3.5" /><span className="hidden sm:inline">Delete</span></Button>
                     </div>
@@ -480,25 +482,68 @@ export default function AdminDashboardPage() {
 
           {activeTab === "users" && (
             <section className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-              <form onSubmit={(e) => { e.preventDefault(); runAction(() => createUserFromAdmin(newUserForm), "User created."); }} className="nexus-card p-5 space-y-3">
-                <h2 className="nexus-card-title">New User</h2>
-                {["name", "email", "password"].map((field) => (
-                  <input key={field} value={(newUserForm as any)[field]} onChange={(e) => setNewUserForm({ ...newUserForm, [field]: e.target.value })} placeholder={field} className="nexus-input w-full px-3 py-2 text-xs outline-none" required />
-                ))}
-                <select value={newUserForm.role} onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value })} className="nexus-input w-full px-3 py-2 text-xs outline-none">
-                  <option value="USER">USER</option><option value="AUTHOR">AUTHOR</option><option value="ADMIN">ADMIN</option>
-                </select>
-                <Button type="submit" className="w-full">Create User</Button>
-              </form>
+              <Card className="overflow-hidden">
+                <CardHeader>
+                  <CardTitle>Create User</CardTitle>
+                  <p className="mt-1 text-xs nexus-text-muted">Add authors, admins, or regular readers from the console.</p>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={(e) => { e.preventDefault(); runAction(() => createUserFromAdmin(newUserForm), "User created."); }} className="space-y-3">
+                    <label className="block">
+                      <span className="block text-[10px] uppercase tracking-widest font-bold nexus-text-muted mb-1">Name</span>
+                      <input value={newUserForm.name} onChange={(e) => setNewUserForm({ ...newUserForm, name: e.target.value })} placeholder="Full name" className="nexus-input w-full px-3 py-2 text-xs outline-none" required />
+                    </label>
+                    <label className="block">
+                      <span className="block text-[10px] uppercase tracking-widest font-bold nexus-text-muted mb-1">Email</span>
+                      <input type="email" value={newUserForm.email} onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })} placeholder="name@example.com" className="nexus-input w-full px-3 py-2 text-xs outline-none" required />
+                    </label>
+                    <label className="block">
+                      <span className="block text-[10px] uppercase tracking-widest font-bold nexus-text-muted mb-1">Password</span>
+                      <input type="password" value={newUserForm.password} onChange={(e) => setNewUserForm({ ...newUserForm, password: e.target.value })} placeholder="Temporary password" className="nexus-input w-full px-3 py-2 text-xs outline-none" required />
+                    </label>
+                    <label className="block">
+                      <span className="block text-[10px] uppercase tracking-widest font-bold nexus-text-muted mb-1">Role</span>
+                      <select value={newUserForm.role} onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value })} className="nexus-input w-full px-3 py-2 text-xs outline-none">
+                        <option value="USER">USER</option><option value="AUTHOR">AUTHOR</option><option value="ADMIN">ADMIN</option>
+                      </select>
+                    </label>
+                    <Button type="submit" className="w-full">Create User</Button>
+                  </form>
+                </CardContent>
+              </Card>
               <div className="xl:col-span-2">
-                <DataPanel title={`Users (${users.length})`}>
-                  {users.map((user) => (
-                    <Row key={user.id} title={user.name} subtitle={`${user.email} · ${user.role}${user.isBanned ? " · Banned" : ""}`}>
-                      <Button variant="outline" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "role"), "Role updated.")} className="h-8 px-3">Role</Button>
-                      <Button variant="destructive" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "ban"), "Ban status updated.")} className="h-8 px-3">{user.isBanned ? "Unban" : "Ban"}</Button>
-                    </Row>
-                  ))}
-                </DataPanel>
+                <Card className="overflow-hidden">
+                  <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <CardTitle>Users</CardTitle>
+                      <p className="mt-1 text-xs nexus-text-muted">{users.length} registered account{users.length === 1 ? "" : "s"}</p>
+                    </div>
+                    <Badge className="border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">Access Control</Badge>
+                  </CardHeader>
+                  <div>
+                    {users.map((user) => (
+                      <div key={user.id} className="nexus-row p-4">
+                        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="h-10 w-10 rounded-full bg-[var(--grad-primary)] text-white flex items-center justify-center text-sm font-black shrink-0">
+                              {user.name?.slice(0, 1).toUpperCase() || "U"}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-bold truncate text-[var(--nexus-text-main)]">{user.name}</p>
+                              <p className="text-[11px] nexus-text-muted truncate">{user.email}</p>
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge className="border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">{user.role}</Badge>
+                            <Badge className={user.isBanned ? "border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-300" : "border-orange-500/20 bg-orange-500/10 text-orange-700 dark:text-orange-300"}>{user.isBanned ? "Banned" : "Active"}</Badge>
+                            <Button variant="outline" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "role"), "Role updated.")} className="h-8 px-3">Change Role</Button>
+                            <Button variant="destructive" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "ban"), "Ban status updated.")} className="h-8 px-3">{user.isBanned ? "Unban" : "Ban"}</Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
               </div>
             </section>
           )}
@@ -637,6 +682,36 @@ export default function AdminDashboardPage() {
           )}
         </MotionDiv>
       </main>
+      {previewArticle && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/65 p-3 backdrop-blur-xl">
+          <div className="nexus-card max-h-[92vh] w-full max-w-5xl overflow-hidden">
+            <div className="nexus-card-header flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <Badge className="mb-2 border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">{previewArticle.category}</Badge>
+                <h2 className="text-xl font-black leading-tight text-[var(--nexus-text-main)]">{previewArticle.title}</h2>
+                <p className="mt-1 text-xs nexus-text-muted">/{previewArticle.slug} - SEO {previewArticle.seoScore}/100</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <Button variant="outline" onClick={() => router.push(`/blog/${previewArticle.slug}`)} className="h-9 px-3">Open Page</Button>
+                <Button variant="ghost" onClick={() => setPreviewArticle(null)} className="h-9 w-9 p-0" aria-label="Close story preview">
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+            <div className="max-h-[calc(92vh-96px)] overflow-y-auto p-5 sm:p-7">
+              {previewArticle.coverImage && (
+                <img src={previewArticle.coverImage} alt={previewArticle.title} className="mb-6 h-64 w-full rounded-xl border border-[var(--nexus-card-border)] object-cover" />
+              )}
+              <p className="mb-6 border-l-2 border-cyan-500 pl-4 text-sm leading-7 nexus-text-muted">{previewArticle.excerpt}</p>
+              <article
+                id="article-body"
+                className="prose max-w-none dark:prose-invert"
+                dangerouslySetInnerHTML={{ __html: renderArticleContent(previewArticle.content) }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -661,11 +736,11 @@ function Row({ title, subtitle, children }: { title: string; subtitle: string; c
   );
 }
 
-function Input({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (value: string) => void; type?: string }) {
+function Input({ label, value, onChange, type = "text", placeholder }: { label: string; value: string; onChange: (value: string) => void; type?: string; placeholder?: string }) {
   return (
     <label className="block">
       <span className="block text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">{label}</span>
-      <ShadInput type={type} value={value || ""} onChange={(e) => onChange(e.target.value)} />
+      <ShadInput type={type} value={value || ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
     </label>
   );
 }

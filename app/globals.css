@@ -17,10 +17,18 @@
 
 @layer base {
   :root {
-    --grad-primary: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+    --nexus-primary: #2563eb;
+    --nexus-input-bg: rgba(255, 255, 255, 0.86);
+    --nexus-input-border: rgba(15, 23, 42, 0.14);
+    --nexus-input-focus-bg: #ffffff;
+    --grad-primary: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   }
   .dark {
-    --grad-primary: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+    --nexus-primary: #3b82f6;
+    --nexus-input-bg: rgba(255, 255, 255, 0.04);
+    --nexus-input-border: rgba(255, 255, 255, 0.11);
+    --nexus-input-focus-bg: rgba(255, 255, 255, 0.07);
+    --grad-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   }
 
   html {
@@ -240,12 +248,12 @@
     border: 0 !important;
     border-radius: 8px !important;
     color: #fff !important;
-    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25) !important;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--nexus-primary) 28%, transparent) !important;
   }
 
   .nexus-btn-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(6, 182, 212, 0.35) !important;
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--nexus-primary) 36%, transparent) !important;
   }
 
   .nexus-input {

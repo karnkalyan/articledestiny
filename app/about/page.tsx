@@ -36,7 +36,7 @@ export default async function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto py-12 px-4">
       <div className="text-center mb-16">
-        <span className="text-[11px] font-bold text-cyan-600 uppercase tracking-widest font-mono select-none">{eyebrow}</span>
+        <span className="text-[11px] font-bold text-blue-600 uppercase tracking-widest font-mono select-none">{eyebrow}</span>
         <h1 className="text-4xl font-extrabold text-slate-900 dark:text-zinc-100 mt-3 tracking-tight">
           {title}
         </h1>
@@ -48,7 +48,7 @@ export default async function AboutPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-16">
         {features.map((feat, i) => (
           <div key={i} className="p-6 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl">
-            <span className="p-2.5 inline-block bg-cyan-50 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-300 w-fit rounded-xl mb-4">
+            <span className="p-2.5 inline-block bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300 w-fit rounded-xl mb-4">
               {i % 2 === 0 ? <Compass className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
             </span>
             <h3 className="text-sm font-bold text-slate-1000 dark:text-zinc-200 uppercase tracking-wider font-mono">{feat.title}</h3>

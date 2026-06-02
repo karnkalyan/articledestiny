@@ -7,6 +7,11 @@ import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { generateSeo } from "@/lib/seo";
 import { notifySubscribersForArticle } from "@/lib/mail";
+import {
+  normalizeAdSenseClientId,
+  normalizeGa4MeasurementId,
+  normalizeSearchConsoleToken,
+} from "@/lib/google-verification";
 
 // Helper to assert admin or author role
 async function requireRole(allowedRoles: string[]) {
@@ -285,14 +290,23 @@ export async function getSiteSettingsForAdmin() {
 
 export async function saveSiteSettings(settings: Record<string, string>) {
   await requireRole(["ADMIN"]);
-  for (const [key, value] of Object.entries(settings)) {
+  const normalizedSettings = {
+    ...settings,
+    google_search_console_verification: normalizeSearchConsoleToken(settings.google_search_console_verification || ""),
+    ga4_measurement_id: normalizeGa4MeasurementId(settings.ga4_measurement_id || ""),
+    adsense_client_id: normalizeAdSenseClientId(settings.adsense_client_id || ""),
+  };
+
+  for (const [key, value] of Object.entries(normalizedSettings)) {
     await db.siteSetting.upsert({
       where: { key },
       create: { key, value },
       update: { value },
     });
   }
+  revalidatePath("/");
   revalidatePath("/about");
+  revalidatePath("/ads.txt");
   return { success: true };
 }
 
