@@ -30,18 +30,18 @@ model Article {
   metaTitle      String?
   metaDescription String?         @db.Text
   metaKeywords   String?          @db.Text
-  canonicalUrl   String?
+  canonicalUrl   String?          @db.Text
   ogTitle        String?
   ogDescription  String?          @db.Text
-  ogImage        String?
+  ogImage        String?          @db.Text
   twitterTitle   String?
   twitterDescription String?      @db.Text
-  twitterImage   String?
+  twitterImage   String?          @db.Text
   focusKeyword   String?
   seoScore       Int              @default(0)
   published      Boolean          @default(true)
   category       String           @default("General")
-  coverImage     String
+  coverImage     String           @db.Text
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   likesCount     Int              @default(0)
