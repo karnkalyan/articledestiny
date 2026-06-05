@@ -14,6 +14,7 @@ import { CommentSection } from "@/components/CommentSection";
 import { HistoryTracker } from "@/components/HistoryTracker";
 import { AdSense } from "@/components/AdSense";
 import { AutoAdSlot } from "@/components/AutoAdSlot";
+import { AuthorHoverCard } from "@/components/AuthorHoverCard";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -222,14 +223,14 @@ export default async function ArticlePage(props: PageProps) {
             <Clock className="h-3. w-3" />
             {readMinutes} min read
           </span>
-          <span className="text-gray-300">•</span>
+          <span className="text-gray-300">-</span>
           <span className="flex items-center gap-1 text-[10px] text-gray-400 font-mono">
             <Eye className="h-3. w-3" />
             {article.viewsCount + 1} Views
           </span>
           {article.seoScore > 0 && (
             <>
-              <span className="text-gray-300">•</span>
+              <span className="text-gray-300">-</span>
               <span className={`text-[10px] font-bold font-mono ${
                 article.seoScore >= 80 ? "text-emerald-600" : article.seoScore >= 50 ? "text-amber-600" : "text-rose-500"
               }`}>
@@ -249,15 +250,7 @@ export default async function ArticlePage(props: PageProps) {
 
         {/* Profile Card */}
         <div className="pt-4 border-t border-gray-50 dark:border-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <Link href={`/author/${article.author.id}`} className="flex items-center gap-3 group">
-            <div className="h-9 w-9 rounded-full bg-indigo-100 text-indigo-805 flex items-center justify-center font-bold text-xs uppercase dark:bg-zinc-850 dark:text-zinc-300 group-hover:scale-105 transition-transform">
-              {article.author.name.substring(0, 2).toUpperCase()}
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{article.author.name}</span>
-              <span className="text-[10px] text-gray-400">Published on {new Date(article.createdAt).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</span>
-            </div>
-          </Link>
+          <AuthorHoverCard author={article.author} publishedAt={article.createdAt} />
 
           {/* Social shares */}
           <ShareButton title={article.title} />
@@ -309,3 +302,4 @@ export default async function ArticlePage(props: PageProps) {
     </article>
   );
 }
+

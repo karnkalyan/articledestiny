@@ -8,6 +8,7 @@ import { AdSense } from "@/components/AdSense";
 import { AutoAdSlot } from "@/components/AutoAdSlot";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ReadIndicator } from "@/components/ReadIndicator";
+import { AuthorHoverCard } from "@/components/AuthorHoverCard";
 
 interface SearchParamsResponse {
   category?: string;
@@ -93,12 +94,7 @@ export default async function HomePage(props: {
               </div>
 
               <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-900 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-6 w-6 rounded-full bg-slate-100 hover:scale-105 transition-transform flex items-center justify-center font-bold text-[9px] uppercase dark:bg-zinc-90 w-fit">
-                    {spotlight.author.name.substring(0, 2).toUpperCase()}
-                  </div>
-                  <span className="text-[10px] font-bold text-gray-700 dark:text-zinc-350">{spotlight.author.name}</span>
-                </div>
+                <AuthorHoverCard author={spotlight.author} publishedAt={spotlight.createdAt} compact />
 
                 <Link
                   href={`/blog/${spotlight.slug}`}
@@ -154,11 +150,11 @@ export default async function HomePage(props: {
               {allArticles.map((art, index) => (
                 <React.Fragment key={art.id}>
                   <div
-                    className="group bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:border-gray-200 dark:hover:border-zinc-800 hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                    className="group bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl overflow-visible shadow-sm hover:border-gray-200 dark:hover:border-zinc-800 hover:-translate-y-0.5 transition-all flex flex-col justify-between"
                   >
                     <div>
                       {/* Cover graphic */}
-                      <div className="h-44 relative overflow-hidden bg-gray-50 border-b border-gray-50 dark:border-zinc-900">
+                      <div className="h-44 relative overflow-hidden rounded-t-2xl bg-gray-50 border-b border-gray-50 dark:border-zinc-900">
                         <img
                           src={art.coverImage}
                           alt={art.title}
@@ -190,14 +186,7 @@ export default async function HomePage(props: {
 
                     {/* Footing actions */}
                     <div className="px-5.5 pb-5.5 pt-3.5 border-t border-gray-50 dark:border-zinc-900/60 flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] text-gray-400 font-mono">
-                          {new Date(art.createdAt).toLocaleDateString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </span>
-                      </div>
+                      <AuthorHoverCard author={art.author} publishedAt={art.createdAt} compact />
 
                       <Link
                         href={`/blog/${art.slug}`}

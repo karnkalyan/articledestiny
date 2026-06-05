@@ -33,68 +33,148 @@ function getCoverImage(entry: any) {
   );
 }
 
+async function seedProfiles(ownerId: number, adminId: number, readerId: number) {
+  await db.authorProfile.upsert({
+    where: { userId: ownerId },
+    create: {
+      userId: ownerId,
+      tagline: "Founder, full-stack developer, and ArticleDestiny editor.",
+      taglineVisible: true,
+      bio: "Karn Kalyan writes about technology, life, design, and the strange little details that turn simple stories into useful reflections.",
+      bioVisible: true,
+      location: "Kathmandu, Nepal",
+      locationVisible: true,
+      website: "https://articledestiny.com",
+      websiteVisible: true,
+      twitter: "",
+      twitterVisible: true,
+      github: "",
+      githubVisible: true,
+      linkedin: "",
+      linkedinVisible: true,
+      phone: "",
+      phoneVisible: false,
+      avatar: "",
+      avatarVisible: true,
+    },
+    update: {
+      taglineVisible: true,
+      bioVisible: true,
+      locationVisible: true,
+      websiteVisible: true,
+      avatarVisible: true,
+    },
+  });
+
+  await db.authorProfile.upsert({
+    where: { userId: adminId },
+    create: {
+      userId: adminId,
+      tagline: "Editorial administrator for ArticleDestiny.",
+      taglineVisible: true,
+      bio: "Maintains publishing quality, site settings, SEO, and community workflows.",
+      bioVisible: true,
+      location: "ArticleDestiny",
+      locationVisible: true,
+      website: "https://articledestiny.com",
+      websiteVisible: true,
+    },
+    update: {
+      taglineVisible: true,
+      bioVisible: true,
+      locationVisible: true,
+      websiteVisible: true,
+    },
+  });
+
+  await db.authorProfile.upsert({
+    where: { userId: readerId },
+    create: {
+      userId: readerId,
+      tagline: "ArticleDestiny reader profile.",
+      taglineVisible: true,
+      bio: "A reader account used for testing comments, likes, and reading history.",
+      bioVisible: true,
+    },
+    update: {
+      taglineVisible: true,
+      bioVisible: true,
+    },
+  });
+}
+
 export async function ensureSeeded() {
-  console.log("🚀 Seed started...");
+  console.log("Seed started...");
 
   try {
     const hashedPasswordAdmin = await bcrypt.hash("admin123", 10);
     const hashedPasswordUser = await bcrypt.hash("user123", 10);
 
-    console.log("👤 Seeding users...");
+    console.log("Seeding users...");
 
     const owner = await db.user.upsert({
       where: { email: "karnkalyan@gmail.com" },
       create: {
+        id: 3,
         name: "Karn Kalyan",
         email: "karnkalyan@gmail.com",
         password: hashedPasswordAdmin,
         role: "ADMIN",
       },
-      update: {},
+      update: {
+        name: "Karn Kalyan",
+        role: "ADMIN",
+      },
     });
 
-    await db.user.upsert({
+    const admin = await db.user.upsert({
       where: { email: "admin@articledestiny.com" },
       create: {
+        id: 1,
         name: "ArticleDestiny Admin",
         email: "admin@articledestiny.com",
         password: hashedPasswordAdmin,
         role: "ADMIN",
       },
-      update: {},
+      update: {
+        role: "ADMIN",
+      },
     });
 
-    await db.user.upsert({
+    const reader = await db.user.upsert({
       where: { email: "user@articledestiny.com" },
       create: {
+        id: 2,
         name: "ArticleDestiny Reader",
         email: "user@articledestiny.com",
         password: hashedPasswordUser,
         role: "USER",
       },
-      update: {},
+      update: {
+        role: "USER",
+      },
     });
 
-    console.log("🧠 Loading articles from DB...");
+    console.log("Seeding author profiles...");
+    await seedProfiles(owner.id, admin.id, reader.id);
+
+    console.log("Loading articles from DB...");
     const existingCount = await db.article.count();
+    console.log("Existing articles:", existingCount);
 
-    console.log("📊 Existing articles:", existingCount);
-
-    console.log("📦 Parsing blogger data...");
-
+    console.log("Parsing blogger data...");
     const entries = (bloggerData as any)?.feed?.entry;
 
     if (!Array.isArray(entries) || entries.length === 0) {
-      console.error("❌ No valid entries found in JSON");
+      console.error("No valid entries found in JSON");
       return;
     }
 
-    console.log(`📊 Entries found: ${entries.length}`);
-
-    console.log("🧹 Clearing articles...");
+    console.log(`Entries found: ${entries.length}`);
+    console.log("Clearing articles...");
     await db.article.deleteMany();
 
-    console.log("📥 Importing articles...");
+    console.log("Importing articles...");
 
     for (let i = 0; i < entries.length; i++) {
       const entry = entries[i];
@@ -104,7 +184,6 @@ export async function ensureSeeded() {
         const content = entry.content?.$t || "";
         const coverImage = getCoverImage(entry);
         const canonicalUrl = getAlternateUrl(entry);
-
         const category = "Stories";
         const excerpt = stripHtml(content).slice(0, 260);
 
@@ -138,35 +217,31 @@ export async function ensureSeeded() {
             createdAt: entry.published?.$t
               ? new Date(entry.published.$t)
               : new Date(),
-
             metaTitle: seo.metaTitle,
             metaDescription: seo.metaDescription,
             metaKeywords: seo.metaKeywords,
             canonicalUrl: seo.canonicalUrl || null,
-
             ogTitle: seo.ogTitle,
             ogDescription: seo.ogDescription,
             ogImage: seo.ogImage || null,
-
             twitterTitle: seo.twitterTitle,
             twitterDescription: seo.twitterDescription,
             twitterImage: seo.twitterImage || null,
-
             focusKeyword: seo.focusKeyword,
             seoScore: seo.seoScore,
           },
         });
 
-        console.log(`✅ Inserted: ${title}`);
+        console.log(`Inserted: ${title}`);
       } catch (err) {
-        console.error(`❌ Failed entry ${i}:`, err);
+        console.error(`Failed entry ${i}:`, err);
       }
     }
 
     const finalCount = await db.article.count();
-    console.log(`🎉 Done. Total articles now: ${finalCount}`);
+    console.log(`Done. Total articles now: ${finalCount}`);
   } catch (error) {
-    console.error("❌ Seeding failed:", error);
+    console.error("Seeding failed:", error);
     throw error;
   }
 }
@@ -179,11 +254,11 @@ if (
 ) {
   ensureSeeded()
     .then(() => {
-      console.log("✅ Done");
+      console.log("Done");
       process.exit(0);
     })
     .catch((err) => {
-      console.error("💥 Fatal error:", err);
+      console.error("Fatal error:", err);
       process.exit(1);
     });
 }

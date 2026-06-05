@@ -5,6 +5,33 @@ import { getSession } from "@/lib/session";
 import { ArticleWithAuthor, CommentWithUser } from "@/types";
 import { revalidatePath } from "next/cache";
 
+function toPublicProfile(profile: any) {
+  if (!profile) return null;
+
+  return {
+    userId: profile.userId,
+    bio: profile.bioVisible ? profile.bio : null,
+    location: profile.locationVisible ? profile.location : null,
+    website: profile.websiteVisible ? profile.website : null,
+    twitter: profile.twitterVisible ? profile.twitter : null,
+    github: profile.githubVisible ? profile.github : null,
+    linkedin: profile.linkedinVisible ? profile.linkedin : null,
+    phone: profile.phoneVisible ? profile.phone : null,
+    avatar: profile.avatarVisible ? profile.avatar : null,
+    tagline: profile.taglineVisible ? profile.tagline : null,
+  };
+}
+
+function withPublicAuthorProfile<T extends { author: any }>(article: T) {
+  return {
+    ...article,
+    author: {
+      ...article.author,
+      profile: toPublicProfile(article.author?.profile),
+    },
+  };
+}
+
 export async function getArticles(category?: string): Promise<ArticleWithAuthor[]> {
   try {
     const where: any = { published: true };
@@ -23,13 +50,14 @@ export async function getArticles(category?: string): Promise<ArticleWithAuthor[
             role: true,
             isBanned: true,
             createdAt: true,
+            profile: true,
           },
         },
       },
       orderBy: { createdAt: "desc" },
     });
 
-    return articles as unknown as ArticleWithAuthor[];
+    return articles.map(withPublicAuthorProfile) as unknown as ArticleWithAuthor[];
   } catch (error) {
     console.error("Error getting articles:", error);
     return [];
@@ -62,11 +90,12 @@ export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor 
             role: true,
             isBanned: true,
             createdAt: true,
+            profile: true,
           },
         },
       },
     });
-    return article as unknown as ArticleWithAuthor;
+    return article ? (withPublicAuthorProfile(article) as unknown as ArticleWithAuthor) : null;
   } catch (error) {
     console.error("Error getting article by slug:", error);
     return null;

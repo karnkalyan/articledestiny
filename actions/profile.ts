@@ -73,6 +73,8 @@ export async function updateMyProfile(data: {
 
     revalidatePath(`/author/${session.id}`);
     revalidatePath(`/author/${session.id}/edit`);
+    revalidatePath("/");
+    revalidatePath("/blog/[slug]", "layout");
     return { success: true, profile };
   } catch (error: any) {
     console.error("Error updating author profile:", error);

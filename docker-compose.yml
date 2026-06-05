@@ -1,9 +1,32 @@
 services:
+  db:
+    image: mysql:8.4
+    restart: always
+    environment:
+      MYSQL_DATABASE: articledestiny
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: quantumSql@123
+      MYSQL_ROOT_PASSWORD: quantumRoot@123
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uadmin", "-pquantumSql@123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   web:
     build: .
     restart: always
-    network_mode: "host"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3400:3400"
     environment:
-      DATABASE_URL: "mysql://admin:quantumSql%40123@127.0.0.1:3306/articledestiny"
+      DATABASE_URL: "mysql://admin:quantumSql%40123@db:3306/articledestiny"
       JWT_SECRET: "khusbhuArticleDestiny!#$@"
       PORT: 3400
+
+volumes:
+  mysql_data:

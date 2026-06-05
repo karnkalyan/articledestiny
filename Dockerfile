@@ -25,4 +25,4 @@ EXPOSE 3400
 ENV PORT=3400
 
 # Push database schema, seed database, and start in production
-CMD ["sh", "-c", "npx prisma db push && npx prisma db seed && npm run start"]
+CMD ["sh", "-c", "npm run db:push && npm run db:seed && npm run start"]

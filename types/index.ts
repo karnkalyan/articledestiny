@@ -76,7 +76,9 @@ export interface Article {
 }
 
 export interface ArticleWithAuthor extends Article {
-  author: SafeUser;
+  author: SafeUser & {
+    profile?: AuthorProfilePublic | null;
+  };
 }
 
 export interface Comment {

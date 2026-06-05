@@ -50,13 +50,11 @@ export async function getSession(): Promise<SafeUser | null> {
   const cookieStore = await cookies();
   const session = cookieStore.get("session")?.value;
   if (!session) {
-    console.log("[getSession] No session cookie found");
     return null;
   }
 
   const payload = await decrypt(session);
   if (!payload) {
-    console.log("[getSession] Decryption failed or session expired");
     return null;
   }
 
@@ -66,11 +64,8 @@ export async function getSession(): Promise<SafeUser | null> {
     });
 
     if (!user) {
-      console.log("[getSession] User not found in database for ID:", payload.id);
       return null;
     }
-
-    console.log("[getSession] User found in DB. Role:", user.role, "Email:", user.email);
 
     return {
       id: user.id,
