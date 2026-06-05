@@ -11,6 +11,11 @@ export type PublicSiteSettings = {
   ga4_measurement_id: string;
   adsense_client_id: string;
   adsense_auto_ads: string;
+  site_title: string;
+  site_description: string;
+  site_keywords: string;
+  site_og_image: string;
+  site_twitter_handle: string;
 };
 
 const PUBLIC_KEYS = [
@@ -19,6 +24,11 @@ const PUBLIC_KEYS = [
   "ga4_measurement_id",
   "adsense_client_id",
   "adsense_auto_ads",
+  "site_title",
+  "site_description",
+  "site_keywords",
+  "site_og_image",
+  "site_twitter_handle",
 ];
 
 export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
@@ -34,5 +44,11 @@ export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
     ga4_measurement_id: normalizeGa4MeasurementId(settings.ga4_measurement_id || ""),
     adsense_client_id: normalizeAdSenseClientId(settings.adsense_client_id || ""),
     adsense_auto_ads: settings.adsense_auto_ads || "true",
+    site_title: settings.site_title || "",
+    site_description: settings.site_description || "",
+    site_keywords: settings.site_keywords || "",
+    site_og_image: settings.site_og_image || "",
+    site_twitter_handle: settings.site_twitter_handle || "",
   };
 }
+

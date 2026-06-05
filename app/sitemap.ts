@@ -12,6 +12,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     orderBy: { updatedAt: "desc" },
   });
 
+  // Get all authors who have published articles
+  const authorIds = await db.article.findMany({
+    where: { published: true },
+    select: { authorId: true },
+    distinct: ["authorId"],
+  });
+
   return [
     {
       url: siteUrl,
@@ -36,6 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: article.updatedAt || article.createdAt,
       changeFrequency: "weekly" as const,
       priority: 0.85,
+    })),
+    ...authorIds.map((a) => ({
+      url: `${siteUrl}/author/${a.authorId}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
     })),
   ];
 }

@@ -70,6 +70,13 @@ export function stripHtml(value = "") {
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/gi, "'")
     .replace(/[#*_`>\-[\]()]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -113,14 +120,57 @@ export function calculateSeoScore(seo: Omit<GeneratedSeo, "seoScore">, content =
   const titleLength = seo.metaTitle.length;
   const descriptionLength = seo.metaDescription.length;
   const keyword = seo.focusKeyword.toLowerCase();
+  const wordCount = plain.split(/\s+/).filter(Boolean).length;
 
-  if (titleLength >= 35 && titleLength <= 65) score += 20;
-  if (descriptionLength >= 110 && descriptionLength <= 160) score += 25;
-  if (seo.metaKeywords.split(",").filter(Boolean).length >= 5) score += 15;
-  if (keyword && seo.metaTitle.toLowerCase().includes(keyword)) score += 10;
-  if (keyword && seo.metaDescription.toLowerCase().includes(keyword)) score += 10;
-  if (seo.ogImage || seo.twitterImage) score += 10;
-  if (plain.split(/\s+/).filter(Boolean).length >= 300) score += 10;
+  // Meta title length (35-65 chars ideal)
+  if (titleLength >= 35 && titleLength <= 65) score += 15;
+  else if (titleLength >= 20 && titleLength <= 80) score += 8;
+
+  // Meta description length (110-160 chars ideal)
+  if (descriptionLength >= 110 && descriptionLength <= 160) score += 15;
+  else if (descriptionLength >= 50 && descriptionLength <= 200) score += 8;
+
+  // Has enough keywords (5+)
+  if (seo.metaKeywords.split(",").filter(Boolean).length >= 5) score += 10;
+  else if (seo.metaKeywords.split(",").filter(Boolean).length >= 3) score += 5;
+
+  // Focus keyword in meta title
+  if (keyword && seo.metaTitle.toLowerCase().includes(keyword)) score += 8;
+
+  // Focus keyword in meta description
+  if (keyword && seo.metaDescription.toLowerCase().includes(keyword)) score += 7;
+
+  // Focus keyword in content (keyword density check: 0.5%-3%)
+  if (keyword && wordCount > 0) {
+    const keywordCount = plain.toLowerCase().split(keyword).length - 1;
+    const density = (keywordCount / wordCount) * 100;
+    if (density >= 0.5 && density <= 3) score += 8;
+    else if (keywordCount > 0) score += 4;
+  }
+
+  // Has OpenGraph or Twitter image
+  if (seo.ogImage || seo.twitterImage) score += 7;
+
+  // Content length bonus
+  if (wordCount >= 600) score += 10;
+  else if (wordCount >= 300) score += 5;
+
+  // Heading structure check (H2/H3 present in content)
+  const hasH2 = /<h2[\s>]/i.test(content) || /^##\s/m.test(content);
+  const hasH3 = /<h3[\s>]/i.test(content) || /^###\s/m.test(content);
+  if (hasH2 && hasH3) score += 8;
+  else if (hasH2 || hasH3) score += 4;
+
+  // Image alt text check (images should have alt attributes)
+  const images = content.match(/<img[^>]*>/gi) || [];
+  const imagesWithAlt = images.filter((img) => /alt=["'][^"']+["']/i.test(img));
+  if (images.length > 0 && imagesWithAlt.length === images.length) score += 7;
+  else if (imagesWithAlt.length > 0) score += 3;
+  else if (images.length === 0) score += 5; // No images is okay
+
+  // Internal linking check
+  const hasInternalLink = /href=["']\//i.test(content) || /\[.*?\]\(\//i.test(content);
+  if (hasInternalLink) score += 5;
 
   return Math.min(score, 100);
 }

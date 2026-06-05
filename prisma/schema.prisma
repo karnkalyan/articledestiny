@@ -19,6 +19,34 @@ model User {
   comments       Comment[]
   likes          Like[]
   readingHistory ReadingHistory[]
+  profile        AuthorProfile?
+}
+
+model AuthorProfile {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  bio             String?  @db.Text
+  bioVisible      Boolean  @default(true)
+  location        String?
+  locationVisible Boolean  @default(true)
+  website         String?
+  websiteVisible  Boolean  @default(true)
+  twitter         String?
+  twitterVisible  Boolean  @default(true)
+  github          String?
+  githubVisible   Boolean  @default(true)
+  linkedin        String?
+  linkedinVisible Boolean  @default(true)
+  phone           String?
+  phoneVisible    Boolean  @default(false)
+  avatar          String?  @db.Text
+  avatarVisible   Boolean  @default(true)
+  tagline         String?
+  taglineVisible  Boolean  @default(true)
+
+  updatedAt       DateTime @updatedAt
 }
 
 model Article {

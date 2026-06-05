@@ -65,15 +65,15 @@ export function AdminAnimatedBackground() {
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
         ref={bandOneRef}
-        className="absolute -top-24 left-0 h-64 w-[72rem] rotate-[-8deg] bg-gradient-to-r from-fuchsia-400/18 via-cyan-300/18 to-transparent blur-3xl dark:from-fuchsia-600/14 dark:via-cyan-500/12"
+        className="absolute -top-24 left-0 h-64 w-[72rem] rotate-[-8deg] bg-gradient-to-r from-blue-400/18 via-indigo-300/18 to-transparent blur-3xl dark:from-blue-600/14 dark:via-indigo-500/12"
       />
       <div
         ref={bandTwoRef}
-        className="absolute top-52 right-0 h-56 w-[64rem] rotate-[10deg] bg-gradient-to-r from-transparent via-emerald-300/14 to-violet-400/18 blur-3xl dark:via-emerald-500/10 dark:to-violet-600/14"
+        className="absolute top-52 right-0 h-56 w-[64rem] rotate-[10deg] bg-gradient-to-r from-transparent via-sky-300/14 to-indigo-400/18 blur-3xl dark:via-sky-500/10 dark:to-indigo-600/14"
       />
       <div
         ref={bandThreeRef}
-        className="absolute bottom-[-6rem] left-[-8rem] h-52 w-[68rem] rotate-[6deg] bg-gradient-to-r from-amber-300/20 via-rose-300/12 to-transparent blur-3xl dark:from-amber-500/10 dark:via-rose-500/10"
+        className="absolute bottom-[-6rem] left-[-8rem] h-52 w-[68rem] rotate-[6deg] bg-gradient-to-r from-blue-300/16 via-indigo-300/12 to-transparent blur-3xl dark:from-blue-500/10 dark:via-indigo-500/10"
       />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.45)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.45)_1px,transparent_1px)] bg-[size:56px_56px] opacity-30 dark:opacity-10" />
     </div>

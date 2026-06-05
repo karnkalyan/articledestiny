@@ -18,17 +18,19 @@
 @layer base {
   :root {
     --nexus-primary: #2563eb;
+    --nexus-primary-dark: #4338ca;
     --nexus-input-bg: rgba(255, 255, 255, 0.86);
     --nexus-input-border: rgba(15, 23, 42, 0.14);
     --nexus-input-focus-bg: #ffffff;
-    --grad-primary: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    --grad-primary: linear-gradient(135deg, #60a5fa 0%, #2563eb 48%, #4338ca 100%);
   }
   .dark {
     --nexus-primary: #3b82f6;
+    --nexus-primary-dark: #6366f1;
     --nexus-input-bg: rgba(255, 255, 255, 0.04);
     --nexus-input-border: rgba(255, 255, 255, 0.11);
     --nexus-input-focus-bg: rgba(255, 255, 255, 0.07);
-    --grad-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --grad-primary: linear-gradient(135deg, #60a5fa 0%, #2563eb 48%, #4f46e5 100%);
   }
 
   html {
@@ -52,19 +54,19 @@
     --nexus-card-bg: rgba(255, 255, 255, 0.72);
     --nexus-card-border: rgba(15, 23, 42, 0.08);
     --nexus-border: rgba(15, 23, 42, 0.08);
-    --nexus-text-main: #0f172a;
-    --nexus-text-muted: #64748b;
-    --nexus-sidebar-bg: rgba(255, 255, 255, 0.88);
-    --nexus-header-bg: rgba(255, 255, 255, 0.78);
+    --nexus-text-main: #020617;
+    --nexus-text-muted: #334155;
+    --nexus-sidebar-bg: rgba(255, 255, 255, 0.94);
+    --nexus-header-bg: rgba(255, 255, 255, 0.9);
     --nexus-shadow: 0 8px 32px rgba(15, 23, 42, 0.07);
-    --nexus-primary: #06b6d4;
-    --nexus-secondary: #f97316;
+    --nexus-primary: #2563eb;
+    --nexus-secondary: #4338ca;
     --nexus-accent: #ef4444;
-    --grad-primary: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
-    --grad-accent: linear-gradient(135deg, #f97316 0%, #0f172a 100%);
-    --grad-mesh: radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.1) 0, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.05) 0, transparent 50%);
-    --sidebar-active-bg: linear-gradient(90deg, rgba(6, 182, 212, 0.15), rgba(14, 116, 144, 0.05));
+    --grad-primary: linear-gradient(135deg, #60a5fa 0%, #2563eb 48%, #4338ca 100%);
+    --grad-accent: linear-gradient(135deg, #2563eb 0%, #1e1b4b 100%);
+    --grad-mesh: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.11) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(67, 56, 202, 0.08) 0, transparent 50%);
+    --sidebar-active-bg: linear-gradient(90deg, rgba(37, 99, 235, 0.15), rgba(67, 56, 202, 0.06));
     --nexus-input-bg: rgba(255, 255, 255, 0.86);
     --nexus-input-border: rgba(15, 23, 42, 0.15);
     --nexus-input-focus-bg: #ffffff;
@@ -85,14 +87,14 @@
     --nexus-sidebar-bg: #131924;
     --nexus-header-bg: rgba(19, 25, 36, 0.86);
     --nexus-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.8);
-    --nexus-primary: #06b6d4;
-    --nexus-secondary: #f97316;
+    --nexus-primary: #3b82f6;
+    --nexus-secondary: #6366f1;
     --nexus-accent: #ef4444;
-    --grad-primary: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
-    --grad-accent: linear-gradient(135deg, #f97316 0%, #7f1d1d 100%);
-    --grad-mesh: radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.07) 0, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0, transparent 50%);
-    --sidebar-active-bg: #1e293b;
+    --grad-primary: linear-gradient(135deg, #60a5fa 0%, #2563eb 48%, #4f46e5 100%);
+    --grad-accent: linear-gradient(135deg, #2563eb 0%, #312e81 100%);
+    --grad-mesh: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.07) 0, transparent 50%);
+    --sidebar-active-bg: linear-gradient(90deg, rgba(59, 130, 246, 0.16), rgba(99, 102, 241, 0.08));
     --nexus-input-bg: rgba(255, 255, 255, 0.025);
     --nexus-input-border: rgba(255, 255, 255, 0.08);
     --nexus-input-focus-bg: rgba(255, 255, 255, 0.045);
@@ -109,14 +111,14 @@
       --nexus-sidebar-bg: #131924;
       --nexus-header-bg: rgba(19, 25, 36, 0.86);
       --nexus-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.8);
-      --nexus-primary: #06b6d4;
-      --nexus-secondary: #f97316;
+      --nexus-primary: #3b82f6;
+      --nexus-secondary: #6366f1;
       --nexus-accent: #ef4444;
-      --grad-primary: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
-      --grad-accent: linear-gradient(135deg, #f97316 0%, #7f1d1d 100%);
-      --grad-mesh: radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.07) 0, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0, transparent 50%);
-      --sidebar-active-bg: #1e293b;
+      --grad-primary: linear-gradient(135deg, #60a5fa 0%, #2563eb 48%, #4f46e5 100%);
+      --grad-accent: linear-gradient(135deg, #2563eb 0%, #312e81 100%);
+      --grad-mesh: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.07) 0, transparent 50%);
+      --sidebar-active-bg: linear-gradient(90deg, rgba(59, 130, 246, 0.16), rgba(99, 102, 241, 0.08));
       --nexus-input-bg: rgba(255, 255, 255, 0.025);
       --nexus-input-border: rgba(255, 255, 255, 0.08);
       --nexus-input-focus-bg: rgba(255, 255, 255, 0.045);
@@ -251,6 +253,19 @@
     box-shadow: 0 4px 12px color-mix(in srgb, var(--nexus-primary) 28%, transparent) !important;
   }
 
+  .app-primary-btn {
+    background: var(--grad-primary) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18) !important;
+  }
+
+  .app-primary-btn:hover {
+    filter: brightness(1.04);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.24) !important;
+  }
+
   .nexus-btn-primary:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 16px color-mix(in srgb, var(--nexus-primary) 36%, transparent) !important;
@@ -284,7 +299,7 @@
 
   .nexus-stat-icon {
     background: var(--grad-primary);
-    box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
   }
 
   .nexus-row {

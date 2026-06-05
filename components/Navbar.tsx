@@ -104,6 +104,15 @@ export function Navbar({ user }: NavbarProps) {
                       <span>Reading History</span>
                     </Link>
 
+                    <Link
+                      href={`/author/${user.id}/edit`}
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 dark:text-zinc-300 dark:hover:bg-zinc-900/60 transition-all"
+                    >
+                      <User className="h-4 w-4 text-indigo-500" />
+                      <span>My Profile</span>
+                    </Link>
+
                     <button
                       onClick={handleSignout}
                       className="flex w-full items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/20 transition-all mt-1 cursor-pointer"
@@ -124,7 +133,7 @@ export function Navbar({ user }: NavbarProps) {
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold tracking-wide shadow-md shadow-indigo-200 dark:shadow-none transition-all hover:scale-[1.02]"
+                  className="app-primary-btn px-4 py-2 rounded-xl text-white text-xs font-bold tracking-wide transition-all"
                 >
                   Join Destiny
                 </Link>
@@ -193,6 +202,15 @@ export function Navbar({ user }: NavbarProps) {
                   </Link>
                 )}
 
+                <Link
+                  href={`/author/${user.id}/edit`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-900"
+                >
+                  <User className="h-4 w-4 text-indigo-500" />
+                  <span>My Profile</span>
+                </Link>
+
                 <button
                   onClick={handleSignout}
                   className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/20 cursor-pointer"
@@ -213,7 +231,7 @@ export function Navbar({ user }: NavbarProps) {
                 <Link
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 rounded-xl bg-indigo-600 text-white text-sm font-bold shadow-md shadow-indigo-100 dark:shadow-none"
+                  className="app-primary-btn w-full text-center py-2 rounded-xl text-sm font-bold"
                 >
                   Join Destiny
                 </Link>

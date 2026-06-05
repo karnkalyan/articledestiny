@@ -6,6 +6,7 @@ import { submitContactMessage } from "@/actions/public";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { AutoAdSlot } from "@/components/AutoAdSlot";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -34,6 +35,8 @@ export default function ContactPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-12 px-4">
+      <AutoAdSlot format="display" />
+
       <div className="text-center mb-12">
         <span className="text-[11px] font-bold text-indigo-650 uppercase tracking-widest font-mono select-none">Get in Touch</span>
         <h1 className="text-3xl font-extrabold text-slate-1000 dark:text-zinc-100 mt-2.5 tracking-tight">
@@ -124,6 +127,8 @@ export default function ContactPage() {
           </form>
         )}
       </div>
+
+      <AutoAdSlot format="display" />
     </div>
   );
 }

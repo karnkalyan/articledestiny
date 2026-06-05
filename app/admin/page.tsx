@@ -90,6 +90,11 @@ const emptySettings = {
   ga4_measurement_id: "",
   adsense_client_id: "",
   adsense_auto_ads: "true",
+  site_title: "",
+  site_description: "",
+  site_keywords: "",
+  site_og_image: "",
+  site_twitter_handle: "",
 };
 
 export default function AdminDashboardPage() {
@@ -230,7 +235,7 @@ export default function AdminDashboardPage() {
       <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--nexus-card-border)]">
         {!sidebarCollapsed && (
           <div className="flex items-center gap-3">
-            <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-700 text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-cyan-500/20">A</span>
+            <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-blue-500/20">A</span>
             <div>
               <p className="text-[10px] uppercase tracking-[0.24em] text-[var(--nexus-text-muted)] font-bold">ArticleDestiny</p>
               <h2 className="text-sm font-black text-[var(--nexus-text-main)]">Admin Console</h2>
@@ -274,7 +279,7 @@ export default function AdminDashboardPage() {
               }}
               title={tab.label}
               className={`w-full h-10 flex items-center ${sidebarCollapsed ? "justify-center" : "justify-start gap-3 px-3"} rounded-lg text-[13px] font-semibold transition-all ${
-                active ? "bg-[var(--sidebar-active-bg)] text-[var(--nexus-text-main)] border-l-[3px] border-cyan-500" : "text-[var(--nexus-text-muted)] hover:bg-slate-900/5 dark:hover:bg-white/[0.035] hover:text-[var(--nexus-text-main)]"
+                active ? "bg-[var(--sidebar-active-bg)] text-[var(--nexus-text-main)] border-l-[3px] border-blue-500" : "text-[var(--nexus-text-muted)] hover:bg-slate-900/5 dark:hover:bg-white/[0.035] hover:text-[var(--nexus-text-main)]"
               }`}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -303,7 +308,7 @@ export default function AdminDashboardPage() {
         <ShieldAlert className="h-10 w-10 text-rose-500 mx-auto mb-4" />
         <h2 className="text-lg font-black">Access Prohibited</h2>
         <p className="text-xs text-gray-500 mt-2">Please sign in with an admin or author account.</p>
-        <Link href="/login" className="inline-block mt-6 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">Sign In</Link>
+        <Link href="/login" className="app-primary-btn inline-block mt-6 px-4 py-2 rounded-xl text-xs font-bold">Sign In</Link>
       </div>
     );
   }
@@ -379,7 +384,7 @@ export default function AdminDashboardPage() {
               <section className="xl:col-span-7 rounded-3xl bg-white/75 dark:bg-zinc-950/60 border border-white/70 dark:border-white/10 p-5 sm:p-6 shadow-2xl shadow-indigo-200/30 dark:shadow-black/30 backdrop-blur-xl space-y-4">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-600">Google Control Room</p>
-                  <h2 className="text-xl font-black mt-1">Search Console, Analytics, and AdSense</h2>
+                  <h2 className="text-xl font-black mt-1">Search Console, Analytics, AdSense & SEO</h2>
                   <p className="text-xs text-gray-500 mt-1">Paste the simple value or the full Google snippet. The app extracts IDs and renders verification tags, Analytics, AdSense, ads.txt, robots, and sitemap URLs automatically.</p>
                 </div>
                 <Input label="Public Site URL" value={settings.site_url} onChange={(value) => setSettings({ ...settings, site_url: value })} placeholder="https://articledestiny.com" />
@@ -390,8 +395,21 @@ export default function AdminDashboardPage() {
                   <input type="checkbox" checked={settings.adsense_auto_ads !== "false"} onChange={(e) => setSettings({ ...settings, adsense_auto_ads: String(e.target.checked) })} />
                   Load AdSense script globally for Auto Ads
                 </label>
+
+                <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 space-y-4">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-600">Site-Level SEO</p>
+                    <p className="text-xs text-gray-500 mt-1">These values are used as the global metadata for every page on the site. Leave blank to use defaults.</p>
+                  </div>
+                  <Input label="Site Title" value={settings.site_title} onChange={(value) => setSettings({ ...settings, site_title: value })} placeholder="ArticleDestiny - Tech, Design, and Developer Stories" />
+                  <Textarea label="Site Description" value={settings.site_description} onChange={(value) => setSettings({ ...settings, site_description: value })} rows={2} />
+                  <Input label="Site Keywords (comma-separated)" value={settings.site_keywords} onChange={(value) => setSettings({ ...settings, site_keywords: value })} placeholder="technology, developer, stories, design" />
+                  <Input label="Default OG Image URL" value={settings.site_og_image} onChange={(value) => setSettings({ ...settings, site_og_image: value })} placeholder="https://articledestiny.com/og-default.jpg" />
+                  <Input label="Twitter Handle" value={settings.site_twitter_handle} onChange={(value) => setSettings({ ...settings, site_twitter_handle: value })} placeholder="@articledestiny" />
+                </div>
+
                 <Button type="submit">
-                  <Save className="h-4 w-4" /> Save Google Setup
+                  <Save className="h-4 w-4" /> Save Google & SEO Setup
                 </Button>
               </section>
 
@@ -399,9 +417,12 @@ export default function AdminDashboardPage() {
                 <h3 className="text-sm font-black uppercase tracking-widest">What These Fields Do</h3>
                 <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
                   <p><strong className="text-white">Search Console:</strong> paste the token or full meta tag. The app renders the required meta tag.</p>
-                  <p><strong className="text-white">Sitemap:</strong> generated live at <span className="text-cyan-300">{(settings.site_url || "http://localhost:3400").replace(/\/+$/, "")}/sitemap.xml</span>.</p>
-                  <p><strong className="text-white">GA4:</strong> use an ID like <span className="text-cyan-300">G-XXXXXXXXXX</span>. The tracking script loads automatically.</p>
-                  <p><strong className="text-white">AdSense:</strong> use an ID like <span className="text-cyan-300">ca-pub-XXXXXXXXXXXXXXXX</span>, or paste the script, meta tag, or ads.txt line. The app renders all three verification methods.</p>
+                  <p><strong className="text-white">Sitemap:</strong> generated live at <span className="text-blue-300">{(settings.site_url || "http://localhost:3400").replace(/\/+$/, "")}/sitemap.xml</span>.</p>
+                  <p><strong className="text-white">GA4:</strong> use an ID like <span className="text-blue-300">G-XXXXXXXXXX</span>. The tracking script loads automatically.</p>
+                  <p><strong className="text-white">AdSense:</strong> use an ID like <span className="text-blue-300">ca-pub-XXXXXXXXXXXXXXXX</span>, or paste the script, meta tag, or ads.txt line. The app renders all three verification methods.</p>
+                  <p><strong className="text-white">Site Title & Description:</strong> used as the default meta title and description on all pages. Overridden per-article by article-level SEO fields.</p>
+                  <p><strong className="text-white">Site Keywords:</strong> comma-separated keywords for global site SEO meta tags.</p>
+                  <p><strong className="text-white">Default OG Image:</strong> fallback image for social sharing when articles don't specify one.</p>
                 </div>
               </section>
             </MotionForm>
@@ -456,8 +477,8 @@ export default function AdminDashboardPage() {
                   <p className="mt-1 text-xs nexus-text-muted">Every public contact form request appears here.</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge className="border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">{messages.length} total</Badge>
-                  <Badge className="border-orange-500/20 bg-orange-500/10 text-orange-700 dark:text-orange-300">{unreadMessages} new</Badge>
+                  <Badge className="border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">{messages.length} total</Badge>
+                  <Badge className="border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">{unreadMessages} new</Badge>
                 </div>
               </CardHeader>
               <div>
@@ -518,7 +539,7 @@ export default function AdminDashboardPage() {
                       <CardTitle>Users</CardTitle>
                       <p className="mt-1 text-xs nexus-text-muted">{users.length} registered account{users.length === 1 ? "" : "s"}</p>
                     </div>
-                    <Badge className="border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">Access Control</Badge>
+                    <Badge className="border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">Access Control</Badge>
                   </CardHeader>
                   <div>
                     {users.map((user) => (
@@ -534,8 +555,9 @@ export default function AdminDashboardPage() {
                             </div>
                           </div>
                           <div className="flex flex-wrap items-center gap-2">
-                            <Badge className="border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">{user.role}</Badge>
-                            <Badge className={user.isBanned ? "border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-300" : "border-orange-500/20 bg-orange-500/10 text-orange-700 dark:text-orange-300"}>{user.isBanned ? "Banned" : "Active"}</Badge>
+                            <Badge className="border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">{user.role}</Badge>
+                            <Badge className={user.isBanned ? "border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-300" : "border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300"}>{user.isBanned ? "Banned" : "Active"}</Badge>
+                            <Button variant="outline" onClick={() => router.push(`/author/${user.id}`)} className="h-8 px-3">View Profile</Button>
                             <Button variant="outline" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "role"), "Role updated.")} className="h-8 px-3">Change Role</Button>
                             <Button variant="destructive" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "ban"), "Ban status updated.")} className="h-8 px-3">{user.isBanned ? "Unban" : "Ban"}</Button>
                           </div>
@@ -588,7 +610,7 @@ export default function AdminDashboardPage() {
                 <>
                   <Card className="xl:col-span-7 overflow-hidden">
                     <CardHeader className="bg-white/35 dark:bg-white/[0.03]">
-                      <Badge className="w-fit border-cyan-200/70 bg-cyan-50/80 text-cyan-800 dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-200">Website Content</Badge>
+                      <Badge className="w-fit border-blue-200/70 bg-blue-50/80 text-blue-800 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-200">Website Content</Badge>
                       <CardTitle className="mt-3">Editable About Page</CardTitle>
                       <p className="mt-1 text-xs text-gray-500">Update the public About page directly from the admin panel using rich text.</p>
                     </CardHeader>
@@ -687,7 +709,7 @@ export default function AdminDashboardPage() {
           <div className="nexus-card max-h-[92vh] w-full max-w-5xl overflow-hidden">
             <div className="nexus-card-header flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <Badge className="mb-2 border-cyan-500/20 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">{previewArticle.category}</Badge>
+                <Badge className="mb-2 border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">{previewArticle.category}</Badge>
                 <h2 className="text-xl font-black leading-tight text-[var(--nexus-text-main)]">{previewArticle.title}</h2>
                 <p className="mt-1 text-xs nexus-text-muted">/{previewArticle.slug} - SEO {previewArticle.seoScore}/100</p>
               </div>
@@ -702,7 +724,7 @@ export default function AdminDashboardPage() {
               {previewArticle.coverImage && (
                 <img src={previewArticle.coverImage} alt={previewArticle.title} className="mb-6 h-64 w-full rounded-xl border border-[var(--nexus-card-border)] object-cover" />
               )}
-              <p className="mb-6 border-l-2 border-cyan-500 pl-4 text-sm leading-7 nexus-text-muted">{previewArticle.excerpt}</p>
+              <p className="mb-6 border-l-2 border-blue-500 pl-4 text-sm leading-7 nexus-text-muted">{previewArticle.excerpt}</p>
               <article
                 id="article-body"
                 className="prose max-w-none dark:prose-invert"
@@ -753,3 +775,4 @@ function Textarea({ label, value, onChange, rows }: { label: string; value: stri
     </label>
   );
 }
+

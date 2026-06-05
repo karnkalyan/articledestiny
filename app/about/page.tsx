@@ -2,6 +2,7 @@ import React from "react";
 import { Compass, ShieldCheck } from "lucide-react";
 import { db } from "@/lib/db";
 import { renderArticleContent } from "@/lib/markdown";
+import { AdSense } from "@/components/AdSense";
 
 export default async function AboutPage() {
   const rows = await db.siteSetting.findMany({
@@ -35,6 +36,8 @@ export default async function AboutPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-12 px-4">
+      <AdSense placement="top" />
+
       <div className="text-center mb-16">
         <span className="text-[11px] font-bold text-blue-600 uppercase tracking-widest font-mono select-none">{eyebrow}</span>
         <h1 className="text-4xl font-extrabold text-slate-900 dark:text-zinc-100 mt-3 tracking-tight">
@@ -63,6 +66,8 @@ export default async function AboutPage() {
         className="prose dark:prose-invert text-sm text-slate-705 dark:text-zinc-300 leading-relaxed space-y-6"
         dangerouslySetInnerHTML={{ __html: renderArticleContent(body) }}
       />
+
+      <AdSense placement="bottom" />
     </div>
   );
 }

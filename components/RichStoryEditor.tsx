@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type QuillType from "quill";
 
 export interface RichStoryEditorHandle {
@@ -21,13 +21,7 @@ export const RichStoryEditor = forwardRef<RichStoryEditorHandle, RichStoryEditor
     const latestValueRef = useRef(value);
     const lastAppliedValueRef = useRef("");
     const lastEmittedValueRef = useRef("");
-
-    useImperativeHandle(ref, () => ({
-      getHTML: () => editorRef.current?.querySelector(".ql-editor")?.innerHTML || "",
-      setHTML: (html: string) => {
-        applyHTML(html);
-      },
-    }));
+    const [mode, setMode] = useState<"visual" | "html">("visual");
 
     const cleanIncomingHtml = useCallback((html: string) => {
       return (html || "")
@@ -50,6 +44,13 @@ export const RichStoryEditor = forwardRef<RichStoryEditorHandle, RichStoryEditor
         lastAppliedValueRef.current = html || "";
       }
     }, [cleanIncomingHtml]);
+
+    useImperativeHandle(ref, () => ({
+      getHTML: () => (mode === "html" ? latestValueRef.current : editorRef.current?.querySelector(".ql-editor")?.innerHTML || ""),
+      setHTML: (html: string) => {
+        applyHTML(html);
+      },
+    }), [applyHTML, mode]);
 
     useEffect(() => {
       latestValueRef.current = value;
@@ -112,7 +113,44 @@ export const RichStoryEditor = forwardRef<RichStoryEditorHandle, RichStoryEditor
 
     return (
       <div ref={wrapperRef} className="quill-story-editor rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-950">
-        <div ref={editorRef} />
+        <div className="flex items-center justify-between gap-2 border-b border-gray-100 bg-slate-50/80 px-3 py-2 dark:border-zinc-850 dark:bg-zinc-900/70">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600 dark:text-zinc-300">Story Body Editor</span>
+          <div className="inline-flex rounded-lg border border-slate-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-950">
+            <button
+              type="button"
+              onClick={() => {
+                setMode("visual");
+                applyHTML(latestValueRef.current);
+              }}
+              className={`h-8 px-3 rounded-md text-[10px] font-bold uppercase tracking-wider transition ${mode === "visual" ? "bg-[var(--grad-primary)] text-white shadow-sm" : "text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-900"}`}
+            >
+              Visual
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("html")}
+              className={`h-8 px-3 rounded-md text-[10px] font-bold uppercase tracking-wider transition ${mode === "html" ? "bg-[var(--grad-primary)] text-white shadow-sm" : "text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-900"}`}
+            >
+              HTML
+            </button>
+          </div>
+        </div>
+        <div className={mode === "visual" ? "block" : "hidden"}>
+          <div ref={editorRef} />
+        </div>
+        {mode === "html" && (
+          <textarea
+            value={value || ""}
+            onChange={(event) => {
+              latestValueRef.current = event.target.value;
+              lastEmittedValueRef.current = event.target.value;
+              onChange(event.target.value);
+            }}
+            spellCheck={false}
+            className="min-h-[520px] w-full resize-y bg-white px-5 py-4 font-mono text-xs leading-6 text-slate-900 outline-none dark:bg-zinc-950 dark:text-zinc-100"
+            placeholder="<p>Write or paste HTML story content here...</p>"
+          />
+        )}
       </div>
     );
   }
@@ -178,3 +216,4 @@ function normalizeVideoUrl(url: string) {
     return url;
   }
 }
+

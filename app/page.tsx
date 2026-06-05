@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getArticles, getCategories } from "@/actions/blog";
 import { getMe } from "@/actions/auth";
 import { AdSense } from "@/components/AdSense";
+import { AutoAdSlot } from "@/components/AutoAdSlot";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ReadIndicator } from "@/components/ReadIndicator";
 
@@ -150,63 +151,69 @@ export default async function HomePage(props: {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6">
-              {allArticles.map((art) => (
-                <div
-                  key={art.id}
-                  className="group bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:border-gray-200 dark:hover:border-zinc-800 hover:-translate-y-0.5 transition-all flex flex-col justify-between"
-                >
-                  <div>
-                    {/* Cover graphic */}
-                    <div className="h-44 relative overflow-hidden bg-gray-50 border-b border-gray-50 dark:border-zinc-900">
-                      <img
-                        src={art.coverImage}
-                        alt={art.title}
-                        className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
-                      />
-                      <div className="absolute top-3 left-3 bg-white/95 dark:bg-zinc-950/95 backdrop-blur px-2.5 py-0.5 rounded-md text-[9px] font-extrabold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest font-mono border border-gray-100/50 dark:border-zinc-800 shadow-sm">
-                        {art.category}
-                      </div>
-
-                      <div className="absolute top-3 right-3">
-                        <ReadIndicator
-                          articleId={art.id}
-                          articleSlug={art.slug}
-                          dbReadIds={dbReadIds}
+              {allArticles.map((art, index) => (
+                <React.Fragment key={art.id}>
+                  <div
+                    className="group bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:border-gray-200 dark:hover:border-zinc-800 hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Cover graphic */}
+                      <div className="h-44 relative overflow-hidden bg-gray-50 border-b border-gray-50 dark:border-zinc-900">
+                        <img
+                          src={art.coverImage}
+                          alt={art.title}
+                          className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                         />
+                        <div className="absolute top-3 left-3 bg-white/95 dark:bg-zinc-950/95 backdrop-blur px-2.5 py-0.5 rounded-md text-[9px] font-extrabold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest font-mono border border-gray-100/50 dark:border-zinc-800 shadow-sm">
+                          {art.category}
+                        </div>
+
+                        <div className="absolute top-3 right-3">
+                          <ReadIndicator
+                            articleId={art.id}
+                            articleSlug={art.slug}
+                            dbReadIds={dbReadIds}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Meta info */}
+                      <div className="p-5.5 space-y-2.5">
+                        <h3 className="text-base font-bold text-slate-1000 dark:text-zinc-100 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight tracking-tight">
+                          <Link href={`/blog/${art.slug}`}>{art.title}</Link>
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed font-normal line-clamp-4">
+                          {art.excerpt}
+                        </p>
                       </div>
                     </div>
 
-                    {/* Meta info */}
-                    <div className="p-5.5 space-y-2.5">
-                      <h3 className="text-base font-bold text-slate-1000 dark:text-zinc-100 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight tracking-tight">
-                        <Link href={`/blog/${art.slug}`}>{art.title}</Link>
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed font-normal line-clamp-4">
-                        {art.excerpt}
-                      </p>
+                    {/* Footing actions */}
+                    <div className="px-5.5 pb-5.5 pt-3.5 border-t border-gray-50 dark:border-zinc-900/60 flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] text-gray-400 font-mono">
+                          {new Date(art.createdAt).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
+                      </div>
+
+                      <Link
+                        href={`/blog/${art.slug}`}
+                        className="flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
+                      >
+                        <span>Read Entry</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
                     </div>
                   </div>
 
-                  {/* Footing actions */}
-                  <div className="px-5.5 pb-5.5 pt-3.5 border-t border-gray-50 dark:border-zinc-900/60 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] text-gray-400 font-mono">
-                        {new Date(art.createdAt).toLocaleDateString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </span>
-                    </div>
-
-                    <Link
-                      href={`/blog/${art.slug}`}
-                      className="flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
-                    >
-                      <span>Read Entry</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-                  </div>
-                </div>
+                  {/* In-feed ad after every 3rd article */}
+                  {(index + 1) % 3 === 0 && index < allArticles.length - 1 && (
+                    <AutoAdSlot format="in-feed" />
+                  )}
+                </React.Fragment>
               ))}
             </div>
           )}

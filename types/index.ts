@@ -9,6 +9,44 @@ export interface SafeUser {
   createdAt: Date;
 }
 
+export interface AuthorProfile {
+  id: number;
+  userId: number;
+  bio: string | null;
+  bioVisible: boolean;
+  location: string | null;
+  locationVisible: boolean;
+  website: string | null;
+  websiteVisible: boolean;
+  twitter: string | null;
+  twitterVisible: boolean;
+  github: string | null;
+  githubVisible: boolean;
+  linkedin: string | null;
+  linkedinVisible: boolean;
+  phone: string | null;
+  phoneVisible: boolean;
+  avatar: string | null;
+  avatarVisible: boolean;
+  tagline: string | null;
+  taglineVisible: boolean;
+  updatedAt: Date;
+}
+
+export interface AuthorProfilePublic {
+  userId: number;
+  bio?: string | null;
+  location?: string | null;
+  website?: string | null;
+  twitter?: string | null;
+  github?: string | null;
+  linkedin?: string | null;
+  phone?: string | null;
+  avatar?: string | null;
+  tagline?: string | null;
+}
+
+
 export interface Article {
   id: number;
   slug: string;

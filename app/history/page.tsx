@@ -106,7 +106,7 @@ export default function HistoryPage() {
           </div>
           <Link
             href="/login"
-            className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-center whitespace-nowrap self-start sm:self-center"
+            className="app-primary-btn px-3 py-1.5 font-bold rounded-lg text-center whitespace-nowrap self-start sm:self-center"
           >
             Sign In Now
           </Link>
@@ -128,7 +128,7 @@ export default function HistoryPage() {
           </p>
           <Link
             href="/"
-            className="inline-block mt-5 px-4.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold tracking-wide"
+            className="app-primary-btn inline-block mt-5 px-4.5 py-2 rounded-xl text-xs font-bold tracking-wide"
           >
             Discover Articles
           </Link>

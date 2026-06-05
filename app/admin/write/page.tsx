@@ -91,21 +91,21 @@ function WriteArticleForm() {
   const handleGenerateSeo = () => {
     const seo = generateSeo({
       title,
-      excerpt,
+      excerpt: "", // Force regenerate fresh excerpt from content/title
       content: editorRef.current?.getHTML() || content,
       category,
       coverImage,
-      metaTitle,
-      metaDescription,
-      metaKeywords,
-      canonicalUrl,
-      ogTitle,
-      ogDescription,
-      ogImage,
-      twitterTitle,
-      twitterDescription,
-      twitterImage,
-      focusKeyword,
+      metaTitle: "", // Force regenerate fresh meta title
+      metaDescription: "", // Force regenerate fresh meta description
+      metaKeywords: "", // Force regenerate fresh meta keywords
+      canonicalUrl, // Keep manual canonicalUrl
+      ogTitle: "", // Force regenerate
+      ogDescription: "", // Force regenerate
+      ogImage: "", // Force regenerate
+      twitterTitle: "", // Force regenerate
+      twitterDescription: "", // Force regenerate
+      twitterImage: "", // Force regenerate
+      focusKeyword, // Keep focusKeyword
     });
 
     setExcerpt(seo.excerpt);
@@ -253,7 +253,7 @@ function WriteArticleForm() {
 
       <MotionPanel {...panelMotion} className="nexus-card relative overflow-hidden p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <Badge className="border-cyan-200/70 bg-cyan-50/80 text-cyan-800 dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-200">Composer Studio</Badge>
+          <Badge className="border-blue-200/70 bg-blue-50/80 text-blue-800 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-200">Composer Studio</Badge>
           <h1 className="text-2xl font-black text-slate-1000 dark:text-zinc-50 tracking-tight mt-1 mb-0.5">
             {isEditMode ? "Modify Article Publication" : "Write Curated Article"}
           </h1>
@@ -425,15 +425,14 @@ function WriteArticleForm() {
                 </div>
               </div>
 
-              <Button
+              <button
                 type="button"
                 onClick={handleGenerateSeo}
-                variant="outline"
-                className="w-full h-11"
+                className="app-primary-btn w-full h-11 active:scale-[0.98] transition-all rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer border-0 outline-none"
               >
                 <SearchCheck className="h-4 w-4" />
                 <span>Auto Generate SEO</span>
-              </Button>
+              </button>
 
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest font-mono mb-1.5">Focus Keyword</label>
@@ -614,7 +613,7 @@ export default function WritePage() {
           </p>
           <Link
             href="/login"
-            className="inline-block mt-6 px-4 py-2 bg-indigo-600 hover:bg-indigo-705 text-white rounded-xl text-xs font-bold leading-none"
+            className="app-primary-btn inline-block mt-6 px-4 py-2 rounded-xl text-xs font-bold leading-none"
           >
             Sign In
           </Link>
@@ -645,7 +644,7 @@ function AdminComposerShell({ children, currentUser }: { children: React.ReactNo
       <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--nexus-card-border)]">
         {!sidebarCollapsed && (
           <div className="flex items-center gap-3">
-            <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-700 text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-cyan-500/20">A</span>
+            <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-blue-500/20">A</span>
             <div>
               <p className="text-[10px] uppercase tracking-[0.24em] text-[var(--nexus-text-muted)] font-bold">ArticleDestiny</p>
               <h2 className="text-sm font-black text-[var(--nexus-text-main)]">Admin Console</h2>
@@ -691,7 +690,7 @@ function AdminComposerShell({ children, currentUser }: { children: React.ReactNo
         })}
         <Link
           href="/admin/write"
-          className={`h-10 flex items-center ${sidebarCollapsed ? "justify-center" : "justify-start gap-3 px-3"} rounded-lg text-[13px] font-semibold bg-[var(--sidebar-active-bg)] text-[var(--nexus-text-main)] border-l-[3px] border-cyan-500`}
+          className={`h-10 flex items-center ${sidebarCollapsed ? "justify-center" : "justify-start gap-3 px-3"} rounded-lg text-[13px] font-semibold bg-[var(--sidebar-active-bg)] text-[var(--nexus-text-main)] border-l-[3px] border-blue-500`}
         >
           <BookOpen className="h-4 w-4 shrink-0" />
           {!sidebarCollapsed && <span>Story Composer</span>}
@@ -755,3 +754,4 @@ function AdminComposerShell({ children, currentUser }: { children: React.ReactNo
     </div>
   );
 }
+

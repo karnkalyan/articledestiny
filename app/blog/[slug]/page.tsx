@@ -13,6 +13,7 @@ import { ShareButton } from "@/components/ShareButton";
 import { CommentSection } from "@/components/CommentSection";
 import { HistoryTracker } from "@/components/HistoryTracker";
 import { AdSense } from "@/components/AdSense";
+import { AutoAdSlot } from "@/components/AutoAdSlot";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -95,37 +96,82 @@ export default async function ArticlePage(props: PageProps) {
   // Fetch current user and core comment list
   const currentUser = await getMe();
   const comments = await getCommentsByArticle(article.id);
+  const { site_url: siteUrl } = await getPublicSiteSettings();
 
   const htmlContent = renderArticleContent(article.content);
 
   // Simple statistics
-  const readMinutes = Math.max(1, Math.ceil(article.content.split(/\s+/).length / 225));
-  const jsonLd = {
+  const wordCount = stripHtml(article.content).split(/\s+/).filter(Boolean).length;
+  const readMinutes = Math.max(1, Math.ceil(wordCount / 225));
+
+  // Enhanced Article JSON-LD
+  const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${siteUrl}/blog/${article.slug}#article`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/blog/${article.slug}`,
+    },
+    url: `${siteUrl}/blog/${article.slug}`,
     headline: article.metaTitle || article.title,
     description: article.metaDescription || article.excerpt,
     image: article.ogImage || article.coverImage,
+    thumbnailUrl: article.coverImage,
     keywords: article.metaKeywords || undefined,
     articleSection: article.category,
     datePublished: article.createdAt.toISOString(),
     dateModified: article.updatedAt.toISOString(),
+    wordCount,
     author: {
       "@type": "Person",
       name: article.author.name,
+      url: `${siteUrl}/author/${article.author.id}`,
     },
     publisher: {
       "@type": "Organization",
       name: "ArticleDestiny",
+      url: siteUrl,
     },
-    wordCount: stripHtml(article.content).split(/\s+/).filter(Boolean).length,
+    isAccessibleForFree: true,
+    inLanguage: "en",
+  };
+
+  // Breadcrumb JSON-LD
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: article.category,
+        item: `${siteUrl}/?category=${encodeURIComponent(article.category)}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.title,
+        item: `${siteUrl}/blog/${article.slug}`,
+      },
+    ],
   };
 
   return (
     <article className="max-w-4xl mx-auto space-y-8 animate-fade-in relative">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Scroll Bar */}
       <ReadingProgressBar />
@@ -157,6 +203,15 @@ export default async function ArticlePage(props: PageProps) {
         </Link>
       </div>
 
+      {/* Breadcrumb navigation */}
+      <nav className="flex items-center gap-1.5 text-[10px] text-gray-400 font-mono">
+        <Link href="/" className="hover:text-indigo-600 transition-colors">Home</Link>
+        <span>/</span>
+        <Link href={`/?category=${encodeURIComponent(article.category)}`} className="hover:text-indigo-600 transition-colors">{article.category}</Link>
+        <span>/</span>
+        <span className="text-gray-600 dark:text-zinc-400 truncate max-w-[200px]">{article.title}</span>
+      </nav>
+
       {/* Article Header Card */}
       <header className="space-y-5 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-3xl p-6 sm:p-8 shadow-sm">
         <div className="flex items-center gap-3">
@@ -172,6 +227,16 @@ export default async function ArticlePage(props: PageProps) {
             <Eye className="h-3. w-3" />
             {article.viewsCount + 1} Views
           </span>
+          {article.seoScore > 0 && (
+            <>
+              <span className="text-gray-300">•</span>
+              <span className={`text-[10px] font-bold font-mono ${
+                article.seoScore >= 80 ? "text-emerald-600" : article.seoScore >= 50 ? "text-amber-600" : "text-rose-500"
+              }`}>
+                SEO {article.seoScore}/100
+              </span>
+            </>
+          )}
         </div>
 
         <h1 className="text-2xl sm:text-3.5xl font-bold text-slate-1000 dark:text-zinc-50 tracking-tight leading-tight">
@@ -184,15 +249,15 @@ export default async function ArticlePage(props: PageProps) {
 
         {/* Profile Card */}
         <div className="pt-4 border-t border-gray-50 dark:border-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-indigo-100 text-indigo-805 flex items-center justify-center font-bold text-xs uppercase dark:bg-zinc-850 dark:text-zinc-300">
+          <Link href={`/author/${article.author.id}`} className="flex items-center gap-3 group">
+            <div className="h-9 w-9 rounded-full bg-indigo-100 text-indigo-805 flex items-center justify-center font-bold text-xs uppercase dark:bg-zinc-850 dark:text-zinc-300 group-hover:scale-105 transition-transform">
               {article.author.name.substring(0, 2).toUpperCase()}
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-xs font-bold text-slate-900 dark:text-white">{article.author.name}</span>
+              <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{article.author.name}</span>
               <span className="text-[10px] text-gray-400">Published on {new Date(article.createdAt).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</span>
             </div>
-          </div>
+          </Link>
 
           {/* Social shares */}
           <ShareButton title={article.title} />
@@ -208,6 +273,9 @@ export default async function ArticlePage(props: PageProps) {
         />
       </div>
 
+      {/* In-article ad before content */}
+      <AutoAdSlot format="in-article" />
+
       {/* Render Markdown Content block */}
       <div className="bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-3xl p-6 sm:p-10 shadow-sm">
         <div
@@ -216,13 +284,16 @@ export default async function ArticlePage(props: PageProps) {
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
 
+        {/* In-article ad after content */}
+        <AutoAdSlot format="in-article" />
+
         {/* Action Bar ( Liking ) */}
         <div className="mt-12 pt-6 border-t border-gray-50 dark:border-zinc-900 flex items-center justify-between">
           <LikeButton articleId={article.id} initialLikes={article.likesCount} />
           <ShareButton title={article.title} />
         </div>
 
-        {/* Ad slot Middle/Bottom */}
+        {/* Ad slot Bottom */}
         <AdSense placement="bottom" />
 
         {/* Comments section block */}
@@ -232,6 +303,9 @@ export default async function ArticlePage(props: PageProps) {
           currentUser={currentUser}
         />
       </div>
+
+      {/* Final bottom auto ad */}
+      <AutoAdSlot format="display" />
     </article>
   );
 }
