@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { getMe, logoutUser } from "@/actions/auth";
 import { SafeUser } from "@/types";
-import { writeArticle } from "@/actions/admin";
+import { getCategoryOptionsForAdmin, writeArticle } from "@/actions/admin";
 import { renderArticleContent } from "@/lib/markdown";
 import { generateSeo, stripHtml } from "@/lib/seo";
 import { RichStoryEditor, RichStoryEditorHandle } from "@/components/RichStoryEditor";
@@ -62,6 +62,7 @@ function WriteArticleForm() {
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Technology");
+  const [categoryOptions, setCategoryOptions] = useState<string[]>(["Stories", "Technology", "Design", "Life", "Philosophy", "Devops"]);
   const [coverImage, setCoverImage] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
@@ -87,6 +88,14 @@ function WriteArticleForm() {
 
   const router = useRouter();
   const editorRef = useRef<RichStoryEditorHandle>(null);
+
+  useEffect(() => {
+    getCategoryOptionsForAdmin()
+      .then((options) => {
+        if (options.length > 0) setCategoryOptions(options);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleGenerateSeo = () => {
     const seo = generateSeo({
@@ -367,12 +376,12 @@ function WriteArticleForm() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="nexus-input w-full text-xs px-3.5 py-3 outline-none"
               >
-                <option value="Stories">Stories</option>
-                <option value="Technology">Technology</option>
-                <option value="Design">Design</option>
-                <option value="Life">Life</option>
-                <option value="Philosophy">Philosophy</option>
-                <option value="Devops">Devops</option>
+                {categoryOptions.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+                {!categoryOptions.includes(category) && category && (
+                  <option value={category}>{category}</option>
+                )}
               </select>
             </div>
 

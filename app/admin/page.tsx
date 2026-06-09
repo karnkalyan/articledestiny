@@ -8,6 +8,7 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
+  Copy,
   Image as ImageIcon,
   Inbox,
   LayoutDashboard,
@@ -44,6 +45,7 @@ import {
   getUsersForAdmin,
   handleUserRoleOrBan,
   saveAd,
+  saveCatalogCategories,
   saveSiteSettings,
   updateContactMessageStatus,
 } from "@/actions/admin";
@@ -98,6 +100,7 @@ const emptySettings = {
   site_keywords: "",
   site_og_image: "",
   site_twitter_handle: "",
+  catalog_categories: JSON.stringify(["Stories", "Technology", "Design", "Life", "Philosophy", "Devops"]),
 };
 
 export default function AdminDashboardPage() {
@@ -123,6 +126,7 @@ export default function AdminDashboardPage() {
   const [editingAd, setEditingAd] = useState<Ad | null>(null);
   const [newUserForm, setNewUserForm] = useState({ name: "", email: "", role: "USER", password: "user123_temp" });
   const [aboutFeatures, setAboutFeatures] = useState<Array<{ title: string; body: string }>>([]);
+  const [newCategory, setNewCategory] = useState("");
 
   // Sync settings when loaded
   useEffect(() => {
@@ -159,6 +163,41 @@ export default function AdminDashboardPage() {
     setSettings({ ...settings, about_features: JSON.stringify(updated) });
   };
 
+  const addCatalogCategory = () => {
+    const next = newCategory.trim();
+    if (!next) return;
+    const updated = Array.from(new Set([...catalogCategories, next]));
+    setSettings({ ...settings, catalog_categories: JSON.stringify(updated) });
+    setNewCategory("");
+  };
+
+  const removeCatalogCategory = (category: string) => {
+    const updated = catalogCategories.filter((item) => item !== category);
+    setSettings({ ...settings, catalog_categories: JSON.stringify(updated) });
+  };
+
+  const generateSiteSeoContent = () => {
+    const siteUrl = (settings.site_url || "https://articledestiny.com").replace(/\/+$/, "");
+    setSettings({
+      ...settings,
+      site_title: "ArticleDestiny - Stories, Ideas, and Developer Insights",
+      site_description: "Read thoughtful ArticleDestiny stories about technology, design, life, creativity, and developer ideas written for curious readers.",
+      site_keywords: "ArticleDestiny, technology stories, developer stories, design articles, life essays, creative writing, productivity, web development",
+      site_og_image: settings.site_og_image || `${siteUrl}/logo/mainlogo.png`,
+      site_twitter_handle: settings.site_twitter_handle || "@articledestiny",
+    });
+  };
+
+  const copyMediaUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setMessage(`Copied ${url}`);
+      setErrorMsg("");
+    } catch (_) {
+      setErrorMsg("Unable to copy media URL. Select and copy the URL manually.");
+    }
+  };
+
   const isAdmin = currentUser?.role === "ADMIN";
   const authorized = !!currentUser && !currentUser.isBanned && (currentUser.role === "ADMIN" || currentUser.role === "AUTHOR");
 
@@ -168,6 +207,15 @@ export default function AdminDashboardPage() {
     const q = query.toLowerCase();
     return articles.filter((article) => `${article.title} ${article.category} ${article.slug}`.toLowerCase().includes(q));
   }, [articles, query]);
+  const catalogCategories = useMemo(() => {
+    try {
+      const parsed = JSON.parse(settings.catalog_categories || "[]");
+      if (Array.isArray(parsed)) return Array.from(new Set(parsed.map((item) => String(item).trim()).filter(Boolean)));
+    } catch (_) {
+      return (settings.catalog_categories || "").split(",").map((item) => item.trim()).filter(Boolean);
+    }
+    return [];
+  }, [settings.catalog_categories]);
 
   async function refresh() {
     setLoading(true);
@@ -414,6 +462,9 @@ export default function AdminDashboardPage() {
                     <p className="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-600">Site-Level SEO</p>
                     <p className="text-xs text-gray-500 mt-1">These values are used as the global metadata for every page on the site. Leave blank to use defaults.</p>
                   </div>
+                  <Button type="button" variant="outline" onClick={generateSiteSeoContent} className="w-fit">
+                    <Plus className="h-4 w-4" /> Generate Auto SEO Content
+                  </Button>
                   <Input label="Site Title" value={settings.site_title} onChange={(value) => setSettings({ ...settings, site_title: value })} placeholder="ArticleDestiny - Tech, Design, and Developer Stories" />
                   <Textarea label="Site Description" value={settings.site_description} onChange={(value) => setSettings({ ...settings, site_description: value })} rows={2} />
                   <Input label="Site Keywords (comma-separated)" value={settings.site_keywords} onChange={(value) => setSettings({ ...settings, site_keywords: value })} placeholder="technology, developer, stories, design" />
@@ -590,9 +641,21 @@ export default function AdminDashboardPage() {
                 {mediaList.map((media) => (
                   <div key={media.id} className="nexus-card overflow-hidden shadow-none">
                     <img src={media.url} alt={media.name} className="w-full aspect-video object-cover bg-slate-100" />
-                    <div className="p-3">
+                    <div className="p-3 space-y-2">
                       <p className="text-xs font-bold truncate">{media.name}</p>
-                      <Button variant="destructive" onClick={() => runAction(() => deleteMedia(media.id), "Media deleted.")} className="mt-2 h-8 px-3 w-full">Delete</Button>
+                      <input
+                        readOnly
+                        value={media.url}
+                        onFocus={(e) => e.currentTarget.select()}
+                        className="nexus-input w-full px-2.5 py-2 text-[11px] font-mono outline-none"
+                        aria-label={`Media URL for ${media.name}`}
+                      />
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button variant="outline" onClick={() => copyMediaUrl(media.url)} className="h-8 px-3">
+                          <Copy className="h-3.5 w-3.5" /> Copy URL
+                        </Button>
+                        <Button variant="destructive" onClick={() => runAction(() => deleteMedia(media.id), "Media deleted.")} className="h-8 px-3">Delete</Button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -668,6 +731,46 @@ export default function AdminDashboardPage() {
                             </div>
                           ))}
                         </div>
+                      </div>
+                      <div className="space-y-3 rounded-2xl border border-[var(--nexus-card-border)] bg-white/50 p-4 dark:bg-white/[0.02]">
+                        <div>
+                          <p className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Story Categories</p>
+                          <p className="mt-1 text-xs nexus-text-muted">Add categories here, then select them in the story composer.</p>
+                        </div>
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <ShadInput
+                            value={newCategory}
+                            onChange={(e) => setNewCategory(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                addCatalogCategory();
+                              }
+                            }}
+                            placeholder="New category name"
+                          />
+                          <Button type="button" onClick={addCatalogCategory} className="shrink-0">
+                            <Plus className="h-4 w-4" /> Add Category
+                          </Button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {catalogCategories.map((category) => (
+                            <span key={category} className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-200">
+                              {category}
+                              <button
+                                type="button"
+                                onClick={() => removeCatalogCategory(category)}
+                                className="text-blue-400 hover:text-rose-500"
+                                aria-label={`Remove ${category}`}
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                        <Button type="button" variant="outline" onClick={() => runAction(() => saveCatalogCategories(catalogCategories), "Categories saved.")}>
+                          <Save className="h-4 w-4" /> Save Categories
+                        </Button>
                       </div>
                       <label className="block">
                         <span className="block text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">About Page Body</span>

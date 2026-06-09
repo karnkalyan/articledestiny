@@ -13,6 +13,37 @@ import {
   normalizeSearchConsoleToken,
 } from "@/lib/google-verification";
 
+const FALLBACK_ADSENSE_CLIENT = "ca-pub-8012743747071481";
+const DEFAULT_CATEGORIES = ["Stories", "Technology", "Design", "Life", "Philosophy", "Devops"];
+
+function uniqueCategories(categories: string[]) {
+  return Array.from(new Set(categories.map((item) => item.trim()).filter(Boolean)));
+}
+
+function parseSavedCategories(value?: string | null) {
+  if (!value) return DEFAULT_CATEGORIES;
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return uniqueCategories(parsed.map(String));
+  } catch (_) {
+    return uniqueCategories(value.split(","));
+  }
+  return DEFAULT_CATEGORIES;
+}
+
+async function getAdSenseClientIdForAds() {
+  const row = await db.siteSetting.findUnique({ where: { key: "adsense_client_id" } });
+  return normalizeAdSenseClientId(row?.value || "") || FALLBACK_ADSENSE_CLIENT;
+}
+
+function buildDefaultAdCodes(clientId: string): Record<string, string> {
+  return {
+    top: `<ins class="adsbygoogle" style="display:block" data-ad-client="${clientId}" data-ad-slot="2163554512" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
+    sidebar: `<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-ef+6k-30-ac+ty" data-ad-client="${clientId}" data-ad-slot="5301729457"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
+    bottom: `<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="${clientId}" data-ad-slot="9049402772"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
+  };
+}
+
 // Helper to assert admin or author role
 async function requireRole(allowedRoles: string[]) {
   const session = await getSession();
@@ -79,6 +110,40 @@ export async function getArticlesForAdmin(): Promise<Article[]> {
   }
 }
 
+export async function getCategoryOptionsForAdmin(): Promise<string[]> {
+  await requireRole(["ADMIN", "AUTHOR"]);
+  try {
+    const [setting, articleCategories] = await Promise.all([
+      db.siteSetting.findUnique({ where: { key: "catalog_categories" } }),
+      db.article.findMany({ select: { category: true }, distinct: ["category"] }),
+    ]);
+
+    return uniqueCategories([
+      ...parseSavedCategories(setting?.value),
+      ...articleCategories.map((item) => item.category),
+    ]);
+  } catch (error) {
+    return DEFAULT_CATEGORIES;
+  }
+}
+
+export async function saveCatalogCategories(categories: string[]) {
+  await requireRole(["ADMIN"]);
+  try {
+    const nextCategories = uniqueCategories(categories);
+    await db.siteSetting.upsert({
+      where: { key: "catalog_categories" },
+      create: { key: "catalog_categories", value: JSON.stringify(nextCategories) },
+      update: { value: JSON.stringify(nextCategories) },
+    });
+    revalidatePath("/");
+    revalidatePath("/admin/write");
+    return { success: true };
+  } catch (error) {
+    return { error: "Failed to save categories" };
+  }
+}
+
 export async function getCommentsForAdmin(): Promise<ReviewItem[]> {
   await requireRole(["ADMIN"]);
   try {
@@ -128,15 +193,15 @@ export async function getUsersForAdmin(): Promise<SafeUser[]> {
 export async function getAdsForAdmin(): Promise<Ad[]> {
   await requireRole(["ADMIN"]);
   try {
-    const defaultAdCodes: Record<string, string> = {
-      top: `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8012743747071481" data-ad-slot="2163554512" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
-      sidebar: `<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-ef+6k-30-ac+ty" data-ad-client="ca-pub-8012743747071481" data-ad-slot="5301729457"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
-      bottom: `<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-8012743747071481" data-ad-slot="9049402772"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
-    };
+    const adsenseClientId = await getAdSenseClientIdForAds();
+    const defaultAdCodes = buildDefaultAdCodes(adsenseClientId);
 
     for (const [placement, code] of Object.entries(defaultAdCodes)) {
       const p = placement as "top" | "sidebar" | "bottom";
       const existing = await db.ad.findUnique({ where: { placement: p } });
+      const shouldRefreshDefault =
+        existing?.code.includes("Sponsored Advertisement") ||
+        (existing?.code.includes("2163554512") || existing?.code.includes("5301729457") || existing?.code.includes("9049402772"));
       if (!existing) {
         await db.ad.create({
           data: {
@@ -145,7 +210,7 @@ export async function getAdsForAdmin(): Promise<Ad[]> {
             active: true,
           },
         });
-      } else if (existing.code.includes("Sponsored Advertisement")) {
+      } else if (shouldRefreshDefault) {
         await db.ad.update({
           where: { placement: p },
           data: { code, active: true },
@@ -401,7 +466,12 @@ export async function getLiveAdByPlacement(placement: string): Promise<Ad | null
     const ad = await db.ad.findFirst({
       where: { placement, active: true },
     });
-    return ad as unknown as Ad;
+    if (!ad) return null;
+    const adsenseClientId = await getAdSenseClientIdForAds();
+    return {
+      ...ad,
+      code: ad.code.replace(/ca-pub-\d+/gi, adsenseClientId),
+    } as unknown as Ad;
   } catch (error) {
     return null;
   }

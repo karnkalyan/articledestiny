@@ -32,6 +32,21 @@ function withPublicAuthorProfile<T extends { author: any }>(article: T) {
   };
 }
 
+function uniqueCategories(categories: string[]) {
+  return Array.from(new Set(categories.map((item) => item.trim()).filter(Boolean)));
+}
+
+function parseSavedCategories(value?: string | null) {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return uniqueCategories(parsed.map(String));
+  } catch (_) {
+    return uniqueCategories(value.split(","));
+  }
+  return [];
+}
+
 export async function getArticles(category?: string): Promise<ArticleWithAuthor[]> {
   try {
     const where: any = { published: true };
@@ -66,12 +81,15 @@ export async function getArticles(category?: string): Promise<ArticleWithAuthor[
 
 export async function getCategories(): Promise<string[]> {
   try {
-    const categories = await db.article.findMany({
+    const [categories, savedCategories] = await Promise.all([
+      db.article.findMany({
       where: { published: true },
       select: { category: true },
       distinct: ["category"],
-    });
-    return ["All", ...categories.map((c) => c.category)];
+      }),
+      db.siteSetting.findUnique({ where: { key: "catalog_categories" } }),
+    ]);
+    return ["All", ...uniqueCategories([...parseSavedCategories(savedCategories?.value), ...categories.map((c) => c.category)])];
   } catch (error) {
     return ["All"];
   }

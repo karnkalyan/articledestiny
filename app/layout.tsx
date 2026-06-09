@@ -21,11 +21,12 @@ export async function generateMetadata(): Promise<Metadata> {
   let siteDescription = "Read practical technology, design, productivity, and developer stories from ArticleDestiny.";
   let siteKeywords = ["technology articles", "developer stories", "design essays", "productivity", "software engineering", "ArticleDestiny"];
   let siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3400";
+  let adsenseClientId = HARDCODED_ADSENSE_CLIENT;
 
   try {
     const { db } = await import("@/lib/db");
     const seoRows = await db.siteSetting.findMany({
-      where: { key: { in: ["site_title", "site_description", "site_keywords", "site_url", "site_og_image"] } },
+      where: { key: { in: ["site_title", "site_description", "site_keywords", "site_url", "site_og_image", "adsense_client_id"] } },
     });
     const seo = Object.fromEntries(seoRows.map((r: any) => [r.key, r.value]));
 
@@ -33,6 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
     if (seo.site_description) siteDescription = seo.site_description;
     if (seo.site_keywords) siteKeywords = seo.site_keywords.split(",").map((k: string) => k.trim()).filter(Boolean);
     if (seo.site_url) siteUrl = seo.site_url.replace(/\/+$/, "");
+    if (seo.adsense_client_id) adsenseClientId = seo.adsense_client_id;
   } catch (e) {
     // fallback to defaults
   }
@@ -77,10 +79,10 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteDescription,
     },
     verification: {
-      google: HARDCODED_ADSENSE_CLIENT,
+      google: adsenseClientId,
     },
     other: {
-      "google-adsense-account": HARDCODED_ADSENSE_CLIENT,
+      "google-adsense-account": adsenseClientId,
     },
   };
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Sparkles, BookOpen, ArrowRight, TrendingUp } from "lucide-react";
+import { BookOpen, ArrowRight, TrendingUp } from "lucide-react";
 import { db } from "@/lib/db";
 import { getArticles, getCategories } from "@/actions/blog";
 import { getMe } from "@/actions/auth";
@@ -9,6 +9,7 @@ import { AutoAdSlot } from "@/components/AutoAdSlot";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ReadIndicator } from "@/components/ReadIndicator";
 import { AuthorHoverCard } from "@/components/AuthorHoverCard";
+import { getPublicSiteSettings } from "@/lib/site";
 
 interface SearchParamsResponse {
   category?: string;
@@ -34,6 +35,8 @@ export default async function HomePage(props: {
   // 3. Fetch categories & filtered articles
   const categoriesList = await getCategories();
   const allArticles = await getArticles(activeCategory);
+  const siteSettings = await getPublicSiteSettings();
+  const adsenseClientId = siteSettings.adsense_client_id || "ca-pub-8012743747071481";
 
   // 4. Fetch authenticated user's read history IDs for read-badges
   const dbReadIds: number[] = [];
@@ -55,34 +58,6 @@ export default async function HomePage(props: {
     <div className="space-y-12">
       {/* Dynamic Top Ad Placement */}
       <AdSense placement="top" />
-
-      <section className="relative overflow-hidden rounded-[2rem] border border-blue-100/80 bg-white px-5 py-7 shadow-sm dark:border-blue-950/40 dark:bg-zinc-950 sm:px-8">
-        <div className="absolute inset-x-0 top-0 h-1.5 bg-[var(--grad-primary)]" />
-        <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-blue-700 dark:border-blue-900/60 dark:bg-blue-950/30 dark:text-blue-300">
-              <Sparkles className="h-3.5 w-3.5" />
-              Editorial Catalog
-            </div>
-            <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-950 dark:text-zinc-50 sm:text-4xl">
-              Stories for builders, readers, and curious minds.
-            </h1>
-            <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-zinc-400">
-              Explore thoughtful articles on technology, design, life, and the ideas that shape ArticleDestiny.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:min-w-80">
-            <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
-              <p className="text-2xl font-black text-slate-950 dark:text-white">{allArticles.length}</p>
-              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">Published</p>
-            </div>
-            <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
-              <p className="text-2xl font-black text-slate-950 dark:text-white">{categoriesList.length}</p>
-              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">Topics</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Hero Spotlight Header Card (Only display if active filter is "All" and there is a spotlight) */}
       {activeCategory === "All" && spotlight && (
@@ -112,7 +87,7 @@ export default async function HomePage(props: {
                   />
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-1000 dark:text-zinc-50 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors tracking-tight leading-tight">
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-zinc-50 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors tracking-tight leading-tight">
                   <Link href={`/blog/${spotlight.slug}`}>{spotlight.title}</Link>
                 </h2>
 
@@ -142,8 +117,8 @@ export default async function HomePage(props: {
         {/* Left Side: Catalog Content */}
         <div className="lg:col-span-8 space-y-8">
           {/* Category Tabs */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-white/80 p-4 shadow-sm dark:border-zinc-900 dark:bg-zinc-950/80">
-            <h3 className="flex items-center gap-2 text-sm font-black text-slate-1000 dark:text-zinc-150 uppercase tracking-widest font-mono">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-blue-100 bg-white p-4 shadow-sm dark:border-blue-950/40 dark:bg-zinc-950">
+            <h3 className="flex items-center gap-2 text-sm font-black text-slate-950 dark:text-zinc-50 uppercase tracking-widest font-mono">
               <TrendingUp className="h-4 w-4 text-blue-500" />
               Curated Catalog ({allArticles.length})
             </h3>
@@ -157,7 +132,7 @@ export default async function HomePage(props: {
                   className={`px-3 py-1 text-[11px] font-bold tracking-wide rounded-lg border transition-all ${
                     (cat === activeCategory || (cat === "All" && activeCategory === "All"))
                       ? "bg-[var(--grad-primary)] text-white border-transparent shadow-md shadow-blue-500/15"
-                      : "border-gray-200 bg-white text-gray-500 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-zinc-805 dark:bg-zinc-950 dark:hover:bg-zinc-900"
+                      : "border-gray-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
                   }`}
                 >
                   {cat}
@@ -204,7 +179,7 @@ export default async function HomePage(props: {
 
                       {/* Meta info */}
                       <div className="p-5.5 space-y-3">
-                        <h3 className="text-lg font-black text-slate-1000 dark:text-zinc-100 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight tracking-tight">
+                        <h3 className="text-lg font-black text-slate-950 dark:text-zinc-100 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight tracking-tight">
                           <Link href={`/blog/${art.slug}`}>{art.title}</Link>
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed font-normal line-clamp-4">
@@ -229,7 +204,7 @@ export default async function HomePage(props: {
 
                   {/* In-feed ad after every 3rd article */}
                   {(index + 1) % 3 === 0 && index < allArticles.length - 1 && (
-                    <AutoAdSlot format="in-feed" />
+                    <AutoAdSlot format="in-feed" clientId={adsenseClientId} />
                   )}
                 </React.Fragment>
               ))}
