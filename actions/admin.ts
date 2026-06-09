@@ -128,17 +128,27 @@ export async function getUsersForAdmin(): Promise<SafeUser[]> {
 export async function getAdsForAdmin(): Promise<Ad[]> {
   await requireRole(["ADMIN"]);
   try {
-    // Populate defaults if none exist
-    const defaultPlacements = ["top", "sidebar", "bottom"];
-    for (const p of defaultPlacements) {
+    const defaultAdCodes: Record<string, string> = {
+      top: `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8012743747071481" data-ad-slot="2163554512" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
+      sidebar: `<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-ef+6k-30-ac+ty" data-ad-client="ca-pub-8012743747071481" data-ad-slot="5301729457"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
+      bottom: `<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-8012743747071481" data-ad-slot="9049402772"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>`,
+    };
+
+    for (const [placement, code] of Object.entries(defaultAdCodes)) {
+      const p = placement as "top" | "sidebar" | "bottom";
       const existing = await db.ad.findUnique({ where: { placement: p } });
       if (!existing) {
         await db.ad.create({
           data: {
             placement: p,
-            code: `<div class="bg-indigo-50 border border-indigo-200 text-indigo-805 rounded p-4 text-center text-xs dark:bg-zinc-900/60 dark:border-zinc-800"><p class="font-bold uppercase tracking-widest text-[9px] text-gray-400 mb-1">Sponsored Advertisement</p><a href="#" class="hover:underline">Discover premium developer tooling at ArticleDestiny Partners</a></div>`,
+            code,
             active: true,
           },
+        });
+      } else if (existing.code.includes("Sponsored Advertisement")) {
+        await db.ad.update({
+          where: { placement: p },
+          data: { code, active: true },
         });
       }
     }

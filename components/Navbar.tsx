@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Compass, Sparkles, BookOpen, User, LogOut, Menu, X, ShieldAlert, History } from "lucide-react";
+import { User, LogOut, Menu, X, ShieldAlert, History } from "lucide-react";
 import { logoutUser } from "@/actions/auth";
 import { SafeUser } from "@/types";
 
@@ -28,13 +28,17 @@ export function Navbar({ user }: NavbarProps) {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2 group">
-              <span className="p-2 bg-gradient-to-tr from-indigo-500 to-indigo-600 rounded-xl shadow-md shadow-indigo-100 dark:shadow-none group-hover:scale-105 transition-transform">
-                <Sparkles className="h-4.5 w-4.5 text-white animate-pulse" />
-              </span>
-              <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-                Article<span className="text-indigo-600 dark:text-indigo-400">Destiny</span>
-              </span>
+            <Link href="/" className="flex items-center gap-2 group" aria-label="ArticleDestiny home">
+              <img
+                src="/logo/mainlogo.png"
+                alt="ArticleDestiny"
+                className="hidden h-10 w-auto max-w-[190px] object-contain transition-transform group-hover:scale-[1.02] sm:block"
+              />
+              <img
+                src="/logo/logo.png"
+                alt="ArticleDestiny"
+                className="h-9 w-9 rounded-xl object-contain shadow-md shadow-blue-100 transition-transform group-hover:scale-105 sm:hidden dark:shadow-none"
+              />
             </Link>
 
             {/* Desktop Navigation Links */}

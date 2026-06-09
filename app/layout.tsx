@@ -49,6 +49,11 @@ export async function generateMetadata(): Promise<Metadata> {
     creator: "ArticleDestiny",
     publisher: "ArticleDestiny",
     keywords: siteKeywords,
+    icons: {
+      icon: "/logo/logo.png",
+      shortcut: "/logo/logo.png",
+      apple: "/logo/logo.png",
+    },
     robots: {
       index: true,
       follow: true,
@@ -129,4 +134,3 @@ export default async function RootLayout({
     </html>
   );
 }
-

@@ -236,15 +236,19 @@ export default function AdminDashboardPage() {
   const nav = (
     <aside className={`admin-sidebar ${sidebarCollapsed ? "lg:w-20" : "lg:w-60"} h-full flex flex-col transition-all duration-300 backdrop-blur-2xl`}>
       <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--nexus-card-border)]">
-        {!sidebarCollapsed && (
-          <div className="flex items-center gap-3">
-            <span className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white inline-flex items-center justify-center text-sm font-black shadow-lg shadow-blue-500/20">A</span>
+        <div className={`flex items-center ${sidebarCollapsed ? "justify-center" : "gap-3"}`}>
+          <img
+            src="/logo/logo.png"
+            alt="ArticleDestiny"
+            className="h-8 w-8 rounded-lg object-contain shadow-lg shadow-blue-500/20"
+          />
+          {!sidebarCollapsed && (
             <div>
               <p className="text-[10px] uppercase tracking-[0.24em] text-[var(--nexus-text-muted)] font-bold">ArticleDestiny</p>
               <h2 className="text-sm font-black text-[var(--nexus-text-main)]">Admin Console</h2>
             </div>
-          </div>
-        )}
+          )}
+        </div>
         <button
           type="button"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}

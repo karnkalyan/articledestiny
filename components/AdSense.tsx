@@ -1,5 +1,6 @@
 import React from "react";
 import { getLiveAdByPlacement } from "@/actions/admin";
+import { AutoAdSlot } from "@/components/AutoAdSlot";
 
 interface AdSenseProps {
   placement: "top" | "sidebar" | "bottom";
@@ -8,7 +9,11 @@ interface AdSenseProps {
 export async function AdSense({ placement }: AdSenseProps) {
   try {
     const ad = await getLiveAdByPlacement(placement);
-    if (!ad || !ad.active || !ad.code) return null;
+    const hasPlaceholderCode = ad?.code?.includes("Sponsored Advertisement");
+    if (!ad || !ad.active || !ad.code || hasPlaceholderCode) {
+      const fallbackFormat = placement === "bottom" ? "multiplex" : "auto";
+      return <AutoAdSlot format={fallbackFormat} className={placement === "sidebar" ? "sticky top-24" : ""} />;
+    }
 
     return (
       <div
@@ -18,7 +23,7 @@ export async function AdSense({ placement }: AdSenseProps) {
       />
     );
   } catch (error) {
-    // Graceful fail in case of errors, keeping UI running
-    return null;
+    const fallbackFormat = placement === "bottom" ? "multiplex" : "auto";
+    return <AutoAdSlot format={fallbackFormat} className={placement === "sidebar" ? "sticky top-24" : ""} />;
   }
 }

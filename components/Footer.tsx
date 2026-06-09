@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
 
 export function Footer() {
   return (
@@ -9,13 +8,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Col 1: Bio */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="p-2 bg-indigo-600 rounded-xl">
-                <Sparkles className="h-4 w-4 text-white" />
-              </span>
-              <span className="text-base font-black tracking-tight text-slate-900 dark:text-white">
-                Article<span className="text-indigo-650 dark:text-indigo-400">Destiny</span>
-              </span>
+            <Link href="/" className="inline-flex items-center" aria-label="ArticleDestiny home">
+              <img
+                src="/logo/mainlogo.png"
+                alt="ArticleDestiny"
+                className="h-10 w-auto max-w-[200px] object-contain"
+              />
             </Link>
             <p className="text-xs text-gray-500 dark:text-zinc-400 max-w-sm leading-relaxed">
               ArticleDestiny is a high-fidelity publishing ecosystem exploring technology, design ideas, and creative essays. Read curated articles or sign up to join the interactive community.

@@ -8,16 +8,35 @@ interface AutoAdSlotProps {
   slot?: string;
 }
 
-/**
- * Client component that renders a Google AdSense ad unit.
- * Uses the global adsbygoogle loaded by layout.tsx.
- * Format options:
- *  - "auto" — responsive auto ads
- *  - "in-article" — native in-article ads
- *  - "in-feed" — native in-feed ads
- *  - "display" — standard display ads
- *  - "multiplex" — multiplex ads (grid)
- */
+const ADSENSE_CLIENT = "ca-pub-8012743747071481";
+
+const AD_UNITS = {
+  auto: {
+    slot: "2163554512",
+    format: "auto",
+    fullWidthResponsive: "true",
+  },
+  display: {
+    slot: "2163554512",
+    format: "auto",
+    fullWidthResponsive: "true",
+  },
+  "in-feed": {
+    slot: "5301729457",
+    format: "fluid",
+    layoutKey: "-ef+6k-30-ac+ty",
+  },
+  "in-article": {
+    slot: "2675566110",
+    format: "fluid",
+    layout: "in-article",
+  },
+  multiplex: {
+    slot: "9049402772",
+    format: "autorelaxed",
+  },
+} as const;
+
 export function AutoAdSlot({
   format = "auto",
   className = "",
@@ -25,35 +44,36 @@ export function AutoAdSlot({
 }: AutoAdSlotProps) {
   const adRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
+  const unit = AD_UNITS[format];
+  const layout = "layout" in unit ? unit.layout : undefined;
+  const layoutKey = "layoutKey" in unit ? unit.layoutKey : undefined;
+  const fullWidthResponsive = "fullWidthResponsive" in unit ? unit.fullWidthResponsive : undefined;
 
   useEffect(() => {
     if (pushed.current) return;
     try {
-      const adsbygoogle = (window as any).adsbygoogle;
-      if (adsbygoogle && adRef.current) {
+      if (adRef.current) {
+        const adsbygoogle = ((window as any).adsbygoogle = (window as any).adsbygoogle || []);
         adsbygoogle.push({});
         pushed.current = true;
       }
-    } catch (e) {
-      // AdSense may not be loaded yet or blocked
+    } catch (_) {
+      // Ad blockers or delayed script loading can prevent push. Keep layout stable.
     }
   }, []);
 
-  const layoutKey = format === "in-feed" ? "-fb+5w+4e-db+86" : undefined;
-
   return (
-    <div
-      className={`w-full my-6 min-h-[90px] select-none overflow-hidden rounded-xl ${className}`}
-    >
+    <div className={`w-full my-6 min-h-[90px] select-none overflow-hidden rounded-xl ${className}`}>
       <ins
         ref={adRef}
         className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-format={format === "in-feed" ? "fluid" : format === "in-article" ? "fluid" : format}
+        style={{ display: "block", textAlign: format === "in-article" ? "center" : undefined }}
+        data-ad-client={ADSENSE_CLIENT}
+        data-ad-slot={slot || unit.slot}
+        data-ad-format={unit.format}
+        data-ad-layout={layout}
         data-ad-layout-key={layoutKey}
-        data-ad-client="ca-pub-8012743747071481"
-        data-ad-slot={slot || ""}
-        data-full-width-responsive="true"
+        data-full-width-responsive={fullWidthResponsive}
       />
     </div>
   );
