@@ -31,12 +31,22 @@ const PUBLIC_KEYS = [
   "site_twitter_handle",
 ];
 
+const DEFAULT_PUBLIC_SITE_URL = "https://articledestiny.com";
+
+function normalizePublicSiteUrl(value?: string) {
+  const raw = (process.env.NEXT_PUBLIC_SITE_URL || value || DEFAULT_PUBLIC_SITE_URL).trim().replace(/\/+$/, "");
+  if (!raw || raw.includes("localhost") || raw.includes("127.0.0.1")) {
+    return DEFAULT_PUBLIC_SITE_URL;
+  }
+  return raw;
+}
+
 export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
   const rows = await db.siteSetting.findMany({
     where: { key: { in: PUBLIC_KEYS } },
   });
   const settings = Object.fromEntries(rows.map((row) => [row.key, row.value]));
-  const siteUrl = (settings.site_url || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3400").replace(/\/+$/, "");
+  const siteUrl = normalizePublicSiteUrl(settings.site_url);
 
   return {
     site_url: siteUrl,
@@ -52,3 +62,6 @@ export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
   };
 }
 
+export function getFallbackPublicSiteUrl() {
+  return normalizePublicSiteUrl();
+}

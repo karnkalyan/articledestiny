@@ -50,6 +50,19 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    await db.authorProfile.upsert({
+      where: { userId: session.id },
+      create: {
+        userId: session.id,
+        avatar: updatedMedia.url,
+        avatarVisible: true,
+      },
+      update: {
+        avatar: updatedMedia.url,
+        avatarVisible: true,
+      },
+    });
+
     return NextResponse.json({ success: true, media: updatedMedia });
   } catch (error: any) {
     console.error("Error uploading profile avatar:", error);

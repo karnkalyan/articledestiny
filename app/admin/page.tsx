@@ -25,6 +25,7 @@ import {
   X,
   Gauge,
   LogOut,
+  User,
 } from "lucide-react";
 import { getMe, logoutUser } from "@/actions/auth";
 import { renderArticleContent } from "@/lib/markdown";
@@ -54,12 +55,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input as ShadInput } from "@/components/ui/input";
 import { Textarea as ShadTextarea } from "@/components/ui/textarea";
 import { RichStoryEditor } from "@/components/RichStoryEditor";
+import { AdminProfilePanel } from "@/components/AdminProfilePanel";
 
-type AdminTab = "overview" | "stories" | "google" | "subscribers" | "messages" | "users" | "media" | "ads" | "site" | "mail";
+type AdminTab = "overview" | "stories" | "profile" | "google" | "subscribers" | "messages" | "users" | "media" | "ads" | "site" | "mail";
 
 const tabs: Array<{ id: AdminTab; label: string; icon: any; adminOnly?: boolean }> = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "stories", label: "Stories", icon: BookOpen },
+  { id: "profile", label: "My Profile", icon: User },
   { id: "google", label: "Google Setup", icon: Gauge, adminOnly: true },
   { id: "subscribers", label: "Subscribers", icon: Mail, adminOnly: true },
   { id: "messages", label: "Messages", icon: Inbox, adminOnly: true },
@@ -85,7 +88,7 @@ const emptySettings = {
   mail_pass: "",
   mail_from: "",
   mail_secure: "false",
-  site_url: "http://localhost:3400",
+  site_url: "https://articledestiny.com",
   google_search_console_verification: "",
   ga4_measurement_id: "",
   adsense_client_id: "",
@@ -376,6 +379,12 @@ export default function AdminDashboardPage() {
                   </MotionDiv>
                 ))}
               </MotionDiv>
+            </MotionPanel>
+          )}
+
+          {activeTab === "profile" && currentUser && (
+            <MotionPanel {...panelMotion}>
+              <AdminProfilePanel currentUser={currentUser} />
             </MotionPanel>
           )}
 
