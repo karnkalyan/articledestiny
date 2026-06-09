@@ -13,6 +13,7 @@ import {
   Save,
   SearchCheck,
   Sparkles,
+  Tags,
   UploadCloud,
   ChevronLeft,
   ChevronRight,
@@ -39,11 +40,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type AdminTab = "overview" | "stories" | "google" | "subscribers" | "messages" | "users" | "media" | "ads" | "site" | "mail";
+type AdminTab = "overview" | "stories" | "categories" | "google" | "subscribers" | "messages" | "users" | "media" | "ads" | "site" | "mail";
 
 const tabs: Array<{ id: AdminTab; label: string; icon: any; adminOnly?: boolean }> = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "stories", label: "Stories", icon: BookOpen },
+  { id: "categories", label: "Categories", icon: Tags, adminOnly: true },
   { id: "google", label: "Google Setup", icon: Gauge, adminOnly: true },
   { id: "subscribers", label: "Subscribers", icon: Mail, adminOnly: true },
   { id: "messages", label: "Messages", icon: Inbox, adminOnly: true },
@@ -61,8 +63,8 @@ function WriteArticleForm() {
   const editId = editIdText ? parseInt(editIdText) : null;
 
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Technology");
-  const [categoryOptions, setCategoryOptions] = useState<string[]>(["Stories", "Technology", "Design", "Life", "Philosophy", "Devops"]);
+  const [category, setCategory] = useState("");
+  const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
   const [coverImage, setCoverImage] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
@@ -92,7 +94,8 @@ function WriteArticleForm() {
   useEffect(() => {
     getCategoryOptionsForAdmin()
       .then((options) => {
-        if (options.length > 0) setCategoryOptions(options);
+        setCategoryOptions(options);
+        setCategory((current) => current || options[0] || "");
       })
       .catch(() => {});
   }, []);

@@ -3,6 +3,15 @@ import bloggerData from "./data-202662172.json";
 import { db } from "./db";
 import { generateSeo, stripHtml } from "./seo";
 
+const DEFAULT_CATALOG_CATEGORIES = [
+  "Stories",
+  "Technology",
+  "Design",
+  "Life",
+  "Philosophy",
+  "Devops",
+];
+
 function slugify(value: string) {
   return value
     .toLowerCase()
@@ -157,6 +166,16 @@ export async function ensureSeeded() {
 
     console.log("Seeding author profiles...");
     await seedProfiles(owner.id, admin.id, reader.id);
+
+    console.log("Seeding catalog categories...");
+    await db.siteSetting.upsert({
+      where: { key: "catalog_categories" },
+      create: {
+        key: "catalog_categories",
+        value: JSON.stringify(DEFAULT_CATALOG_CATEGORIES),
+      },
+      update: {},
+    });
 
     console.log("Loading articles from DB...");
     const existingCount = await db.article.count();

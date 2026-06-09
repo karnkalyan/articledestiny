@@ -21,6 +21,7 @@ import {
   Search,
   Settings,
   ShieldAlert,
+  Tags,
   Trash2,
   Users,
   X,
@@ -59,11 +60,12 @@ import { Textarea as ShadTextarea } from "@/components/ui/textarea";
 import { RichStoryEditor } from "@/components/RichStoryEditor";
 import { AdminProfilePanel } from "@/components/AdminProfilePanel";
 
-type AdminTab = "overview" | "stories" | "profile" | "google" | "subscribers" | "messages" | "users" | "media" | "ads" | "site" | "mail";
+type AdminTab = "overview" | "stories" | "categories" | "profile" | "google" | "subscribers" | "messages" | "users" | "media" | "ads" | "site" | "mail";
 
 const tabs: Array<{ id: AdminTab; label: string; icon: any; adminOnly?: boolean }> = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "stories", label: "Stories", icon: BookOpen },
+  { id: "categories", label: "Categories", icon: Tags, adminOnly: true },
   { id: "profile", label: "My Profile", icon: User },
   { id: "google", label: "Google Setup", icon: Gauge, adminOnly: true },
   { id: "subscribers", label: "Subscribers", icon: Mail, adminOnly: true },
@@ -100,7 +102,7 @@ const emptySettings = {
   site_keywords: "",
   site_og_image: "",
   site_twitter_handle: "",
-  catalog_categories: JSON.stringify(["Stories", "Technology", "Design", "Life", "Philosophy", "Devops"]),
+  catalog_categories: "[]",
 };
 
 export default function AdminDashboardPage() {
@@ -523,6 +525,60 @@ export default function AdminDashboardPage() {
             </MotionPanel>
           )}
 
+          {activeTab === "categories" && (
+            <MotionPanel {...panelMotion} className="nexus-card p-5 sm:p-6 space-y-5">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="nexus-card-title">Categories</h2>
+                  <p className="mt-1 text-xs nexus-text-muted">Create the catalog categories used on the homepage and in the story composer.</p>
+                </div>
+                <Badge className="w-fit border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">{catalogCategories.length} active</Badge>
+              </div>
+
+              <div className="rounded-2xl border border-[var(--nexus-card-border)] bg-white/55 p-4 dark:bg-white/[0.02]">
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <ShadInput
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        addCatalogCategory();
+                      }
+                    }}
+                    placeholder="New category name"
+                  />
+                  <Button type="button" onClick={addCatalogCategory} className="shrink-0">
+                    <Plus className="h-4 w-4" /> Add Category
+                  </Button>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {catalogCategories.length === 0 && (
+                    <p className="text-xs nexus-text-muted">No categories saved yet. Run the seed or add your first category here.</p>
+                  )}
+                  {catalogCategories.map((category) => (
+                    <span key={category} className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-800 dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-100">
+                      {category}
+                      <button
+                        type="button"
+                        onClick={() => removeCatalogCategory(category)}
+                        className="rounded-full text-blue-500 hover:text-rose-500"
+                        aria-label={`Remove ${category}`}
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <Button type="button" onClick={() => runAction(() => saveCatalogCategories(catalogCategories), "Categories saved.")} className="w-fit">
+                <Save className="h-4 w-4" /> Save Categories
+              </Button>
+            </MotionPanel>
+          )}
+
           {activeTab === "subscribers" && (
             <DataPanel title={`Subscribers (${subscribers.length})`}>
               {subscribers.map((subscriber) => (
@@ -731,46 +787,6 @@ export default function AdminDashboardPage() {
                             </div>
                           ))}
                         </div>
-                      </div>
-                      <div className="space-y-3 rounded-2xl border border-[var(--nexus-card-border)] bg-white/50 p-4 dark:bg-white/[0.02]">
-                        <div>
-                          <p className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Story Categories</p>
-                          <p className="mt-1 text-xs nexus-text-muted">Add categories here, then select them in the story composer.</p>
-                        </div>
-                        <div className="flex flex-col gap-2 sm:flex-row">
-                          <ShadInput
-                            value={newCategory}
-                            onChange={(e) => setNewCategory(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") {
-                                e.preventDefault();
-                                addCatalogCategory();
-                              }
-                            }}
-                            placeholder="New category name"
-                          />
-                          <Button type="button" onClick={addCatalogCategory} className="shrink-0">
-                            <Plus className="h-4 w-4" /> Add Category
-                          </Button>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {catalogCategories.map((category) => (
-                            <span key={category} className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-200">
-                              {category}
-                              <button
-                                type="button"
-                                onClick={() => removeCatalogCategory(category)}
-                                className="text-blue-400 hover:text-rose-500"
-                                aria-label={`Remove ${category}`}
-                              >
-                                <X className="h-3 w-3" />
-                              </button>
-                            </span>
-                          ))}
-                        </div>
-                        <Button type="button" variant="outline" onClick={() => runAction(() => saveCatalogCategories(catalogCategories), "Categories saved.")}>
-                          <Save className="h-4 w-4" /> Save Categories
-                        </Button>
                       </div>
                       <label className="block">
                         <span className="block text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">About Page Body</span>

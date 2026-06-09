@@ -117,9 +117,9 @@ export default async function HomePage(props: {
         {/* Left Side: Catalog Content */}
         <div className="lg:col-span-8 space-y-8">
           {/* Category Tabs */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-blue-100 bg-white p-4 shadow-sm dark:border-blue-950/40 dark:bg-zinc-950">
-            <h3 className="flex items-center gap-2 text-sm font-black text-slate-950 dark:text-zinc-50 uppercase tracking-widest font-mono">
-              <TrendingUp className="h-4 w-4 text-blue-500" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-900/50 dark:bg-blue-950/25">
+            <h3 className="flex items-center gap-2 text-sm font-black text-blue-950 dark:text-blue-50 uppercase tracking-widest font-mono">
+              <TrendingUp className="h-4 w-4 text-blue-600 dark:text-blue-300" />
               Curated Catalog ({allArticles.length})
             </h3>
 
@@ -131,8 +131,8 @@ export default async function HomePage(props: {
                   href={cat === "All" ? "/" : `/?category=${encodeURIComponent(cat)}`}
                   className={`px-3 py-1 text-[11px] font-bold tracking-wide rounded-lg border transition-all ${
                     (cat === activeCategory || (cat === "All" && activeCategory === "All"))
-                      ? "bg-[var(--grad-primary)] text-white border-transparent shadow-md shadow-blue-500/15"
-                      : "border-gray-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                      ? "border-blue-700 bg-blue-700 text-white shadow-md shadow-blue-500/20 dark:border-blue-400 dark:bg-blue-500 dark:text-white"
+                      : "border-blue-200 bg-white text-blue-900 hover:border-blue-400 hover:bg-blue-100 hover:text-blue-950 dark:border-blue-900/60 dark:bg-zinc-950 dark:text-blue-100 dark:hover:bg-blue-950/60"
                   }`}
                 >
                   {cat}
@@ -214,6 +214,27 @@ export default async function HomePage(props: {
 
         {/* Right Side: Editorial Sidebar */}
         <div className="lg:col-span-4 space-y-8">
+          <div className="p-6 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-3xl shadow-sm">
+            <h4 className="text-[10px] font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-widest font-mono border-b border-gray-100 dark:border-zinc-900 pb-3 mb-4">
+              Categories
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {categoriesList.map((cat) => (
+                <Link
+                  key={cat}
+                  href={cat === "All" ? "/" : `/?category=${encodeURIComponent(cat)}`}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
+                    (cat === activeCategory || (cat === "All" && activeCategory === "All"))
+                      ? "border-blue-700 bg-blue-700 text-white dark:border-blue-400 dark:bg-blue-500"
+                      : "border-blue-100 bg-blue-50 text-blue-800 hover:border-blue-300 hover:bg-blue-100 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-100"
+                  }`}
+                >
+                  {cat}
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* Section 1: Publisher Profile */}
           <div className="p-6 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-3xl shadow-sm text-center">
             <h4 className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest font-mono mb-2">Publisher Spotlight</h4>

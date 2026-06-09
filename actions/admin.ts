@@ -14,21 +14,20 @@ import {
 } from "@/lib/google-verification";
 
 const FALLBACK_ADSENSE_CLIENT = "ca-pub-8012743747071481";
-const DEFAULT_CATEGORIES = ["Stories", "Technology", "Design", "Life", "Philosophy", "Devops"];
 
 function uniqueCategories(categories: string[]) {
   return Array.from(new Set(categories.map((item) => item.trim()).filter(Boolean)));
 }
 
 function parseSavedCategories(value?: string | null) {
-  if (!value) return DEFAULT_CATEGORIES;
+  if (!value) return [];
   try {
     const parsed = JSON.parse(value);
     if (Array.isArray(parsed)) return uniqueCategories(parsed.map(String));
   } catch (_) {
     return uniqueCategories(value.split(","));
   }
-  return DEFAULT_CATEGORIES;
+  return [];
 }
 
 async function getAdSenseClientIdForAds() {
@@ -123,7 +122,7 @@ export async function getCategoryOptionsForAdmin(): Promise<string[]> {
       ...articleCategories.map((item) => item.category),
     ]);
   } catch (error) {
-    return DEFAULT_CATEGORIES;
+    return [];
   }
 }
 
