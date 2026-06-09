@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Eye, EyeOff, FileText, Globe, MapPin, Phone, Save, Sparkles, UploadCloud } from "lucide-react";
-import { getMyProfile, updateMyProfile } from "@/actions/profile";
+import { Eye, EyeOff, FileText, Globe, KeyRound, Mail, MapPin, Phone, Save, Sparkles, UploadCloud, User } from "lucide-react";
+import { getMyProfile, updateMyAccount, updateMyProfile } from "@/actions/profile";
 import { AuthorProfile, SafeUser } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -96,8 +96,16 @@ function profileToForm(profile: AuthorProfile | null): ProfileForm {
 
 export function AdminProfilePanel({ currentUser }: { currentUser: SafeUser }) {
   const [form, setForm] = useState<ProfileForm>(defaultProfileForm);
+  const [accountForm, setAccountForm] = useState({
+    name: currentUser.name,
+    email: currentUser.email,
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [accountSaving, setAccountSaving] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -151,6 +159,34 @@ export function AdminProfilePanel({ currentUser }: { currentUser: SafeUser }) {
     }
   };
 
+  const saveAccount = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setAccountSaving(true);
+    setMessage("");
+    setErrorMsg("");
+
+    try {
+      const result = await updateMyAccount(accountForm);
+      if (result?.error) {
+        setErrorMsg(result.error);
+      } else {
+        setAccountForm((prev) => ({
+          ...prev,
+          name: result.user?.name || prev.name,
+          email: result.user?.email || prev.email,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
+        setMessage("Account information saved to database.");
+      }
+    } catch (error: any) {
+      setErrorMsg(error.message || "Unable to save account.");
+    } finally {
+      setAccountSaving(false);
+    }
+  };
+
   const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -191,6 +227,91 @@ export function AdminProfilePanel({ currentUser }: { currentUser: SafeUser }) {
   }
 
   return (
+    <div className="space-y-5">
+    <form onSubmit={saveAccount} className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+      <Card className="xl:col-span-4 overflow-hidden">
+        <CardHeader>
+          <CardTitle>Account Login</CardTitle>
+          <p className="mt-1 text-xs nexus-text-muted">Update your account name, email, and password.</p>
+        </CardHeader>
+      </Card>
+      <Card className="xl:col-span-8 overflow-hidden">
+        <CardContent className="space-y-5 pt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-[var(--nexus-text-main)]">
+                <User className="h-3.5 w-3.5 text-blue-500" />
+                Display Name
+              </span>
+              <input
+                value={accountForm.name}
+                onChange={(event) => setAccountForm((prev) => ({ ...prev, name: event.target.value }))}
+                className="nexus-input w-full px-3.5 py-3 text-xs outline-none"
+                required
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-[var(--nexus-text-main)]">
+                <Mail className="h-3.5 w-3.5 text-blue-500" />
+                Email
+              </span>
+              <input
+                type="email"
+                value={accountForm.email}
+                onChange={(event) => setAccountForm((prev) => ({ ...prev, email: event.target.value }))}
+                className="nexus-input w-full px-3.5 py-3 text-xs outline-none"
+                required
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-[var(--nexus-text-main)]">
+                <KeyRound className="h-3.5 w-3.5 text-blue-500" />
+                Current Password
+              </span>
+              <input
+                type="password"
+                value={accountForm.currentPassword}
+                onChange={(event) => setAccountForm((prev) => ({ ...prev, currentPassword: event.target.value }))}
+                placeholder="Required only for password change"
+                className="nexus-input w-full px-3.5 py-3 text-xs outline-none"
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-[var(--nexus-text-main)]">
+                <KeyRound className="h-3.5 w-3.5 text-blue-500" />
+                New Password
+              </span>
+              <input
+                type="password"
+                value={accountForm.newPassword}
+                onChange={(event) => setAccountForm((prev) => ({ ...prev, newPassword: event.target.value }))}
+                placeholder="Minimum 6 characters"
+                className="nexus-input w-full px-3.5 py-3 text-xs outline-none"
+              />
+            </label>
+            <label className="space-y-2 lg:col-span-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-[var(--nexus-text-main)]">
+                <KeyRound className="h-3.5 w-3.5 text-blue-500" />
+                Confirm New Password
+              </span>
+              <input
+                type="password"
+                value={accountForm.confirmPassword}
+                onChange={(event) => setAccountForm((prev) => ({ ...prev, confirmPassword: event.target.value }))}
+                className="nexus-input w-full px-3.5 py-3 text-xs outline-none"
+              />
+            </label>
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={accountSaving}>
+              <Save className="h-4 w-4" />
+              {accountSaving ? "Saving..." : "Save Account"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </form>
+
     <form onSubmit={saveProfile} className="grid grid-cols-1 xl:grid-cols-12 gap-5">
       <Card className="xl:col-span-4 overflow-hidden">
         <CardHeader>
@@ -288,6 +409,7 @@ export function AdminProfilePanel({ currentUser }: { currentUser: SafeUser }) {
         </CardContent>
       </Card>
     </form>
+    </div>
   );
 }
 

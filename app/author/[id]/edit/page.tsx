@@ -16,9 +16,11 @@ import {
   Sparkles,
   ShieldAlert,
   UploadCloud,
+  KeyRound,
+  Mail,
 } from "lucide-react";
 import { getMe } from "@/actions/auth";
-import { getMyProfile, updateMyProfile } from "@/actions/profile";
+import { getMyProfile, updateMyAccount, updateMyProfile } from "@/actions/profile";
 import { SafeUser, AuthorProfile } from "@/types";
 
 interface ProfileField {
@@ -46,6 +48,7 @@ export default function AuthorProfileEditPage() {
   const [currentUser, setCurrentUser] = useState<SafeUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [accountSaving, setAccountSaving] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -70,6 +73,13 @@ export default function AuthorProfileEditPage() {
     tagline: "",
     taglineVisible: true,
   });
+  const [accountForm, setAccountForm] = useState({
+    name: "",
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   useEffect(() => {
     async function load() {
@@ -78,6 +88,7 @@ export default function AuthorProfileEditPage() {
         setCurrentUser(me);
 
         if (me) {
+          setAccountForm((prev) => ({ ...prev, name: me.name, email: me.email }));
           const profile = await getMyProfile();
           if (profile) {
             setFormData({
@@ -129,6 +140,36 @@ export default function AuthorProfileEditPage() {
       setErrorMsg(err.message || "Failed to save profile.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleAccountSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAccountSaving(true);
+    setMessage("");
+    setErrorMsg("");
+
+    try {
+      const result = await updateMyAccount(accountForm);
+      if (result.error) {
+        setErrorMsg(result.error);
+      } else {
+        if (result.user) setCurrentUser(result.user);
+        setAccountForm((prev) => ({
+          ...prev,
+          name: result.user?.name || prev.name,
+          email: result.user?.email || prev.email,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
+        setMessage("Account saved successfully!");
+        setTimeout(() => setMessage(""), 3000);
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || "Failed to save account.");
+    } finally {
+      setAccountSaving(false);
     }
   };
 
@@ -260,6 +301,89 @@ export default function AuthorProfileEditPage() {
       )}
 
       {/* Profile form */}
+      <form onSubmit={handleAccountSave} className="space-y-6">
+        <div className="bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl p-6 shadow-sm space-y-6">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-widest font-mono border-b border-gray-100 dark:border-zinc-900 pb-3">
+            Account Login
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-gray-600 dark:text-zinc-400">
+                <User className="h-3.5 w-3.5 text-indigo-500" />
+                Display Name
+              </span>
+              <input
+                value={accountForm.name}
+                onChange={(e) => setAccountForm({ ...accountForm, name: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-600 transition-colors"
+                required
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-gray-600 dark:text-zinc-400">
+                <Mail className="h-3.5 w-3.5 text-indigo-500" />
+                Email
+              </span>
+              <input
+                type="email"
+                value={accountForm.email}
+                onChange={(e) => setAccountForm({ ...accountForm, email: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-600 transition-colors"
+                required
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-gray-600 dark:text-zinc-400">
+                <KeyRound className="h-3.5 w-3.5 text-indigo-500" />
+                Current Password
+              </span>
+              <input
+                type="password"
+                value={accountForm.currentPassword}
+                onChange={(e) => setAccountForm({ ...accountForm, currentPassword: e.target.value })}
+                placeholder="Required only for password change"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-600 transition-colors"
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-gray-600 dark:text-zinc-400">
+                <KeyRound className="h-3.5 w-3.5 text-indigo-500" />
+                New Password
+              </span>
+              <input
+                type="password"
+                value={accountForm.newPassword}
+                onChange={(e) => setAccountForm({ ...accountForm, newPassword: e.target.value })}
+                placeholder="Minimum 6 characters"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-600 transition-colors"
+              />
+            </label>
+            <label className="space-y-2 md:col-span-2">
+              <span className="flex items-center gap-2 text-xs font-bold text-gray-600 dark:text-zinc-400">
+                <KeyRound className="h-3.5 w-3.5 text-indigo-500" />
+                Confirm New Password
+              </span>
+              <input
+                type="password"
+                value={accountForm.confirmPassword}
+                onChange={(e) => setAccountForm({ ...accountForm, confirmPassword: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-600 transition-colors"
+              />
+            </label>
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={accountSaving}
+              className="app-primary-btn flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all disabled:opacity-50"
+            >
+              <Save className="h-4 w-4" />
+              {accountSaving ? "Saving..." : "Save Account"}
+            </button>
+          </div>
+        </div>
+      </form>
+
       <form onSubmit={handleSave} className="space-y-6">
         {/* Avatar image */}
         <div className="bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl p-6 shadow-sm space-y-4">
