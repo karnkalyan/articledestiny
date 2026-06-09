@@ -41,7 +41,7 @@ export function AuthorHoverCard({ author, publishedAt, compact = false }: Author
   );
 
   return (
-    <div className="relative z-20 inline-flex max-w-full group/author">
+    <div className="relative z-[70] inline-flex max-w-full group/author hover:z-[9999]">
       <Link href={`/author/${author.id}`} className="flex min-w-0 items-center gap-2.5">
         {avatar ? (
           <img
@@ -66,7 +66,7 @@ export function AuthorHoverCard({ author, publishedAt, compact = false }: Author
         </span>
       </Link>
 
-      <div className="pointer-events-none absolute left-0 top-full mt-3 w-[min(21rem,calc(100vw-2rem))] translate-y-1 rounded-2xl border border-gray-100 bg-white p-4 text-left opacity-0 shadow-2xl shadow-slate-900/10 transition-all duration-200 group-hover/author:pointer-events-auto group-hover/author:translate-y-0 group-hover/author:opacity-100 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-black/40">
+      <div className="pointer-events-none absolute left-0 top-full z-[9999] mt-3 w-[min(21rem,calc(100vw-2rem))] translate-y-1 rounded-2xl border border-gray-100 bg-white p-4 text-left opacity-0 shadow-2xl shadow-slate-900/20 transition-all duration-200 group-hover/author:pointer-events-auto group-hover/author:translate-y-0 group-hover/author:opacity-100 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-black/50">
         <div className="flex items-start gap-3">
           {avatar ? (
             <img src={avatar} alt={author.name} className="h-12 w-12 shrink-0 rounded-full object-cover" />

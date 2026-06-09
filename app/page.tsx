@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Compass, Sparkles, BookOpen, Clock, ArrowRight, BookMarked } from "lucide-react";
+import { Sparkles, BookOpen, ArrowRight, TrendingUp } from "lucide-react";
 import { db } from "@/lib/db";
 import { getArticles, getCategories } from "@/actions/blog";
 import { getMe } from "@/actions/auth";
@@ -56,12 +56,40 @@ export default async function HomePage(props: {
       {/* Dynamic Top Ad Placement */}
       <AdSense placement="top" />
 
+      <section className="relative overflow-hidden rounded-[2rem] border border-blue-100/80 bg-white px-5 py-7 shadow-sm dark:border-blue-950/40 dark:bg-zinc-950 sm:px-8">
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-[var(--grad-primary)]" />
+        <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-blue-700 dark:border-blue-900/60 dark:bg-blue-950/30 dark:text-blue-300">
+              <Sparkles className="h-3.5 w-3.5" />
+              Editorial Catalog
+            </div>
+            <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-950 dark:text-zinc-50 sm:text-4xl">
+              Stories for builders, readers, and curious minds.
+            </h1>
+            <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-zinc-400">
+              Explore thoughtful articles on technology, design, life, and the ideas that shape ArticleDestiny.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:min-w-80">
+            <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
+              <p className="text-2xl font-black text-slate-950 dark:text-white">{allArticles.length}</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">Published</p>
+            </div>
+            <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
+              <p className="text-2xl font-black text-slate-950 dark:text-white">{categoriesList.length}</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-gray-500">Topics</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Hero Spotlight Header Card (Only display if active filter is "All" and there is a spotlight) */}
       {activeCategory === "All" && spotlight && (
-        <div id="hero-spotlight" className="group relative bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+        <div id="hero-spotlight" className="group relative z-10 rounded-[2rem] border border-blue-100/70 bg-white shadow-xl shadow-blue-950/5 transition-all hover:z-[80] hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-950/10 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-black/20 dark:hover:border-blue-900/50">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
             {/* Visual Cover */}
-            <div className="lg:col-span-7 h-64 sm:h-96 relative overflow-hidden">
+            <div className="lg:col-span-7 h-64 sm:h-96 relative overflow-hidden rounded-t-[2rem] lg:rounded-l-[2rem] lg:rounded-tr-none">
               <img
                 src={spotlight.coverImage}
                 alt={spotlight.title}
@@ -84,9 +112,9 @@ export default async function HomePage(props: {
                   />
                 </div>
 
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-1000 dark:text-zinc-50 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors tracking-tight leading-tight">
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-1000 dark:text-zinc-50 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors tracking-tight leading-tight">
                   <Link href={`/blog/${spotlight.slug}`}>{spotlight.title}</Link>
-                </h1>
+                </h2>
 
                 <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400 leading-relaxed font-normal line-clamp-3">
                   {spotlight.excerpt}
@@ -114,8 +142,9 @@ export default async function HomePage(props: {
         {/* Left Side: Catalog Content */}
         <div className="lg:col-span-8 space-y-8">
           {/* Category Tabs */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-zinc-900 pb-5">
-            <h3 className="text-sm font-bold text-slate-1000 dark:text-zinc-150 uppercase tracking-widest font-mono">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-gray-100 bg-white/80 p-4 shadow-sm dark:border-zinc-900 dark:bg-zinc-950/80">
+            <h3 className="flex items-center gap-2 text-sm font-black text-slate-1000 dark:text-zinc-150 uppercase tracking-widest font-mono">
+              <TrendingUp className="h-4 w-4 text-blue-500" />
               Curated Catalog ({allArticles.length})
             </h3>
 
@@ -127,8 +156,8 @@ export default async function HomePage(props: {
                   href={cat === "All" ? "/" : `/?category=${encodeURIComponent(cat)}`}
                   className={`px-3 py-1 text-[11px] font-bold tracking-wide rounded-lg border transition-all ${
                     (cat === activeCategory || (cat === "All" && activeCategory === "All"))
-                      ? "bg-slate-900 text-white border-slate-900 dark:bg-indigo-600 dark:border-indigo-600"
-                      : "border-gray-200 text-gray-500 hover:bg-gray-50 dark:border-zinc-805 dark:hover:bg-zinc-900"
+                      ? "bg-[var(--grad-primary)] text-white border-transparent shadow-md shadow-blue-500/15"
+                      : "border-gray-200 bg-white text-gray-500 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-zinc-805 dark:bg-zinc-950 dark:hover:bg-zinc-900"
                   }`}
                 >
                   {cat}
@@ -150,11 +179,11 @@ export default async function HomePage(props: {
               {allArticles.map((art, index) => (
                 <React.Fragment key={art.id}>
                   <div
-                    className="group bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl overflow-visible shadow-sm hover:border-gray-200 dark:hover:border-zinc-800 hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                    className="group relative z-0 rounded-3xl border border-gray-100 bg-white shadow-sm shadow-slate-950/[0.03] transition-all hover:z-[90] hover:-translate-y-1 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-950/10 dark:border-zinc-900 dark:bg-zinc-950 dark:shadow-black/20 dark:hover:border-blue-900/50 flex flex-col justify-between"
                   >
                     <div>
                       {/* Cover graphic */}
-                      <div className="h-44 relative overflow-hidden rounded-t-2xl bg-gray-50 border-b border-gray-50 dark:border-zinc-900">
+                      <div className="h-48 relative overflow-hidden rounded-t-3xl bg-gray-50 border-b border-gray-50 dark:border-zinc-900">
                         <img
                           src={art.coverImage}
                           alt={art.title}
@@ -174,8 +203,8 @@ export default async function HomePage(props: {
                       </div>
 
                       {/* Meta info */}
-                      <div className="p-5.5 space-y-2.5">
-                        <h3 className="text-base font-bold text-slate-1000 dark:text-zinc-100 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight tracking-tight">
+                      <div className="p-5.5 space-y-3">
+                        <h3 className="text-lg font-black text-slate-1000 dark:text-zinc-100 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight tracking-tight">
                           <Link href={`/blog/${art.slug}`}>{art.title}</Link>
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed font-normal line-clamp-4">
@@ -185,12 +214,12 @@ export default async function HomePage(props: {
                     </div>
 
                     {/* Footing actions */}
-                    <div className="px-5.5 pb-5.5 pt-3.5 border-t border-gray-50 dark:border-zinc-900/60 flex items-center justify-between">
+                    <div className="relative px-5.5 pb-5.5 pt-3.5 border-t border-gray-50 dark:border-zinc-900/60 flex items-center justify-between gap-3">
                       <AuthorHoverCard author={art.author} publishedAt={art.createdAt} compact />
 
                       <Link
                         href={`/blog/${art.slug}`}
-                        className="flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
+                        className="shrink-0 inline-flex items-center gap-1 rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 transition-colors hover:border-blue-200 hover:bg-blue-100 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-300 dark:hover:bg-blue-950/60"
                       >
                         <span>Read Entry</span>
                         <ArrowRight className="h-3 w-3" />
@@ -211,7 +240,7 @@ export default async function HomePage(props: {
         {/* Right Side: Editorial Sidebar */}
         <div className="lg:col-span-4 space-y-8">
           {/* Section 1: Publisher Profile */}
-          <div className="p-6 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl shadow-sm text-center">
+          <div className="p-6 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-3xl shadow-sm text-center">
             <h4 className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest font-mono mb-2">Publisher Spotlight</h4>
             <div className="h-14 w-14 rounded-full bg-indigo-50 border-2 border-indigo-200 text-indigo-600 flex items-center justify-center font-bold mx-auto text-sm shadow-md animate-pulse">
               AD
@@ -226,7 +255,7 @@ export default async function HomePage(props: {
           <AdSense placement="sidebar" />
 
           {/* Section 3: Newsletter Form Drawer */}
-          <div className="p-6 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-2xl shadow-sm">
+          <div className="p-6 bg-white border border-gray-100 dark:bg-zinc-950 dark:border-zinc-900 rounded-3xl shadow-sm">
             <h4 className="text-[10px] font-bold text-slate-900 dark:text-zinc-150 uppercase tracking-widest font-mono border-b border-gray-100 dark:border-zinc-900 pb-3 mb-4">
               Weekly Digest
             </h4>
