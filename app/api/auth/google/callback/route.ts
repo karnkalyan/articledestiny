@@ -9,7 +9,10 @@ const DEFAULT_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams, origin } = request.nextUrl;
+    const { searchParams } = request.nextUrl;
+    const forwardedProto = request.headers.get("x-forwarded-proto") || "https";
+    const forwardedHost = request.headers.get("x-forwarded-host") || request.headers.get("host") || request.nextUrl.host;
+    const origin = `${forwardedProto}://${forwardedHost}`;
     const code = searchParams.get("code");
     const errorParam = searchParams.get("error");
 

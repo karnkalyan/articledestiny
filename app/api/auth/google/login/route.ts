@@ -5,7 +5,10 @@ const DEFAULT_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
 
 export async function GET(request: NextRequest) {
   try {
-    const origin = request.nextUrl.origin;
+    // Use forwarded headers from reverse proxy for correct public URL
+    const forwardedProto = request.headers.get("x-forwarded-proto") || "https";
+    const forwardedHost = request.headers.get("x-forwarded-host") || request.headers.get("host") || request.nextUrl.host;
+    const origin = `${forwardedProto}://${forwardedHost}`;
     const redirectUri = `${origin}/api/auth/google/callback`;
 
     // Fetch Google Client ID from database site settings
