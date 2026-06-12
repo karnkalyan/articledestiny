@@ -55,7 +55,9 @@ export function Footer() {
                 <span className="text-gray-450 cursor-not-allowed">Terms of Service</span>
               </li>
               <li>
-                <span className="text-gray-450 cursor-not-allowed">Privacy Policy</span>
+                <Link href="/privacy" className="text-gray-450 hover:text-indigo-650 transition-colors">
+                  Privacy Policy
+                </Link>
               </li>
             </ul>
           </div>

@@ -380,6 +380,8 @@ export async function saveSiteSettings(settings: Record<string, string>) {
   }
   revalidatePath("/");
   revalidatePath("/about");
+  revalidatePath("/privacy");
+  revalidatePath("/contact");
   revalidatePath("/ads.txt");
   return { success: true };
 }

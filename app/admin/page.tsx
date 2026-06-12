@@ -87,6 +87,11 @@ const emptySettings = {
   about_feature_two_title: "Privacy First Ecosystem",
   about_feature_two_body: "Reader history stays local or securely tied to authenticated accounts.",
   about_body: "<p>Established in 2026, ArticleDestiny grew from a single developer's dissatisfaction with algorithmic content feeds. Recognizing the beauty in focused, long-form technical literature, we developed an application with an unyielding dedication to visual rhythm and structural clarity.</p><p>We hope our platform inspires you to think deeply, experiment creatively, and contribute constructively to the active dialogue thread below each article on our server.</p>",
+  privacy_title: "Privacy Policy",
+  privacy_body: "<h2>1. Information We Collect</h2><p>We value your privacy. Your reading history stays local to your browser session using localStorage unless you choose to authenticate. If you create an account, we store your name, email address, profile settings, and interactions (such as likes and comments) to personalize your experience.</p><h2>2. Data Usage & Security</h2><p>Your details are never sold, rented, or distributed to third-party marketing entities. We strictly use configuration emails to notify you of subscriptions, newsletters, or replies to comments.</p><h2>3. Cookies and Tracking</h2><p>We use essential cookies to maintain user authentication sessions. Third-party services like Google Analytics and Google AdSense may collect standard device indicators and usage statistics if enabled by the site administration.</p>",
+  contact_eyebrow: "Get in Touch",
+  contact_title: "Connect with ArticleDestiny",
+  contact_description: "Suggestions, submissions, editorial pitches, or general design reviews.",
   mail_host: "",
   mail_port: "587",
   mail_user: "",
@@ -134,6 +139,7 @@ export default function AdminDashboardPage() {
   const [newCategory, setNewCategory] = useState("");
   const [testEmailTo, setTestEmailTo] = useState("");
   const [testEmailSending, setTestEmailSending] = useState(false);
+  const [sitePreviewTab, setSitePreviewTab] = useState<"about" | "privacy" | "contact">("about");
 
   // Sync settings when loaded
   useEffect(() => {
@@ -768,57 +774,94 @@ export default function AdminDashboardPage() {
               {activeTab === "site" ? (
                 <>
                   <Card className="xl:col-span-7 overflow-hidden">
-                    <CardHeader className="bg-white/35 dark:bg-white/[0.03]">
-                      <Badge className="w-fit border-blue-200/70 bg-blue-50/80 text-blue-800 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-200">Website Content</Badge>
-                      <CardTitle className="mt-3">Editable About Page</CardTitle>
-                      <p className="mt-1 text-xs text-gray-500">Update the public About page directly from the admin panel using rich text.</p>
+                    <CardHeader className="bg-white/35 dark:bg-white/[0.03] flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                      <div>
+                        <Badge className="w-fit border-blue-200/70 bg-blue-50/80 text-blue-800 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-200">Website Content</Badge>
+                        <CardTitle className="mt-3">Custom Pages Editor</CardTitle>
+                        <p className="mt-1 text-xs text-gray-500">Edit the About Us, Privacy Policy, and Contact pages directly.</p>
+                      </div>
+                      <div className="flex bg-slate-100 dark:bg-zinc-900 p-1 rounded-xl w-fit shrink-0 border border-slate-200/30 dark:border-zinc-800">
+                        {(["about", "privacy", "contact"] as const).map((mode) => (
+                          <button
+                            key={mode}
+                            type="button"
+                            onClick={() => setSitePreviewTab(mode)}
+                            className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${sitePreviewTab === mode ? "bg-white dark:bg-zinc-800 text-blue-600 dark:text-blue-400 shadow-sm" : "text-gray-500 hover:text-gray-700 dark:hover:text-zinc-300"}`}
+                          >
+                            {mode === "about" ? "About Us" : mode === "privacy" ? "Privacy Policy" : "Contact"}
+                          </button>
+                        ))}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <Input label="Eyebrow" value={settings.about_eyebrow} onChange={(value) => setSettings({ ...settings, about_eyebrow: value })} />
-                      <Input label="Title" value={settings.about_title} onChange={(value) => setSettings({ ...settings, about_title: value })} />
-                      <Textarea label="Intro" value={settings.about_intro} onChange={(value) => setSettings({ ...settings, about_intro: value })} rows={3} />
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between border-b border-gray-100 dark:border-zinc-900 pb-2">
-                          <span className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Dynamic Features List ({aboutFeatures.length})</span>
-                          <Button type="button" variant="outline" onClick={addFeature} className="h-8">
-                            + Add Feature
-                          </Button>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {aboutFeatures.map((feat, index) => (
-                            <div key={index} className="space-y-3 rounded-xl border border-[var(--nexus-card-border)] bg-slate-900/5 dark:bg-white/[0.02] p-3.5 relative group">
-                              <button
-                                type="button"
-                                onClick={() => removeFeature(index)}
-                                className="absolute top-2 right-2 text-rose-500 hover:text-rose-700 opacity-60 hover:opacity-100 transition-opacity p-1 cursor-pointer"
-                                title="Remove Feature"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </button>
-                              <div className="pr-6">
-                                <label className="block text-[9px] font-bold text-gray-400 uppercase mb-1">Feature {index + 1} Title</label>
-                                <ShadInput
-                                  value={feat.title}
-                                  onChange={(e) => updateFeature(index, "title", e.target.value)}
-                                />
-                              </div>
-                              <div>
-                                <label className="block text-[9px] font-bold text-gray-400 uppercase mb-1">Feature {index + 1} Description</label>
-                                <ShadTextarea
-                                  value={feat.body}
-                                  onChange={(e) => updateFeature(index, "body", e.target.value)}
-                                  rows={2}
-                                />
-                              </div>
+                      {sitePreviewTab === "about" && (
+                        <>
+                          <Input label="Eyebrow" value={settings.about_eyebrow} onChange={(value) => setSettings({ ...settings, about_eyebrow: value })} />
+                          <Input label="Title" value={settings.about_title} onChange={(value) => setSettings({ ...settings, about_title: value })} />
+                          <Textarea label="Intro" value={settings.about_intro} onChange={(value) => setSettings({ ...settings, about_intro: value })} rows={3} />
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between border-b border-gray-100 dark:border-zinc-900 pb-2">
+                              <span className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Dynamic Features List ({aboutFeatures.length})</span>
+                              <Button type="button" variant="outline" onClick={addFeature} className="h-8">
+                                + Add Feature
+                              </Button>
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                      <label className="block">
-                        <span className="block text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">About Page Body</span>
-                        <RichStoryEditor value={settings.about_body || ""} onChange={(value) => setSettings({ ...settings, about_body: value })} />
-                      </label>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {aboutFeatures.map((feat, index) => (
+                                <div key={index} className="space-y-3 rounded-xl border border-[var(--nexus-card-border)] bg-slate-900/5 dark:bg-white/[0.02] p-3.5 relative group">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeFeature(index)}
+                                    className="absolute top-2 right-2 text-rose-500 hover:text-rose-700 opacity-60 hover:opacity-100 transition-opacity p-1 cursor-pointer"
+                                    title="Remove Feature"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </button>
+                                  <div className="pr-6">
+                                    <label className="block text-[9px] font-bold text-gray-400 uppercase mb-1">Feature {index + 1} Title</label>
+                                    <ShadInput
+                                      value={feat.title}
+                                      onChange={(e) => updateFeature(index, "title", e.target.value)}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-gray-400 uppercase mb-1">Feature {index + 1} Description</label>
+                                    <ShadTextarea
+                                      value={feat.body}
+                                      onChange={(e) => updateFeature(index, "body", e.target.value)}
+                                      rows={2}
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <label className="block">
+                            <span className="block text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">About Page Body</span>
+                            <RichStoryEditor value={settings.about_body || ""} onChange={(value) => setSettings({ ...settings, about_body: value })} />
+                          </label>
+                        </>
+                      )}
+
+                      {sitePreviewTab === "privacy" && (
+                        <>
+                          <Input label="Privacy Policy Page Title" value={settings.privacy_title} onChange={(value) => setSettings({ ...settings, privacy_title: value })} />
+                          <label className="block">
+                            <span className="block text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">Privacy Policy Body</span>
+                            <RichStoryEditor value={settings.privacy_body || ""} onChange={(value) => setSettings({ ...settings, privacy_body: value })} />
+                          </label>
+                        </>
+                      )}
+
+                      {sitePreviewTab === "contact" && (
+                        <>
+                          <Input label="Contact Page Eyebrow" value={settings.contact_eyebrow} onChange={(value) => setSettings({ ...settings, contact_eyebrow: value })} />
+                          <Input label="Contact Page Title" value={settings.contact_title} onChange={(value) => setSettings({ ...settings, contact_title: value })} />
+                          <Textarea label="Contact Page Description" value={settings.contact_description} onChange={(value) => setSettings({ ...settings, contact_description: value })} rows={4} />
+                        </>
+                      )}
+
                       <Button type="submit">
                         <Save className="h-4 w-4" /> Save Website Content
                       </Button>
@@ -826,24 +869,58 @@ export default function AdminDashboardPage() {
                   </Card>
                   <Card className="xl:col-span-5 overflow-hidden">
                     <CardHeader>
-                      <CardTitle>Live About Preview</CardTitle>
-                      <p className="mt-1 text-xs text-gray-500">This mirrors what visitors see on the About page after saving.</p>
+                      <CardTitle>Live Preview</CardTitle>
+                      <p className="mt-1 text-xs text-gray-500">
+                        This matches the public {" "}
+                        {sitePreviewTab === "about" ? "About Us" : sitePreviewTab === "privacy" ? "Privacy Policy" : "Contact"} page.
+                      </p>
                     </CardHeader>
                     <CardContent className="space-y-5">
-                      <div>
-                        <Badge className="mb-3">{settings.about_eyebrow || "Editorial Manifesto"}</Badge>
-                        <h3 className="text-2xl font-black leading-tight text-slate-950 dark:text-zinc-50">{settings.about_title || "Where technology intersects human curiosity."}</h3>
-                        <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-zinc-300">{settings.about_intro || "ArticleDestiny is a boutique publishing engine curated to inspire and inform developers, digital designers, and tech enthusiasts."}</p>
-                      </div>
-                      <div className="grid grid-cols-1 gap-3">
-                        {aboutFeatures.map((feat, i) => (
-                          <div key={i} className="rounded-xl border border-[var(--nexus-card-border)] p-4">
-                            <p className="text-sm font-bold">{feat.title}</p>
-                            <p className="mt-2 text-xs leading-6 nexus-text-muted">{feat.body}</p>
+                      {sitePreviewTab === "about" && (
+                        <>
+                          <div>
+                            <Badge className="mb-3">{settings.about_eyebrow || "Editorial Manifesto"}</Badge>
+                            <h3 className="text-2xl font-black leading-tight text-slate-950 dark:text-zinc-50">{settings.about_title || "Where technology intersects human curiosity."}</h3>
+                            <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-zinc-300">{settings.about_intro || "ArticleDestiny is a boutique publishing engine curated to inspire and inform developers, digital designers, and tech enthusiasts."}</p>
                           </div>
-                        ))}
-                      </div>
-                      <div className="max-h-[520px] overflow-auto rounded-2xl border border-white/70 bg-white/55 p-4 text-sm dark:border-white/10 dark:bg-white/5" dangerouslySetInnerHTML={{ __html: settings.about_body || "<p>About page body preview appears here.</p>" }} />
+                          <div className="grid grid-cols-1 gap-3">
+                            {aboutFeatures.map((feat, i) => (
+                              <div key={i} className="rounded-xl border border-[var(--nexus-card-border)] p-4">
+                                <p className="text-sm font-bold">{feat.title}</p>
+                                <p className="mt-2 text-xs leading-6 nexus-text-muted">{feat.body}</p>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="max-h-[520px] overflow-auto rounded-2xl border border-white/70 bg-white/55 p-4 text-sm dark:border-white/10 dark:bg-white/5" dangerouslySetInnerHTML={{ __html: settings.about_body || "<p>About page body preview appears here.</p>" }} />
+                        </>
+                      )}
+
+                      {sitePreviewTab === "privacy" && (
+                        <>
+                          <div>
+                            <h3 className="text-2xl font-black leading-tight text-slate-950 dark:text-zinc-50">{settings.privacy_title || "Privacy Policy"}</h3>
+                          </div>
+                          <div className="max-h-[620px] overflow-auto rounded-2xl border border-white/70 bg-white/55 p-4 text-sm dark:border-white/10 dark:bg-white/5" dangerouslySetInnerHTML={{ __html: settings.privacy_body || "<p>Privacy policy body preview appears here.</p>" }} />
+                        </>
+                      )}
+
+                      {sitePreviewTab === "contact" && (
+                        <>
+                          <div className="text-center py-6 bg-slate-50 dark:bg-zinc-900 rounded-2xl border border-dashed border-gray-200 dark:border-zinc-800">
+                            <Badge className="mb-3">{settings.contact_eyebrow || "Get in Touch"}</Badge>
+                            <h3 className="text-xl font-black leading-tight text-slate-950 dark:text-zinc-50">{settings.contact_title || "Connect with ArticleDestiny"}</h3>
+                            <p className="mt-2 text-xs px-4 text-gray-500 dark:text-zinc-400">{settings.contact_description || "Suggestions, submissions, editorial pitches, or general design reviews."}</p>
+                          </div>
+                          <div className="p-4 border border-[var(--nexus-card-border)] rounded-xl bg-white dark:bg-zinc-950/60 opacity-80 select-none">
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Preview Form Fields</p>
+                            <div className="mt-3 space-y-2">
+                              <div className="h-8 bg-slate-100 dark:bg-zinc-900 rounded-lg"></div>
+                              <div className="h-8 bg-slate-100 dark:bg-zinc-900 rounded-lg"></div>
+                              <div className="h-20 bg-slate-100 dark:bg-zinc-900 rounded-lg"></div>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </>
