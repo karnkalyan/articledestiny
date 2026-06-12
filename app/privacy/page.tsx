@@ -33,7 +33,7 @@ export default async function PrivacyPolicyPage() {
         <h1 className="text-4xl font-extrabold text-slate-900 dark:text-zinc-100 tracking-tight">
           {title}
         </h1>
-        <p className="text-xs text-gray-500 mt-2 select-none">
+        <p className="text-xs text-gray-500 mt-2 select-none" suppressHydrationWarning>
           Last updated: {new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
         </p>
       </div>

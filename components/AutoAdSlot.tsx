@@ -47,10 +47,15 @@ export function AutoAdSlot({
   const adRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
   const [resolvedClientId, setResolvedClientId] = useState(clientId || "");
+  const [mounted, setMounted] = useState(false);
   const unit = AD_UNITS[format];
   const layout = "layout" in unit ? unit.layout : undefined;
   const layoutKey = "layoutKey" in unit ? unit.layoutKey : undefined;
   const fullWidthResponsive = "fullWidthResponsive" in unit ? unit.fullWidthResponsive : undefined;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -87,6 +92,12 @@ export function AutoAdSlot({
       // Ad blockers or delayed script loading can prevent push. Keep layout stable.
     }
   }, [resolvedClientId]);
+
+  if (!mounted) {
+    return (
+      <div className={`w-full my-6 min-h-[90px] select-none overflow-hidden rounded-xl ${className}`} />
+    );
+  }
 
   return (
     <div className={`w-full my-6 min-h-[90px] select-none overflow-hidden rounded-xl ${className}`}>
