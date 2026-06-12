@@ -18,11 +18,11 @@ export async function GET(request: NextRequest) {
 
     if (errorParam) {
       console.error("[Google OAuth Callback Error Param]:", errorParam);
-      return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(errorParam)}`, request.url));
+      return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(errorParam)}`, origin));
     }
 
     if (!code) {
-      return NextResponse.redirect(new URL("/login?error=No authorization code provided.", request.url));
+      return NextResponse.redirect(new URL("/login?error=No authorization code provided.", origin));
     }
 
     const redirectUri = `${origin}/api/auth/google/callback`;
@@ -50,14 +50,14 @@ export async function GET(request: NextRequest) {
     if (!tokenResponse.ok) {
       const tokenError = await tokenResponse.text();
       console.error("[Google Token Exchange Error]:", tokenError);
-      return NextResponse.redirect(new URL("/login?error=Failed to retrieve access token from Google.", request.url));
+      return NextResponse.redirect(new URL("/login?error=Failed to retrieve access token from Google.", origin));
     }
 
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
     if (!accessToken) {
-      return NextResponse.redirect(new URL("/login?error=Google access token not found in response.", request.url));
+      return NextResponse.redirect(new URL("/login?error=Google access token not found in response.", origin));
     }
 
     // Retrieve user details using access token
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!userInfoResponse.ok) {
-      return NextResponse.redirect(new URL("/login?error=Failed to retrieve Google user profile.", request.url));
+      return NextResponse.redirect(new URL("/login?error=Failed to retrieve Google user profile.", origin));
     }
 
     const userInfo = await userInfoResponse.json();
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
     const name = userInfo.name?.trim() || userInfo.given_name?.trim() || "Google Reader";
 
     if (!email) {
-      return NextResponse.redirect(new URL("/login?error=Email address not provided by Google account.", request.url));
+      return NextResponse.redirect(new URL("/login?error=Email address not provided by Google account.", origin));
     }
 
     // Check if user already exists
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     if (user) {
       if (user.isBanned) {
         return NextResponse.redirect(
-          new URL("/login?error=This account has been banned by an administrator.", request.url)
+          new URL("/login?error=This account has been banned by an administrator.", origin)
         );
       }
     } else {
@@ -121,9 +121,9 @@ export async function GET(request: NextRequest) {
     // Create session cookie
     await createSession(safeUser);
 
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/", origin));
   } catch (error: any) {
     console.error("[Google OAuth Callback Catch Error]:", error);
-    return NextResponse.redirect(new URL("/login?error=An unexpected error occurred during login.", request.url));
+    return NextResponse.redirect(new URL("/login?error=An unexpected error occurred during login.", origin));
   }
 }

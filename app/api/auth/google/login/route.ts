@@ -26,6 +26,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(googleAuthUrl);
   } catch (error: any) {
     console.error("[Google Login API Error]:", error);
-    return NextResponse.redirect(new URL("/login?error=Google authentication could not be initialized.", request.url));
+    return NextResponse.redirect(new URL("/login?error=Google authentication could not be initialized.", origin));
   }
 }
