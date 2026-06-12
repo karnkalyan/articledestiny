@@ -2,47 +2,100 @@
 
 import React, { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
-import { toggleLikeArticle, getArticleLikeStatus } from "@/actions/blog";
+import { toggleLikeArticle, getArticleLikeStatus, toggleGuestLikeArticle } from "@/actions/blog";
 import { useRouter } from "next/navigation";
 
 interface LikeButtonProps {
   articleId: number;
   initialLikes: number;
+  currentUser?: any;
 }
 
-export function LikeButton({ articleId, initialLikes }: LikeButtonProps) {
+export function LikeButton({ articleId, initialLikes, currentUser }: LikeButtonProps) {
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(initialLikes);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
 
+  // Sync initialLikes when it changes from the server
+  useEffect(() => {
+    setLikesCount(initialLikes);
+  }, [initialLikes]);
+
   useEffect(() => {
     let active = true;
+
     const fetchStatus = async () => {
-      const isLiked = await getArticleLikeStatus(articleId);
-      if (active) {
-        setLiked(isLiked);
+      if (currentUser) {
+        const isLiked = await getArticleLikeStatus(articleId);
+        if (active) {
+          setLiked(isLiked);
+        }
+      } else {
+        // Guest mode - check localStorage
+        if (typeof window !== "undefined") {
+          try {
+            const likedList = JSON.parse(localStorage.getItem("guest_liked_articles") || "[]");
+            if (active) {
+              setLiked(Array.isArray(likedList) && likedList.includes(articleId));
+            }
+          } catch (_) {
+            if (active) setLiked(false);
+          }
+        }
       }
     };
+
     fetchStatus();
     return () => {
       active = false;
     };
-  }, [articleId]);
+  }, [articleId, currentUser]);
 
   const handleLike = async () => {
     if (loading) return;
     setLoading(true);
     setErrorMsg("");
 
-    const result = await toggleLikeArticle(articleId);
-    if ("error" in result) {
-      setErrorMsg("Must sign in to like");
-      setTimeout(() => setErrorMsg(""), 3000);
+    if (currentUser) {
+      const result = await toggleLikeArticle(articleId);
+      if ("error" in result) {
+        setErrorMsg("Failed to update like status");
+        setTimeout(() => setErrorMsg(""), 3000);
+      } else {
+        setLiked(result.liked);
+        setLikesCount((prev) => (result.liked ? prev + 1 : Math.max(0, prev - 1)));
+      }
     } else {
-      setLiked(result.liked);
-      setLikesCount((prev) => (result.liked ? prev + 1 : Math.max(0, prev - 1)));
+      // Guest Liking Flow
+      try {
+        const likedListStr = localStorage.getItem("guest_liked_articles") || "[]";
+        let likedList = JSON.parse(likedListStr);
+        if (!Array.isArray(likedList)) {
+          likedList = [];
+        }
+
+        const isLiking = !likedList.includes(articleId);
+        const result = await toggleGuestLikeArticle(articleId, isLiking);
+
+        if ("error" in result) {
+          setErrorMsg("Failed to update guest like");
+          setTimeout(() => setErrorMsg(""), 3000);
+        } else {
+          if (isLiking) {
+            likedList.push(articleId);
+          } else {
+            likedList = likedList.filter((id: number) => id !== articleId);
+          }
+          localStorage.setItem("guest_liked_articles", JSON.stringify(likedList));
+          setLiked(isLiking);
+          setLikesCount((prev) => (isLiking ? prev + 1 : Math.max(0, prev - 1)));
+        }
+      } catch (_) {
+        setErrorMsg("Failed to record guest like");
+        setTimeout(() => setErrorMsg(""), 3000);
+      }
     }
     setLoading(false);
   };
@@ -63,8 +116,7 @@ export function LikeButton({ articleId, initialLikes }: LikeButtonProps) {
       </button>
       {errorMsg && (
         <span
-          onClick={() => router.push("/login")}
-          className="text-xs text-rose-500 dark:text-rose-400 font-medium hover:underline cursor-pointer animate-pulse"
+          className="text-xs text-rose-500 dark:text-rose-400 font-medium animate-pulse"
         >
           {errorMsg}
         </span>

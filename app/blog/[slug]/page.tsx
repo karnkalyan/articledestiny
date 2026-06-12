@@ -1,3 +1,5 @@
+export const revalidate = 0;
+
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -15,6 +17,7 @@ import { HistoryTracker } from "@/components/HistoryTracker";
 import { AdSense } from "@/components/AdSense";
 import { AutoAdSlot } from "@/components/AutoAdSlot";
 import { AuthorHoverCard } from "@/components/AuthorHoverCard";
+import { CommentWithUser } from "@/types";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -98,6 +101,38 @@ export default async function ArticlePage(props: PageProps) {
   const currentUser = await getMe();
   const comments = await getCommentsByArticle(article.id);
   const { site_url: siteUrl } = await getPublicSiteSettings();
+
+  // Helper to recursively parse ratings from comment tree
+  const parseRatingsFromComments = (items: CommentWithUser[]) => {
+    let sum = 0;
+    let count = 0;
+
+    const traverse = (list: CommentWithUser[]) => {
+      list.forEach((item) => {
+        let text = item.content;
+        if (text.startsWith("[Guest: ")) {
+          const m = text.match(/^\[Guest:\s*([^\]]+)\]\s*([\s\S]*)$/);
+          if (m) text = m[2];
+        }
+        if (text.startsWith("[Rating: ")) {
+          const m = text.match(/^\[Rating:\s*([1-5])\]\s*([\s\S]*)$/);
+          if (m) {
+            sum += parseInt(m[1], 10);
+            count++;
+          }
+        }
+        if (item.replies && item.replies.length > 0) {
+          traverse(item.replies);
+        }
+      });
+    };
+
+    traverse(items);
+    return { sum, count };
+  };
+
+  const { sum: totalRatingSum, count: ratingCount } = parseRatingsFromComments(comments);
+  const averageRating = ratingCount > 0 ? (totalRatingSum / ratingCount).toFixed(1) : null;
 
   const htmlContent = renderArticleContent(article.content);
 
@@ -228,6 +263,14 @@ export default async function ArticlePage(props: PageProps) {
             <Eye className="h-3. w-3" />
             {article.viewsCount + 1} Views
           </span>
+          {averageRating !== null && (
+            <>
+              <span className="text-gray-300">-</span>
+              <span className="flex items-center gap-1 text-[10px] text-amber-500 font-mono font-bold animate-pulse">
+                ★ {averageRating} ({ratingCount} {ratingCount === 1 ? "review" : "reviews"})
+              </span>
+            </>
+          )}
           {article.seoScore > 0 && (
             <>
               <span className="text-gray-300">-</span>
@@ -282,7 +325,7 @@ export default async function ArticlePage(props: PageProps) {
 
         {/* Action Bar ( Liking ) */}
         <div className="mt-12 pt-6 border-t border-gray-50 dark:border-zinc-900 flex items-center justify-between">
-          <LikeButton articleId={article.id} initialLikes={article.likesCount} />
+          <LikeButton articleId={article.id} initialLikes={article.likesCount} currentUser={currentUser} />
           <ShareButton title={article.title} />
         </div>
 

@@ -1,3 +1,5 @@
+export const revalidate = 0;
+
 import React from "react";
 import { Compass, ShieldCheck } from "lucide-react";
 import { db } from "@/lib/db";

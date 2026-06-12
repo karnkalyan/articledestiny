@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { ArticleWithAuthor, CommentWithUser } from "@/types";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
 
 function toPublicProfile(profile: any) {
   if (!profile) return null;
@@ -267,7 +268,12 @@ export async function getCommentsByArticle(articleId: number): Promise<CommentWi
   }
 }
 
-export async function submitComment(articleId: number, content: string, parentId: number | null = null) {
+export async function submitComment(
+  articleId: number,
+  content: string,
+  parentId: number | null = null,
+  rating: number | null = null
+) {
   try {
     const session = await getSession();
     if (!session) {
@@ -282,10 +288,15 @@ export async function submitComment(articleId: number, content: string, parentId
       return { error: "Comment content cannot be empty" };
     }
 
+    let finalContent = content.trim();
+    if (rating && rating >= 1 && rating <= 5) {
+      finalContent = `[Rating: ${rating}] ${finalContent}`;
+    }
+
     // Default status: APPROVED (can be custom modified if moderation required)
     const newComment = await db.comment.create({
       data: {
-        content: content.trim(),
+        content: finalContent,
         articleId,
         userId: session.id,
         parentId,
@@ -298,5 +309,79 @@ export async function submitComment(articleId: number, content: string, parentId
   } catch (error: any) {
     console.error("Error submitting comment:", error);
     return { error: error.message || "Failed to submit comment" };
+  }
+}
+
+export async function submitGuestComment(
+  articleId: number,
+  content: string,
+  guestName: string,
+  parentId: number | null = null,
+  rating: number | null = null
+) {
+  try {
+    if (!content.trim()) {
+      return { error: "Comment content cannot be empty" };
+    }
+
+    // Find or create system-wide Guest user
+    let guestUser = await db.user.findFirst({
+      where: { email: "guest@articledestiny.com" },
+    });
+
+    if (!guestUser) {
+      const dummyPassword = await bcrypt.hash(Math.random().toString(36) + Date.now().toString(), 10);
+      guestUser = await db.user.create({
+        data: {
+          email: "guest@articledestiny.com",
+          name: "Guest",
+          password: dummyPassword,
+          role: "USER",
+        },
+      });
+    }
+
+    const name = guestName.trim() || "Guest";
+
+    // Format content with guest name and optional rating prefix
+    let finalContent = `[Guest: ${name}]`;
+    if (rating && rating >= 1 && rating <= 5) {
+      finalContent += `[Rating: ${rating}]`;
+    }
+    finalContent += ` ${content.trim()}`;
+
+    const newComment = await db.comment.create({
+      data: {
+        content: finalContent,
+        articleId,
+        userId: guestUser.id,
+        parentId,
+        status: "APPROVED",
+      },
+    });
+
+    revalidatePath(`/blog/[slug]`, "layout");
+    return { success: true, comment: newComment };
+  } catch (error: any) {
+    console.error("Error submitting guest comment:", error);
+    return { error: error.message || "Failed to submit guest comment" };
+  }
+}
+
+export async function toggleGuestLikeArticle(articleId: number, isLiking: boolean) {
+  try {
+    await db.article.update({
+      where: { id: articleId },
+      data: {
+        likesCount: {
+          increment: isLiking ? 1 : -1,
+        },
+      },
+    });
+    revalidatePath(`/blog/[slug]`, "layout");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error toggling guest like:", error);
+    return { error: "Failed to like article" };
   }
 }

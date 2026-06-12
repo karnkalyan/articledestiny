@@ -97,6 +97,8 @@ const emptySettings = {
   ga4_measurement_id: "",
   adsense_client_id: "",
   adsense_auto_ads: "true",
+  google_client_id: "",
+  google_client_secret: "",
   site_title: "",
   site_description: "",
   site_keywords: "",
@@ -458,6 +460,15 @@ export default function AdminDashboardPage() {
                   <input type="checkbox" checked={settings.adsense_auto_ads !== "false"} onChange={(e) => setSettings({ ...settings, adsense_auto_ads: String(e.target.checked) })} />
                   Load AdSense script globally for Auto Ads
                 </label>
+
+                <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 space-y-4">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.25em] font-black text-indigo-600">Google OAuth Sign-In Settings</p>
+                    <p className="text-xs text-gray-500 mt-1">Configure client ID and secret to enable Sign In with Google across the platform.</p>
+                  </div>
+                  <Input label="Google Client ID" value={settings.google_client_id} onChange={(value) => setSettings({ ...settings, google_client_id: value })} placeholder="Google client ID" />
+                  <Input label="Google Client Secret" type="password" value={settings.google_client_secret} onChange={(value) => setSettings({ ...settings, google_client_secret: value })} placeholder="Google client secret" />
+                </div>
 
                 <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 space-y-4">
                   <div>

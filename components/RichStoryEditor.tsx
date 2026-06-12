@@ -23,6 +23,11 @@ export const RichStoryEditor = forwardRef<RichStoryEditorHandle, RichStoryEditor
     const lastEmittedValueRef = useRef("");
     const [mode, setMode] = useState<"visual" | "html">("visual");
 
+    const onChangeRef = useRef(onChange);
+    useEffect(() => {
+      onChangeRef.current = onChange;
+    });
+
     const cleanIncomingHtml = useCallback((html: string) => {
       return (html || "")
         .replace(/^(\s|&nbsp;|<p>(\s|&nbsp;|<br\s*\/?>)*<\/p>|<div>(\s|&nbsp;|<br\s*\/?>)*<\/div>|<br\s*\/?>)+/gi, "")
@@ -72,6 +77,13 @@ export const RichStoryEditor = forwardRef<RichStoryEditorHandle, RichStoryEditor
         const Quill = (await import("quill")).default;
         if (!mounted || !editorRef.current) return;
 
+        // Clean up any existing Quill elements/toolbars first to prevent duplicates
+        if (wrapperRef.current) {
+          const toolbars = wrapperRef.current.querySelectorAll(".ql-toolbar");
+          toolbars.forEach((tb) => tb.remove());
+        }
+        editorRef.current.innerHTML = "";
+
         const quill = new Quill(editorRef.current, {
           theme: "snow",
           placeholder: "Write your story with rich text, media, embeds, headings, lists, quotes, and links...",
@@ -98,18 +110,24 @@ export const RichStoryEditor = forwardRef<RichStoryEditorHandle, RichStoryEditor
         quillRef.current = quill;
         applyHTML(latestValueRef.current || "", quill);
         quill.on("text-change", () => {
-          lastEmittedValueRef.current = quill.root.innerHTML;
-          onChange(quill.root.innerHTML);
+          const html = quill.root.innerHTML;
+          lastEmittedValueRef.current = html;
+          onChangeRef.current(html);
         });
       }
 
       initialize();
 
+      const wrapperEl = wrapperRef.current;
       return () => {
         mounted = false;
         quillRef.current = null;
+        if (wrapperEl) {
+          const toolbars = wrapperEl.querySelectorAll(".ql-toolbar");
+          toolbars.forEach((tb) => tb.remove());
+        }
       };
-    }, [applyHTML, onChange]);
+    }, [cleanIncomingHtml, applyHTML]);
 
     return (
       <div ref={wrapperRef} className="quill-story-editor rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-950">
