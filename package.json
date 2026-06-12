@@ -8,8 +8,7 @@
     "start": "next start -p 3400",
     "lint": "next lint",
     "db:push": "prisma db push",
-    "db:seed": "prisma db seed",
-    "db:reset": "prisma db push --force-reset && prisma db seed",
+    "db:reset": "prisma db push --force-reset",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -40,7 +39,5 @@
     "tsx": "^4.19.2",
     "typescript": "^5.5.2"
   },
-  "prisma": {
-    "seed": "npx tsx lib/seed.ts"
-  }
+  "prisma": {}
 }
