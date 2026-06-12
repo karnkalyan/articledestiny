@@ -6,7 +6,7 @@ import { Article, ReviewItem, SafeUser, Ad } from "@/types";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { generateSeo } from "@/lib/seo";
-import { notifySubscribersForArticle } from "@/lib/mail";
+import { notifySubscribersForArticle, sendMail } from "@/lib/mail";
 import {
   normalizeAdSenseClientId,
   normalizeGa4MeasurementId,
@@ -556,5 +556,48 @@ export async function deleteMedia(id: number) {
   } catch (error) {
     console.error("Error deleting media from db:", error);
     return { error: "Failed to delete media asset" };
+  }
+}
+
+export async function sendTestEmail(toEmail: string) {
+  await requireRole(["ADMIN"]);
+  const email = toEmail.trim().toLowerCase();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: "Please enter a valid email address." };
+  }
+
+  try {
+    const result = await sendMail({
+      to: email,
+      subject: "ArticleDestiny - Test Email ✅",
+      html: `
+        <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb">
+          <div style="background:linear-gradient(135deg,#2563eb 0%,#4338ca 100%);padding:32px;text-align:center">
+            <h1 style="color:#ffffff;font-size:24px;margin:0;font-weight:800">🎉 SMTP Test Successful!</h1>
+          </div>
+          <div style="padding:28px 32px">
+            <p style="font-size:15px;line-height:1.7;color:#374151;margin:0 0 12px">
+              Great news! Your ArticleDestiny SMTP mail settings are configured correctly.
+            </p>
+            <p style="font-size:15px;line-height:1.7;color:#374151;margin:0 0 12px">
+              This means subscriber welcome emails, article notifications, and contact form alerts will all be delivered successfully.
+            </p>
+            <p style="font-size:13px;color:#9ca3af;margin:20px 0 0;text-align:center">
+              Sent from ArticleDestiny Admin Panel · ${new Date().toLocaleString()}
+            </p>
+          </div>
+        </div>
+      `,
+      text: "SMTP Test Successful! Your ArticleDestiny mail settings are configured correctly.",
+    });
+
+    if (result.skipped) {
+      return { error: result.reason || "SMTP settings are incomplete. Please fill in all fields and save first." };
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Test email failed:", error);
+    return { error: error.message || "Failed to send test email. Check your SMTP settings." };
   }
 }

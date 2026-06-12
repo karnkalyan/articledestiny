@@ -140,14 +140,16 @@ export const RichStoryEditor = forwardRef<RichStoryEditorHandle, RichStoryEditor
                 setMode("visual");
                 applyHTML(latestValueRef.current);
               }}
-              className={`h-8 px-3 rounded-md text-[10px] font-bold uppercase tracking-wider transition ${mode === "visual" ? "bg-[var(--grad-primary)] text-white shadow-sm" : "text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-900"}`}
+              style={mode === "visual" ? { background: "linear-gradient(135deg, #2563eb, #4338ca)" } : undefined}
+              className={`h-8 px-3 rounded-md text-[10px] font-bold uppercase tracking-wider transition ${mode === "visual" ? "text-white shadow-sm" : "text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-900"}`}
             >
               Visual
             </button>
             <button
               type="button"
               onClick={() => setMode("html")}
-              className={`h-8 px-3 rounded-md text-[10px] font-bold uppercase tracking-wider transition ${mode === "html" ? "bg-[var(--grad-primary)] text-white shadow-sm" : "text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-900"}`}
+              style={mode === "html" ? { background: "linear-gradient(135deg, #2563eb, #4338ca)" } : undefined}
+              className={`h-8 px-3 rounded-md text-[10px] font-bold uppercase tracking-wider transition ${mode === "html" ? "text-white shadow-sm" : "text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-900"}`}
             >
               HTML
             </button>

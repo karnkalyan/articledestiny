@@ -48,6 +48,7 @@ import {
   saveAd,
   saveCatalogCategories,
   saveSiteSettings,
+  sendTestEmail,
   updateContactMessageStatus,
 } from "@/actions/admin";
 import { Ad, Article, ContactMessage, SafeUser, Subscriber } from "@/types";
@@ -131,6 +132,8 @@ export default function AdminDashboardPage() {
   const [newUserForm, setNewUserForm] = useState({ name: "", email: "", role: "USER", password: "user123_temp" });
   const [aboutFeatures, setAboutFeatures] = useState<Array<{ title: string; body: string }>>([]);
   const [newCategory, setNewCategory] = useState("");
+  const [testEmailTo, setTestEmailTo] = useState("");
+  const [testEmailSending, setTestEmailSending] = useState(false);
 
   // Sync settings when loaded
   useEffect(() => {
@@ -592,10 +595,23 @@ export default function AdminDashboardPage() {
 
           {activeTab === "subscribers" && (
             <DataPanel title={`Subscribers (${subscribers.length})`}>
+              {subscribers.length === 0 && (
+                <div className="p-6 text-sm text-[var(--nexus-text-muted)]">No subscribers yet.</div>
+              )}
               {subscribers.map((subscriber) => (
-                <Row key={subscriber.id} title={subscriber.email} subtitle={new Date(subscriber.createdAt).toLocaleDateString()}>
-                  <Button variant="destructive" onClick={() => runAction(() => deleteSubscriber(subscriber.id), "Subscriber removed.")} className="h-8 w-8 p-0"><Trash2 className="h-4 w-4" /></Button>
-                </Row>
+                <div key={subscriber.id} className="p-4 border-b border-[var(--nexus-card-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-bold truncate text-[var(--nexus-text-main)]">{subscriber.email}</p>
+                    <p className="text-[11px] text-[var(--nexus-text-muted)] truncate">{new Date(subscriber.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge className={subscriber.active ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300" : "border-gray-500/20 bg-gray-500/10 text-gray-600 dark:text-gray-400"}>{subscriber.active ? "Active" : "Inactive"}</Badge>
+                    <Button variant="destructive" onClick={() => runAction(() => deleteSubscriber(subscriber.id), "Subscriber removed.")} className="h-8 px-3 gap-1.5">
+                      <Trash2 className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Delete</span>
+                    </Button>
+                  </div>
+                </div>
               ))}
             </DataPanel>
           )}
@@ -674,20 +690,20 @@ export default function AdminDashboardPage() {
                   </CardHeader>
                   <div>
                     {users.map((user) => (
-                      <div key={user.id} className="nexus-row p-4">
+                      <div key={user.id} className="p-4 border-b border-[var(--nexus-card-border)]">
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="h-10 w-10 rounded-full bg-[var(--grad-primary)] text-white flex items-center justify-center text-sm font-black shrink-0">
+                            <div className="h-10 w-10 rounded-full flex items-center justify-center text-sm font-black shrink-0 text-white" style={{ background: 'linear-gradient(135deg, #60a5fa, #2563eb, #4338ca)' }}>
                               {user.name?.slice(0, 1).toUpperCase() || "U"}
                             </div>
                             <div className="min-w-0">
                               <p className="font-bold truncate text-[var(--nexus-text-main)]">{user.name}</p>
-                              <p className="text-[11px] nexus-text-muted truncate">{user.email}</p>
+                              <p className="text-[11px] text-[var(--nexus-text-muted)] truncate">{user.email}</p>
                             </div>
                           </div>
                           <div className="flex flex-wrap items-center gap-2">
                             <Badge className="border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">{user.role}</Badge>
-                            <Badge className={user.isBanned ? "border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-300" : "border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300"}>{user.isBanned ? "Banned" : "Active"}</Badge>
+                            <Badge className={user.isBanned ? "border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-300" : "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"}>{user.isBanned ? "Banned" : "Active"}</Badge>
                             <Button variant="outline" onClick={() => router.push(`/author/${user.id}`)} className="h-8 px-3">View Profile</Button>
                             <Button variant="outline" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "role"), "Role updated.")} className="h-8 px-3">Change Role</Button>
                             <Button variant="destructive" disabled={user.id === currentUser?.id} onClick={() => runAction(() => handleUserRoleOrBan(user.id, String(user.role), user.isBanned, "ban"), "Ban status updated.")} className="h-8 px-3">{user.isBanned ? "Unban" : "Ban"}</Button>
@@ -839,10 +855,48 @@ export default function AdminDashboardPage() {
                   <Input label="SMTP User" value={settings.mail_user} onChange={(value) => setSettings({ ...settings, mail_user: value })} />
                   <Input label="SMTP Password / App Password" type="password" value={settings.mail_pass} onChange={(value) => setSettings({ ...settings, mail_pass: value })} />
                   <Input label="From Email" value={settings.mail_from} onChange={(value) => setSettings({ ...settings, mail_from: value })} />
-                  <label className="flex items-center gap-2 text-xs font-bold"><input type="checkbox" checked={settings.mail_secure === "true"} onChange={(e) => setSettings({ ...settings, mail_secure: String(e.target.checked) })} /> Use secure SSL/TLS</label>
+                  <label className="flex items-center gap-2 text-xs font-bold text-[var(--nexus-text-main)]"><input type="checkbox" checked={settings.mail_secure === "true"} onChange={(e) => setSettings({ ...settings, mail_secure: String(e.target.checked) })} /> Use secure SSL/TLS</label>
                 </>
               )}
-              {activeTab === "mail" && <Button type="submit"><Save className="h-4 w-4" /> Save Settings</Button>}
+              {activeTab === "mail" && (
+                <>
+                  <Button type="submit"><Save className="h-4 w-4" /> Save Settings</Button>
+                  <div className="pt-4 border-t border-[var(--nexus-card-border)] space-y-3">
+                    <h3 className="text-sm font-black uppercase tracking-widest text-[var(--nexus-text-main)]">Send Test Email</h3>
+                    <p className="text-xs text-[var(--nexus-text-muted)]">Verify your SMTP settings by sending a test email. Save settings first before testing.</p>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <ShadInput
+                        type="email"
+                        value={testEmailTo}
+                        onChange={(e) => setTestEmailTo(e.target.value)}
+                        placeholder="recipient@example.com"
+                      />
+                      <Button
+                        type="button"
+                        disabled={testEmailSending || !testEmailTo.trim()}
+                        onClick={async () => {
+                          setTestEmailSending(true);
+                          setMessage("");
+                          setErrorMsg("");
+                          try {
+                            const result = await sendTestEmail(testEmailTo);
+                            if (result.error) setErrorMsg(result.error);
+                            else setMessage("Test email sent successfully! Check your inbox.");
+                          } catch (err: any) {
+                            setErrorMsg(err.message || "Failed to send test email.");
+                          } finally {
+                            setTestEmailSending(false);
+                          }
+                        }}
+                        className="shrink-0"
+                      >
+                        <Mail className="h-4 w-4" />
+                        {testEmailSending ? "Sending..." : "Send Test"}
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
             </MotionForm>
           )}
         </MotionDiv>
