@@ -3,7 +3,6 @@ services:
     build: .
     restart: always
     network_mode: "host"
+    env_file: .env
     environment:
-      DATABASE_URL: "mysql://admin:quantumSql%40123@127.0.0.1:3306/articledestiny"
-      JWT_SECRET: "khusbhuArticleDestiny!#$@"
       PORT: 3400

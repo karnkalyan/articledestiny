@@ -124,7 +124,6 @@ export async function ensureSeeded() {
     const owner = await db.user.upsert({
       where: { email: "karnkalyan@gmail.com" },
       create: {
-        id: 3,
         name: "Karn Kalyan",
         email: "karnkalyan@gmail.com",
         password: hashedPasswordAdmin,
@@ -139,7 +138,6 @@ export async function ensureSeeded() {
     const admin = await db.user.upsert({
       where: { email: "admin@articledestiny.com" },
       create: {
-        id: 1,
         name: "ArticleDestiny Admin",
         email: "admin@articledestiny.com",
         password: hashedPasswordAdmin,
@@ -153,7 +151,6 @@ export async function ensureSeeded() {
     const reader = await db.user.upsert({
       where: { email: "user@articledestiny.com" },
       create: {
-        id: 2,
         name: "ArticleDestiny Reader",
         email: "user@articledestiny.com",
         password: hashedPasswordUser,
